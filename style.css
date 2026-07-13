@@ -62,11 +62,11 @@ h1{
 }
 
 .correct{
-    background:#16a34a !;
+    background:#16a34a !important;
 }
 
 .wrong{
-    background:#dc2626 !;
+    background:#dc2626 !important;
 }
 
 #result h2{
@@ -89,4 +89,13 @@ h1{
     color:#fff;
     font-size:20px;
     cursor:pointer;
+}
+#clock{
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.8);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 18px;
 }
