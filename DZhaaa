@@ -1,8 +1,31 @@
 let score = 0;
-let wrong = 0;
+wrong = 0;
 let current = 0;
 let time = 15;
 let timer;
+
+function playSound(type){
+    let audio = new AudioContext();
+    let osc = audio.createOscillator();
+    let gain = audio.createGain();
+
+    osc.connect(gain);
+    gain.connect(audio.destination);
+
+    if(type === "correct"){
+        osc.frequency.value = 700;
+    }else{
+        osc.frequency.value = 250;
+    }
+
+    gain.gain.value = 0.1;
+
+    osc.start();
+
+    setTimeout(()=>{
+        osc.stop();
+    },200);
+}
 
 const questions = [
 {
@@ -102,7 +125,7 @@ function loadQuestion(){
 
 clearInterval(timer);
 
-time = 15;
+time = 30;
 document.getElementById("timer").innerText = "⏱️ " + time;
 
 document.getElementById("number").innerText =
@@ -153,21 +176,29 @@ buttons.forEach(btn => btn.disabled = true);
 
 if(i === questions[current].correct){
 
-score++;
-buttons[i].classList.add("correct");
+    score++;
+    buttons[i].classList.add("correct");
+
+    playSound("correct");
 
 }else{
 
-wrong++;
-buttons[i].classList.add("wrong");
+    wrong++;
+    buttons[i].classList.add("wrong");
+    buttons[questions[current].correct].classList.add("correct");
+
+    playSound("wrong");
 buttons[questions[current].correct].classList.add("correct");
+
+document.getElementById("wrongSound").play();
 
 }
 
 document.getElementById("score").innerText =
 "🏆 خاڵ: " + score;
 
-setTimeout(nextQuestion,1000);
+setTimeout(nextQuestion,3000);
+
 
 }
 
@@ -177,7 +208,9 @@ current++;
 
 if(current >= questions.length){
 
-let best = localStorage.getItem("highScore") || 0;
+    document.getElementById("winSound").play();
+
+    let best = localStorage.getItem("highScore") || 0;
 
 if(score > best){
 best = score;
@@ -202,3 +235,30 @@ return;
 loadQuestion();
 
 }
+function toKurdishNumber(str){
+return str
+.replaceAll("0","٠")
+.replaceAll("1","١")
+.replaceAll("2","٢")
+.replaceAll("3","٣")
+.replaceAll("4","٤")
+.replaceAll("5","٥")
+.replaceAll("6","٦")
+.replaceAll("7","٧")
+.replaceAll("8","٨")
+.replaceAll("9","٩");
+}
+
+function showClock(){
+let now = new Date();
+
+let time =
+now.getHours().toString().padStart(2,"0") + ":" +
+now.getMinutes().toString().padStart(2,"0") + ":" +
+now.getSeconds().toString().padStart(2,"0");
+
+document.getElementById("clock").innerHTML = "🕒 " + toKurdishNumber(time);
+}
+
+setInterval(showClock,1000);
+showClock();
