@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>یاری مەتەڵ و بیرکردنەوە</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container" id="game">
+
+<h1>🧩 یاری مەتەڵ و بیرکردنەوە</h1>
+
+<div class="top">
+
+<p id="number">پرسیار 1 / 100</p>
+
+<p id="timer">⏱️ 15</p>
+
+<p id="score">🏆 خاڵ: 0</p>
+
+</div>
+
+<h2 id="question"></h2>
+
+<div class="answers">
+
+<button class="answer" id="a0" onclick="checkAnswer(0)"></button>
+
+<button class="answer" id="a1" onclick="checkAnswer(1)"></button>
+
+<button class="answer" id="a2" onclick="checkAnswer(2)"></button>
+
+<button class="answer" id="a3" onclick="checkAnswer(3)"></button>
+
+</div>
+
+</div>
+
+<div id="result" style="display:none">
+
+<h2>🏁 کۆتایی یاری</h2>
+
+<p id="finalScore"></p>
+
+<p id="highScore"></p>
+
+<button onclick="location.reload()">
+🔄 دووبارە یاری بکە
+</button>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
