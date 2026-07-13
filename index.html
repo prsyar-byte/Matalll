@@ -8,19 +8,110 @@
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body><div id="login" class="login-screen">
+  <div class="login-box">
+    <h1>🧩 یاری مەتەڵ و بیرکردنەوە</h1>
+    <p>تکایە ناو و ئیمەیڵی خۆت بنووسە</p>
 
-<div class="container" id="game">
+    <input type="text" id="playerName" placeholder="👤 ناو">
+    <input type="email" id="playerEmail" placeholder="📧 ئیمەیڵ">
+
+    <button onclick="startGame()">دەستپێکردنی یاری</button>
+  </div>
+</div>
+
+<style>
+.login-screen{
+    position:fixed;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
+
+.login-box{
+    width:90%;
+    max-width:380px;
+    background:#fff;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.login-box h1{
+    margin-bottom:10px;
+}
+
+.login-box p{
+    color:#555;
+    margin-bottom:20px;
+}
+
+.login-box input{
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:12px;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+.login-box button{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:12px;
+    background:#2196F3;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.login-box button:hover{
+    opacity:.9;
+}
+</style>
+
+<script>
+function startGame(){
+    const name=document.getElementById("playerName").value.trim();
+    const email=document.getElementById("playerEmail").value.trim();
+
+    if(name==="" || email===""){
+        alert("تکایە ناو و ئیمەیڵ بنووسە.");
+        return;
+    }
+
+    localStorage.setItem("playerName",name);
+    localStorage.setItem("playerEmail",email);
+
+    document.getElementById("login").style.display="none";
+    document.getElementById("game").style.display="block";
+document.getElementById("bgMusic").play();
+}
+</script>
+
+<div class="container" id="game" style="display:none;">
+
 
 <h1>🧩 یاری مەتەڵ و بیرکردنەوە</h1>
 
 <div class="top">
 
-<p id="number">پرسیار 1 / 15</p>
+<p id="number">پرسیار 1 / 100</p>
 
 <p id="timer">⏱️ 15</p>
 
 <p id="score">🏆 خاڵ: 0</p>
+
+<p id="clock">🕒</p>
 
 </div>
 
@@ -54,7 +145,10 @@
 
 </div>
 
-<script src="script.js"></script>
-
+<script src="script.js"></script><script type="module" src="firebase.js"></script>
+<audio id="correctSound" src="correct.mp3"></audio>
+<audio id="wrongSound" src="wrong.mp3"></audio>
+<audio id="bgMusic" src="music.mp3" loop></audio>
+<audio id="winSound" src="win.mp3"></audio>
 </body>
 </html>
