@@ -1,0 +1,204 @@
+let score = 0;
+let wrong = 0;
+let current = 0;
+let time = 15;
+let timer;
+
+const questions = [
+{
+
+question:"چی هەر زیاتر لێی دەبڕیت، گەورەتر دەبێت؟",
+answers:["دار","کونا","کاغەز","بەرد"],
+correct:1
+},
+{
+question:"ئەوە چییە هەمیشە دێت بەڵام هەرگیز ناگات؟",
+answers:["سبەی","ئەمڕۆ","دوێنێ","مانگ"],
+correct:0
+},
+{
+question:"چی دەم هەیە بەڵام قسە ناکات؟",
+answers:["کتێب","جام","ماسی","ڕووبار"],
+correct:1
+}
+,
+{
+question:"کام شت هەیە هەرچەندە بشکێنیت، هێشتا بەکاردەهێنرێت؟",
+answers:["هێلکە","بەرد","دار","جام"],
+correct:0
+}
+,
+{
+question:"چی هەیە هەموو کەس دەیبینێت، بەڵام ناتوانێت دەستی لێ بدات؟",
+answers:["سێبەر","ئاو","دار","بەرد"],
+correct:0
+}
+,
+{
+question:"چی هەر زیاتر لێی وەردەگریت، زیاتر جێی دەمێنێت؟",
+answers:["کونا","ئاو","دار","بەرد"],
+correct:0
+}
+,
+{
+question:"کام شت پڕە لە کون، بەڵام ئاو هەڵدەگرێت؟",
+answers:["ئاسفنج","جام","تەشت","سەتڵ"],
+correct:0
+}
+,
+{
+question:"یەکەم سورەی قورئانی پیرۆز کامەیە؟",
+answers:["الفاتحە","البقرە","الإخلاص","الناس"],
+correct:0
+}
+,
+{
+question:"چەند نوێژی فەرز لە ڕۆژێکدا هەیە؟",
+answers:["٣","٤","٥","٦"],
+correct:2
+}
+,
+{
+question:"لە یاری تۆپی پێ، ژمارەی یاریزانانی هەر تیمێک لە ناو مەیدان چەندە؟",
+answers:["9","10","11","12"],
+correct:2
+}
+,
+{
+question:"کێ زۆرترین پاڵەوانی جامی جیهانی تۆپی پێی بەدەستهێناوە؟",
+answers:["ئەڵمانیا","ئیتاڵیا","برازیل","ئەرجەنتین"],
+correct:2
+}
+,
+{
+question:"ئاو لە چەند توخم پێکهاتووە؟",
+answers:["1","2","3","4"],
+correct:1
+}
+,
+{
+question:"نیشانەی کیمیایی ئاکسیجین چییە؟",
+answers:["H","O","N","C"],
+correct:1
+}
+,
+{
+question:"خێراترین شت لە بۆشایی (Vacuum) چییە؟",
+answers:["دەنگ","ڕووناکی","ئاو","با"],
+correct:1
+}
+,
+{
+question:"یەکەی پێوانەکردنی هێز (Force) چییە؟",
+answers:["وات","ژول","نیوتن","ڤۆلت"],
+correct:2
+}
+];
+questions.sort(() => Math.random() - 0.5);
+
+loadQuestion();
+
+function loadQuestion(){
+
+clearInterval(timer);
+
+time = 15;
+document.getElementById("timer").innerText = "⏱️ " + time;
+
+document.getElementById("number").innerText =
+"پرسیار " + (current + 1) + " / " + questions.length;
+
+document.getElementById("question").innerText =
+questions[current].question;
+
+for(let i=0;i<4;i++){
+let btn = document.getElementById("a"+i);
+btn.innerText = questions[current].answers[i];
+btn.className = "answer";
+btn.disabled = false;
+}
+
+document.getElementById("score").innerText =
+"🏆 خاڵ: " + score;
+
+startTimer();
+
+}
+
+function startTimer(){
+
+timer = setInterval(function(){
+
+time--;
+
+document.getElementById("timer").innerText =
+"⏱️ " + time;
+
+if(time <= 0){
+clearInterval(timer);
+wrong++;
+nextQuestion();
+}
+
+},1000);
+
+}
+function checkAnswer(i){
+
+clearInterval(timer);
+
+let buttons = document.querySelectorAll(".answer");
+
+buttons.forEach(btn => btn.disabled = true);
+
+if(i === questions[current].correct){
+
+score++;
+buttons[i].classList.add("correct");
+
+}else{
+
+wrong++;
+buttons[i].classList.add("wrong");
+buttons[questions[current].correct].classList.add("correct");
+
+}
+
+document.getElementById("score").innerText =
+"🏆 خاڵ: " + score;
+
+setTimeout(nextQuestion,1000);
+
+}
+
+function nextQuestion(){
+
+current++;
+
+if(current >= questions.length){
+
+let best = localStorage.getItem("highScore") || 0;
+
+if(score > best){
+best = score;
+localStorage.setItem("highScore",score);
+}
+
+document.getElementById("game").style.display = "none";
+document.getElementById("result").style.display = "block";
+
+document.getElementById("finalScore").innerHTML =
+"🏆 خاڵ: " + score +
+"<br>✅ وەڵامی ڕاست: " + score +
+"<br>❌ وەڵامی هەڵە: " + wrong;
+
+document.getElementById("highScore").innerHTML =
+"🥇 باشترین خاڵ: " + best;
+
+return;
+
+}
+
+loadQuestion();
+
+}
