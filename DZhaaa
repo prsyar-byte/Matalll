@@ -1,5 +1,5 @@
 let score = 0;
-wrong = 0;
+let wrong = 0;
 let current = 0;
 let time = 15;
 let timer;
@@ -116,6 +116,163 @@ question:"یەکەی پێوانەکردنی هێز (Force) چییە؟",
 answers:["وات","ژول","نیوتن","ڤۆلت"],
 correct:2
 }
+,
+{
+question:"قورئانی پیرۆز بە کام زمان دابەزی؟",
+answers:["کوردی","عەرەبی","فارسی","ئینگلیزی"],
+correct:1
+}
+,
+{
+question:"مانگی ڕەمەزان کام مانگی ساڵی کۆچییە؟",
+answers:["٩","١٠","١١","١٢"],
+correct:0
+}
+,
+{
+question:"کێ پێغەمبەری یەکەمی مرۆڤایەتی بوو؟",
+answers:["نوح (ع)","موسا (ع)","ئادەم (ع)","ئیبراهیم (ع)"],
+correct:2
+}
+,
+{
+question:"کاتی خولانەوەی زەوی لە دەوری خۆی نزیکەی چەندە؟",
+answers:["12 کاتژمێر","24 کاتژمێر","30 ڕۆژ","365 ڕۆژ"],
+correct:1
+}
+,
+{
+question:"کام یەک لەمانە گەرمابوونەوەی مادە پێوانە دەکات؟",
+answers:["کێلوگرام","مەتر","پلەی گەرمی","نیوتن"],
+correct:2
+}
+,
+{
+question:"لە یاری باسکەتبال، هەر تیمێک لە یاریگا چەند یاریزان هەیە؟",
+answers:["4","5","6","7"],
+correct:1
+}
+,
+{
+question:"لە یاری تۆپی پێ، کێ ڕێکخستنی یاری دەکات؟",
+answers:["گۆڵچی","داور","کاپتن","تماشاکەر"],
+correct:1
+}
+,
+{
+question:"لە یاری تێنیس، ئامانجی سەرەکی چییە؟",
+answers:["گۆڵکردن","خستنەوەی توپ بەسەر تۆڕەکەدا","گرتنی توپ بە دەست","ڕاکردن"],
+correct:1
+}
+,
+{
+question:"گەورەترین ئەندامی جەستەی مرۆڤ کامەیە؟",
+answers:["دڵ","مێشک","پێست","جگەر"],
+correct:2
+}
+,
+{
+question:"کام ئەندام خوێن لە جەستەدا پەمپ دەکات؟",
+answers:["مێشک","دڵ","گەدە","شش"],
+correct:1
+}
+,
+{
+question:"کامەیان هەناسەدان بەڕێوە دەبات؟",
+answers:["شش","دڵ","مێشک","گورچیلە"],
+correct:0
+}
+,
+{
+question:"چییە کە دەشکێت بەبێ ئەوەی بیخەیتە سەر زەوی؟",
+answers:["بەڵێن","بەرد","جام","دار"],
+correct:0
+}
+,
+{
+question:"کام ڤیتامین زۆر بە ڕووناکی خۆر پەیوەندی هەیە؟",
+answers:["ڤیتامینی A","ڤیتامینی B","ڤیتامینی C","ڤیتامینی D"],
+correct:3
+}
+,
+{
+question:"چەند ددان لە زۆربەی گەورەکاندا هەیە؟",
+answers:["20","28","32","36"],
+correct:2
+}
+,
+{
+question:"هەستی خۆشحاڵی زۆرجار بە چی پەیوەندیدارە؟",
+answers:["هەستی باش و پەیوەندی کۆمەڵایەتی","تەنها بێدەنگی","توڕەیی","ترس"],
+correct:0
+}
+,
+{
+question:"یادگرتنەوە چییە؟",
+answers:["توانای تۆمارکردن و بیرگەی زانیاری","تەنها خەوتن","جوڵەی جەستە","خواردن"],
+correct:0
+}
+,
+{
+question:"بۆ زۆربەی گەورەکان چەند کاتژمێر خەوتن لە شەوێکدا پێشنیار دەکرێت؟",
+answers:["1-2 کاتژمێر","7-9 کاتژمێر","15-20 کاتژمێر","24 کاتژمێر"],
+correct:1
+}
+,
+{
+question:"خەوتن بۆ کام شت گرنگە؟",
+answers:["ئارامگرتن و نوێکردنەوەی جەستە","تەنها بۆ جوڵان","کەمکردنەوەی بیر","زیادکردنی ماندووبوون"],
+correct:0
+}
+,
+{
+question:"چی زیاتر بەکاردەهێنیت، زۆرتر فێری دەبیت؟",
+answers:["مێشک","بەرد","دار","کاغەز"],
+correct:0
+}
+,
+{
+question:"لە ئیسلامدا زەکات یەکێکە لە چەند ستوونی ئیسلام؟",
+answers:["3","4","5","6"],
+correct:2
+}
+,
+{
+question:"کام سورە لە قورئانی پیرۆز بە ناوی مانگێک ناونراوە؟",
+answers:["الفیل","الحج","البقرە","التین"],
+correct:1
+}
+,
+{
+question:"کۆتایی پێغەمبەران کێیە؟",
+answers:["موسا (ع)","عیسا (ع)","محمد (ﷺ)","نوح (ع)"],
+correct:2
+}
+,
+{
+question:"لە مانگی ڕەمەزاندا کام عبادەت زۆر جێبەجێ دەکرێت؟",
+answers:["ڕۆژوو","حەج","زەکات تەنها","قوربانی"],
+correct:0
+}
+,
+{
+question:"لە یاری ئۆڵۆمپیک، هەر چەند ساڵ جارێک بەڕێوەدەچێت؟",
+answers:["2 ساڵ","3 ساڵ","4 ساڵ","5 ساڵ"],
+correct:2
+}
+,
+{
+question:"کێ یەکێکە لە ناسراوترین یاریزانانی تێنیس لە مێژوودا؟",
+answers:["ڕۆجەر فیدەرەر","مایک جۆردەن","ماڕادۆنا","شوماخەر"],
+correct:0
+}
+,
+{
+question:" شكؤي كاكه سيروان كه ي حيز ئه بيت؟",
+answers:["2027","2030","2029","2028"],
+correct:1
+}
+,
 ];
 questions.sort(() => Math.random() - 0.5);
 
@@ -125,7 +282,7 @@ function loadQuestion(){
 
 clearInterval(timer);
 
-time = 30;
+time = 20;
 document.getElementById("timer").innerText = "⏱️ " + time;
 
 document.getElementById("number").innerText =
@@ -188,16 +345,14 @@ if(i === questions[current].correct){
     buttons[questions[current].correct].classList.add("correct");
 
     playSound("wrong");
-buttons[questions[current].correct].classList.add("correct");
-
-document.getElementById("wrongSound").play();
+buttons[questions[current].correct].classList.add("correct")
 
 }
 
 document.getElementById("score").innerText =
 "🏆 خاڵ: " + score;
 
-setTimeout(nextQuestion,3000);
+setTimeout(nextQuestion,1000);
 
 
 }
@@ -207,8 +362,6 @@ function nextQuestion(){
 current++;
 
 if(current >= questions.length){
-
-    document.getElementById("winSound").play();
 
     let best = localStorage.getItem("highScore") || 0;
 
@@ -220,8 +373,13 @@ localStorage.setItem("highScore",score);
 document.getElementById("game").style.display = "none";
 document.getElementById("result").style.display = "block";
 
+const playerName = localStorage.getItem("playerName") || "یاریزان";
+const playerEmail = localStorage.getItem("playerEmail") || "";
+
 document.getElementById("finalScore").innerHTML =
-"🏆 خاڵ: " + score +
+"👤 ناو: " + playerName +
+"<br>📧 ئیمەیڵ: <a href='mailto:" + playerEmail + "'>" + playerEmail + "</a>" +
+"<br><br>🏆 خاڵ: " + score +
 "<br>✅ وەڵامی ڕاست: " + score +
 "<br>❌ وەڵامی هەڵە: " + wrong;
 
@@ -235,29 +393,15 @@ return;
 loadQuestion();
 
 }
-function toKurdishNumber(str){
-return str
-.replaceAll("0","٠")
-.replaceAll("1","١")
-.replaceAll("2","٢")
-.replaceAll("3","٣")
-.replaceAll("4","٤")
-.replaceAll("5","٥")
-.replaceAll("6","٦")
-.replaceAll("7","٧")
-.replaceAll("8","٨")
-.replaceAll("9","٩");
-}
-
 function showClock(){
-let now = new Date();
+    let now = new Date();
 
-let time =
-now.getHours().toString().padStart(2,"0") + ":" +
-now.getMinutes().toString().padStart(2,"0") + ":" +
-now.getSeconds().toString().padStart(2,"0");
+    let time =
+    ((now.getHours() % 12) || 12) + ":" +
+    now.getMinutes().toString().padStart(2,"0") + ":" +
+    now.getSeconds().toString().padStart(2,"0");
 
-document.getElementById("clock").innerHTML = "🕒 " + toKurdishNumber(time);
+    document.getElementById("clock").innerHTML = "🕒 " + time;
 }
 
 setInterval(showClock,1000);
