@@ -1,408 +1,627 @@
-let score = 0;
-let wrong = 0;
-let current = 0;
-let time = 15;
-let timer;
+document.addEventListener("DOMContentLoaded",()=>{
 
-function playSound(type){
-    let audio = new AudioContext();
-    let osc = audio.createOscillator();
-    let gain = audio.createGain();
+// Settings
+const settingsBtn=document.getElementById("settingsBtn");
+const settingsPage=document.getElementById("settingsPage");
+const games=document.querySelector(".games");
+const tabs=document.querySelector(".tabs");
 
-    osc.connect(gain);
-    gain.connect(audio.destination);
 
-    if(type === "correct"){
-        osc.frequency.value = 700;
-    }else{
-        osc.frequency.value = 250;
-    }
+settingsBtn.onclick=()=>{
 
-    gain.gain.value = 0.1;
+if(settingsPage.style.display=="block"){
 
-    osc.start();
-
-    setTimeout(()=>{
-        osc.stop();
-    },200);
-}
-
-const questions = [
-{
-
-question:"چی هەر زیاتر لێی دەبڕیت، گەورەتر دەبێت؟",
-answers:["دار","کونا","کاغەز","بەرد"],
-correct:1
-},
-{
-question:"ئەوە چییە هەمیشە دێت بەڵام هەرگیز ناگات؟",
-answers:["سبەی","ئەمڕۆ","دوێنێ","مانگ"],
-correct:0
-},
-{
-question:"چی دەم هەیە بەڵام قسە ناکات؟",
-answers:["کتێب","جام","ماسی","ڕووبار"],
-correct:1
-}
-,
-{
-question:"کام شت هەیە هەرچەندە بشکێنیت، هێشتا بەکاردەهێنرێت؟",
-answers:["هێلکە","بەرد","دار","جام"],
-correct:0
-}
-,
-{
-question:"چی هەیە هەموو کەس دەیبینێت، بەڵام ناتوانێت دەستی لێ بدات؟",
-answers:["سێبەر","ئاو","دار","بەرد"],
-correct:0
-}
-,
-{
-question:"چی هەر زیاتر لێی وەردەگریت، زیاتر جێی دەمێنێت؟",
-answers:["کونا","ئاو","دار","بەرد"],
-correct:0
-}
-,
-{
-question:"کام شت پڕە لە کون، بەڵام ئاو هەڵدەگرێت؟",
-answers:["ئاسفنج","جام","تەشت","سەتڵ"],
-correct:0
-}
-,
-{
-question:"یەکەم سورەی قورئانی پیرۆز کامەیە؟",
-answers:["الفاتحە","البقرە","الإخلاص","الناس"],
-correct:0
-}
-,
-{
-question:"چەند نوێژی فەرز لە ڕۆژێکدا هەیە؟",
-answers:["٣","٤","٥","٦"],
-correct:2
-}
-,
-{
-question:"لە یاری تۆپی پێ، ژمارەی یاریزانانی هەر تیمێک لە ناو مەیدان چەندە؟",
-answers:["9","10","11","12"],
-correct:2
-}
-,
-{
-question:"کێ زۆرترین پاڵەوانی جامی جیهانی تۆپی پێی بەدەستهێناوە؟",
-answers:["ئەڵمانیا","ئیتاڵیا","برازیل","ئەرجەنتین"],
-correct:2
-}
-,
-{
-question:"ئاو لە چەند توخم پێکهاتووە؟",
-answers:["1","2","3","4"],
-correct:1
-}
-,
-{
-question:"نیشانەی کیمیایی ئاکسیجین چییە؟",
-answers:["H","O","N","C"],
-correct:1
-}
-,
-{
-question:"خێراترین شت لە بۆشایی (Vacuum) چییە؟",
-answers:["دەنگ","ڕووناکی","ئاو","با"],
-correct:1
-}
-,
-{
-question:"یەکەی پێوانەکردنی هێز (Force) چییە؟",
-answers:["وات","ژول","نیوتن","ڤۆلت"],
-correct:2
-}
-,
-{
-question:"قورئانی پیرۆز بە کام زمان دابەزی؟",
-answers:["کوردی","عەرەبی","فارسی","ئینگلیزی"],
-correct:1
-}
-,
-{
-question:"مانگی ڕەمەزان کام مانگی ساڵی کۆچییە؟",
-answers:["٩","١٠","١١","١٢"],
-correct:0
-}
-,
-{
-question:"کێ پێغەمبەری یەکەمی مرۆڤایەتی بوو؟",
-answers:["نوح (ع)","موسا (ع)","ئادەم (ع)","ئیبراهیم (ع)"],
-correct:2
-}
-,
-{
-question:"کاتی خولانەوەی زەوی لە دەوری خۆی نزیکەی چەندە؟",
-answers:["12 کاتژمێر","24 کاتژمێر","30 ڕۆژ","365 ڕۆژ"],
-correct:1
-}
-,
-{
-question:"کام یەک لەمانە گەرمابوونەوەی مادە پێوانە دەکات؟",
-answers:["کێلوگرام","مەتر","پلەی گەرمی","نیوتن"],
-correct:2
-}
-,
-{
-question:"لە یاری باسکەتبال، هەر تیمێک لە یاریگا چەند یاریزان هەیە؟",
-answers:["4","5","6","7"],
-correct:1
-}
-,
-{
-question:"لە یاری تۆپی پێ، کێ ڕێکخستنی یاری دەکات؟",
-answers:["گۆڵچی","داور","کاپتن","تماشاکەر"],
-correct:1
-}
-,
-{
-question:"لە یاری تێنیس، ئامانجی سەرەکی چییە؟",
-answers:["گۆڵکردن","خستنەوەی توپ بەسەر تۆڕەکەدا","گرتنی توپ بە دەست","ڕاکردن"],
-correct:1
-}
-,
-{
-question:"گەورەترین ئەندامی جەستەی مرۆڤ کامەیە؟",
-answers:["دڵ","مێشک","پێست","جگەر"],
-correct:2
-}
-,
-{
-question:"کام ئەندام خوێن لە جەستەدا پەمپ دەکات؟",
-answers:["مێشک","دڵ","گەدە","شش"],
-correct:1
-}
-,
-{
-question:"کامەیان هەناسەدان بەڕێوە دەبات؟",
-answers:["شش","دڵ","مێشک","گورچیلە"],
-correct:0
-}
-,
-{
-question:"چییە کە دەشکێت بەبێ ئەوەی بیخەیتە سەر زەوی؟",
-answers:["بەڵێن","بەرد","جام","دار"],
-correct:0
-}
-,
-{
-question:"کام ڤیتامین زۆر بە ڕووناکی خۆر پەیوەندی هەیە؟",
-answers:["ڤیتامینی A","ڤیتامینی B","ڤیتامینی C","ڤیتامینی D"],
-correct:3
-}
-,
-{
-question:"چەند ددان لە زۆربەی گەورەکاندا هەیە؟",
-answers:["20","28","32","36"],
-correct:2
-}
-,
-{
-question:"هەستی خۆشحاڵی زۆرجار بە چی پەیوەندیدارە؟",
-answers:["هەستی باش و پەیوەندی کۆمەڵایەتی","تەنها بێدەنگی","توڕەیی","ترس"],
-correct:0
-}
-,
-{
-question:"یادگرتنەوە چییە؟",
-answers:["توانای تۆمارکردن و بیرگەی زانیاری","تەنها خەوتن","جوڵەی جەستە","خواردن"],
-correct:0
-}
-,
-{
-question:"بۆ زۆربەی گەورەکان چەند کاتژمێر خەوتن لە شەوێکدا پێشنیار دەکرێت؟",
-answers:["1-2 کاتژمێر","7-9 کاتژمێر","15-20 کاتژمێر","24 کاتژمێر"],
-correct:1
-}
-,
-{
-question:"خەوتن بۆ کام شت گرنگە؟",
-answers:["ئارامگرتن و نوێکردنەوەی جەستە","تەنها بۆ جوڵان","کەمکردنەوەی بیر","زیادکردنی ماندووبوون"],
-correct:0
-}
-,
-{
-question:"چی زیاتر بەکاردەهێنیت، زۆرتر فێری دەبیت؟",
-answers:["مێشک","بەرد","دار","کاغەز"],
-correct:0
-}
-,
-{
-question:"لە ئیسلامدا زەکات یەکێکە لە چەند ستوونی ئیسلام؟",
-answers:["3","4","5","6"],
-correct:2
-}
-,
-{
-question:"کام سورە لە قورئانی پیرۆز بە ناوی مانگێک ناونراوە؟",
-answers:["الفیل","الحج","البقرە","التین"],
-correct:1
-}
-,
-{
-question:"کۆتایی پێغەمبەران کێیە؟",
-answers:["موسا (ع)","عیسا (ع)","محمد (ﷺ)","نوح (ع)"],
-correct:2
-}
-,
-{
-question:"لە مانگی ڕەمەزاندا کام عبادەت زۆر جێبەجێ دەکرێت؟",
-answers:["ڕۆژوو","حەج","زەکات تەنها","قوربانی"],
-correct:0
-}
-,
-{
-question:"لە یاری ئۆڵۆمپیک، هەر چەند ساڵ جارێک بەڕێوەدەچێت؟",
-answers:["2 ساڵ","3 ساڵ","4 ساڵ","5 ساڵ"],
-correct:2
-}
-,
-{
-question:"کێ یەکێکە لە ناسراوترین یاریزانانی تێنیس لە مێژوودا؟",
-answers:["ڕۆجەر فیدەرەر","مایک جۆردەن","ماڕادۆنا","شوماخەر"],
-correct:0
-}
-,
-{
-question:" شكؤي كاكه سيروان كه ي حيز ئه بيت؟",
-answers:["2027","2030","2029","2028"],
-correct:1
-}
-,
-];
-questions.sort(() => Math.random() - 0.5);
-
-loadQuestion();
-
-function loadQuestion(){
-
-clearInterval(timer);
-
-time = 20;
-document.getElementById("timer").innerText = "⏱️ " + time;
-
-document.getElementById("number").innerText =
-"پرسیار " + (current + 1) + " / " + questions.length;
-
-document.getElementById("question").innerText =
-questions[current].question;
-
-for(let i=0;i<4;i++){
-let btn = document.getElementById("a"+i);
-btn.innerText = questions[current].answers[i];
-btn.className = "answer";
-btn.disabled = false;
-}
-
-document.getElementById("score").innerText =
-"🏆 خاڵ: " + score;
-
-startTimer();
-
-}
-
-function startTimer(){
-
-timer = setInterval(function(){
-
-time--;
-
-document.getElementById("timer").innerText =
-"⏱️ " + time;
-
-if(time <= 0){
-clearInterval(timer);
-wrong++;
-nextQuestion();
-}
-
-},1000);
-
-}
-function checkAnswer(i){
-
-clearInterval(timer);
-
-let buttons = document.querySelectorAll(".answer");
-
-buttons.forEach(btn => btn.disabled = true);
-
-if(i === questions[current].correct){
-
-    score++;
-    buttons[i].classList.add("correct");
-
-    playSound("correct");
+settingsPage.style.display="none";
+games.style.display="grid";
+tabs.style.display="flex";
 
 }else{
 
-    wrong++;
-    buttons[i].classList.add("wrong");
-    buttons[questions[current].correct].classList.add("correct");
-
-    playSound("wrong");
-buttons[questions[current].correct].classList.add("correct")
+settingsPage.style.display="block";
+games.style.display="none";
+tabs.style.display="none";
 
 }
 
-document.getElementById("score").innerText =
-"🏆 خاڵ: " + score;
+};
 
-setTimeout(nextQuestion,1000);
 
+// Dark Mode
+document.getElementById("darkModeBtn").onclick=()=>{
+
+document.body.classList.toggle("dark-mode");
+
+};
+
+
+// Language
+document.getElementById("languageBtn").onclick=()=>{
+
+alert("🌐 کوردی / English / العربية");
+
+};
+
+
+// Notification
+document.getElementById("notifyBtn").onclick=()=>{
+
+alert("🔔 هیچ ئاگادارکردنەوەی نوێ نییە");
+
+};
+
+
+// Sound
+let sound=true;
+
+document.getElementById("soundBtn").onclick=()=>{
+
+sound=!sound;
+
+alert(sound ? "🔊 دەنگ چالاک کرا" : "🔇 دەنگ ناچالاک کرا");
+
+};
+
+
+
+// Games
+document.querySelectorAll(".card").forEach(card=>{
+
+card.onclick=()=>{
+
+alert("🎮 یاری: "+card.querySelector("h3").textContent);
+
+};
+
+});
+
+
+// Favorite
+document.querySelectorAll(".heart").forEach(h=>{
+
+h.onclick=(e)=>{
+
+e.stopPropagation();
+
+h.textContent=h.textContent=="♡"?"❤️":"♡";
+
+};
+
+});
+
+
+// Search
+const search=document.getElementById("search");
+
+search.onkeyup=()=>{
+
+let value=search.value.toLowerCase();
+
+document.querySelectorAll(".card").forEach(card=>{
+
+let name=card.querySelector("h3").textContent.toLowerCase();
+
+card.style.display=name.includes(value)?"block":"none";
+
+});
+
+};
+
+
+
+// Chat
+const chatBtn=document.querySelector(".nav-item:nth-child(3)");
+const chatPage=document.getElementById("chatPage");
+const sendBtn=document.getElementById("sendBtn");
+const messageInput=document.getElementById("messageInput");
+const chatBox=document.getElementById("chatBox");
+
+
+chatBtn.onclick=()=>{
+
+games.style.display="none";
+chatPage.style.display="block";
+
+};
+
+
+sendBtn.onclick=()=>{
+
+let text=messageInput.value;
+
+if(text!=""){
+
+let p=document.createElement("p");
+
+p.textContent="👤 "+text;
+
+chatBox.appendChild(p);
+
+messageInput.value="";
 
 }
 
-function nextQuestion(){
+};
 
-current++;
 
-if(current >= questions.length){
 
-    let best = localStorage.getItem("highScore") || 0;
+// Profile
+const profileBtn=document.querySelector(".nav-item:nth-child(4)");
+const profilePage=document.getElementById("profilePage");
+const editProfileBtn=document.getElementById("editProfileBtn");
+const profileName=document.querySelector("#profilePage h3");
 
-if(score > best){
-best = score;
-localStorage.setItem("highScore",score);
-}
 
-document.getElementById("game").style.display = "none";
-document.getElementById("result").style.display = "block";
+profileBtn.onclick=()=>{
 
-const playerName = localStorage.getItem("playerName") || "یاریزان";
-const playerEmail = localStorage.getItem("playerEmail") || "";
+games.style.display="none";
+chatPage.style.display="none";
+profilePage.style.display="block";
 
-document.getElementById("finalScore").innerHTML =
-"👤 ناو: " + playerName +
-"<br>📧 ئیمەیڵ: <a href='mailto:" + playerEmail + "'>" + playerEmail + "</a>" +
-"<br><br>🏆 خاڵ: " + score +
-"<br>✅ وەڵامی ڕاست: " + score +
-"<br>❌ وەڵامی هەڵە: " + wrong;
+};
 
-document.getElementById("highScore").innerHTML =
-"🥇 باشترین خاڵ: " + best;
 
-return;
+// Save Name
+let savedName=localStorage.getItem("username");
+
+if(savedName){
+
+profileName.textContent=savedName;
 
 }
 
-loadQuestion();
+
+editProfileBtn.onclick=()=>{
+
+let name=prompt("ناوی نوێ بنووسە:");
+
+if(name){
+
+profileName.textContent=name;
+
+localStorage.setItem("username",name);
 
 }
-function showClock(){
-    let now = new Date();
 
-    let time =
-    ((now.getHours() % 12) || 12) + ":" +
-    now.getMinutes().toString().padStart(2,"0") + ":" +
-    now.getSeconds().toString().padStart(2,"0");
+};
 
-    document.getElementById("clock").innerHTML = "🕒 " + time;
+
+// Home & Games Navigation
+
+const homeBtn = document.querySelector(".nav-item:nth-child(1)");
+const gamesBtn = document.querySelector(".nav-item:nth-child(2)");
+
+homeBtn.onclick = () => {
+
+  games.style.display = "grid";
+  tabs.style.display = "flex";
+
+  chatPage.style.display = "none";
+  profilePage.style.display = "none";
+  settingsPage.style.display = "none";
+
+};
+
+
+gamesBtn.onclick = () => {
+
+  games.style.display = "grid";
+  tabs.style.display = "flex";
+
+  chatPage.style.display = "none";
+  profilePage.style.display = "none";
+  settingsPage.style.display = "none";
+
+};
+    // Profile Image
+
+const changeImageBtn = document.getElementById("changeImageBtn");
+const imageInput = document.getElementById("imageInput");
+const profileImage = document.getElementById("profileImage");
+
+
+let savedImage = localStorage.getItem("profileImage");
+
+if(savedImage && profileImage){
+  profileImage.src = savedImage;
 }
 
-setInterval(showClock,1000);
-showClock();
+
+if(changeImageBtn){
+
+changeImageBtn.onclick = ()=>{
+
+imageInput.click();
+
+};
+
+}
+
+
+if(imageInput){
+
+imageInput.onchange = ()=>{
+
+let file = imageInput.files[0];
+
+if(file){
+
+let reader = new FileReader();
+
+reader.onload = function(e){
+
+profileImage.src = e.target.result;
+
+localStorage.setItem("profileImage", e.target.result);
+
+}
+
+reader.readAsDataURL(file);
+
+}
+
+};
+
+}
+    const scoreText = document.getElementById("score");
+const winsText = document.getElementById("wins");
+
+let score = localStorage.getItem("score") || 0;
+let wins = localStorage.getItem("wins") || 0;
+
+if(scoreText){
+  scoreText.textContent = score;
+}
+
+if(winsText){
+  winsText.textContent = wins;
+}
+    // Favorite Games Save
+
+const favCount = document.getElementById("favCount");
+const favGamesBox = document.getElementById("favGames");
+
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+
+function updateFavorites(){
+
+  if(favCount){
+    favCount.textContent = favorites.length;
+  }
+
+  if(favGamesBox){
+
+    favGamesBox.innerHTML = "";
+
+    favorites.forEach(game=>{
+
+      let p = document.createElement("p");
+      p.textContent = "❤️ " + game;
+
+      favGamesBox.appendChild(p);
+
+    });
+
+  }
+
+}
+
+
+document.querySelectorAll(".heart").forEach(heart=>{
+
+heart.onclick=(e)=>{
+
+e.stopPropagation();
+
+let card = heart.parentElement;
+let name = card.querySelector("h3").textContent;
+
+
+if(heart.textContent=="♡"){
+
+heart.textContent="❤️";
+
+favorites.push(name);
+
+}else{
+
+heart.textContent="♡";
+
+favorites = favorites.filter(item=>item != name);
+
+}
+
+
+localStorage.setItem("favorites", JSON.stringify(favorites));
+
+updateFavorites();
+
+};
+
+});
+
+
+updateFavorites();
+    // Friends Online System
+
+const friendInput = document.getElementById("friendInput");
+const addFriendBtn = document.getElementById("addFriendBtn");
+const friendList = document.getElementById("friendList");
+
+let friends = JSON.parse(localStorage.getItem("friends")) || [];
+
+
+function showFriends(){
+
+  if(friendList){
+
+    friendList.innerHTML = "";
+
+    friends.forEach((friend,index)=>{
+
+      let div = document.createElement("div");
+
+      div.className = "friend";
+
+      div.innerHTML = `
+👤 ${friend.name}
+<br>
+${friend.online ? "🟢 ئۆنلاین" : "⚪ ئۆفلاین"}
+
+<br>
+
+<button onclick="openFriendChat('${friend.name}')">
+💬 چات
+</button>
+
+<button onclick="changeStatus(${index})">
+🔄
+</button>
+`;
+      friendList.appendChild(div);
+
+    });
+
+  }
+
+}
+
+
+// زیادکردنی هاوڕێ
+
+if(addFriendBtn){
+
+addFriendBtn.onclick = ()=>{
+
+let name = friendInput.value.trim();
+
+if(name){
+
+friends.push({
+  name:name,
+  online:true
+});
+
+
+localStorage.setItem(
+"friends",
+JSON.stringify(friends)
+);
+
+
+friendInput.value="";
+
+showFriends();
+
+}
+
+};
+
+}
+
+
+// گۆڕینی دۆخ
+
+function changeStatus(index){
+
+friends[index].online = !friends[index].online;
+
+localStorage.setItem(
+"friends",
+JSON.stringify(friends)
+);
+
+showFriends();
+
+}
+
+
+showFriends();
+    // Private Friend Chat
+
+const privateChat = document.getElementById("privateChat");
+const chatFriendName = document.getElementById("chatFriendName");
+const privateChatBox = document.getElementById("privateChatBox");
+const privateMessageInput = document.getElementById("privateMessageInput");
+const privateSendBtn = document.getElementById("privateSendBtn");
+
+
+let currentFriend = "";
+
+
+function openFriendChat(name){
+
+currentFriend = name;
+
+chatFriendName.textContent = "👤 " + name;
+
+privateChat.style.display="block";
+
+loadMessages();
+
+}
+
+
+function loadMessages(){
+
+privateChatBox.innerHTML="";
+
+let messages = JSON.parse(
+localStorage.getItem("chat_"+currentFriend)
+) || [];
+
+
+messages.forEach(msg=>{
+
+let p=document.createElement("p");
+
+p.textContent="👤 "+msg;
+
+privateChatBox.appendChild(p);
+
+});
+
+}
+
+
+
+if(privateSendBtn){
+
+privateSendBtn.onclick=()=>{
+
+let text=privateMessageInput.value.trim();
+
+
+if(text){
+
+let messages = JSON.parse(
+localStorage.getItem("chat_"+currentFriend)
+) || [];
+
+
+messages.push(text);
+
+
+localStorage.setItem(
+"chat_"+currentFriend,
+JSON.stringify(messages)
+);
+
+
+privateMessageInput.value="";
+
+loadMessages();
+
+}
+
+};
+
+}
+    // Login System
+
+const loginPage = document.getElementById("loginPage");
+
+const usernameInput = document.getElementById("usernameInput");
+const passwordInput = document.getElementById("passwordInput");
+
+const loginBtn = document.getElementById("loginBtn");
+const signupBtn = document.getElementById("signupBtn");
+
+
+let account = JSON.parse(localStorage.getItem("account"));
+
+
+if(account){
+
+loginPage.style.display="none";
+
+}
+
+
+
+// Signup
+
+signupBtn.onclick = ()=>{
+
+let user = usernameInput.value;
+let pass = passwordInput.value;
+
+
+if(user && pass){
+
+localStorage.setItem(
+"account",
+JSON.stringify({
+username:user,
+password:pass
+})
+);
+
+
+alert("✅ هەژمار دروست کرا");
+
+loginPage.style.display="none";
+
+}
+
+};
+
+
+
+// Login
+
+loginBtn.onclick = ()=>{
+
+
+let user = usernameInput.value;
+let pass = passwordInput.value;
+
+
+let saved = JSON.parse(
+localStorage.getItem("account")
+);
+
+
+if(saved && user==saved.username && pass==saved.password){
+
+alert("✅ بەخێربێیت "+user);
+
+loginPage.style.display="none";
+
+
+}else{
+
+alert("❌ زانیاری هەڵەیە");
+
+}
+
+};
+    // Connect Login Name With Profile
+
+const loginName = document.getElementById("usernameInput");
+const profileTitle = document.querySelector("#profilePage h3");
+
+let accountData = JSON.parse(localStorage.getItem("account"));
+
+
+if(accountData && profileTitle){
+
+  profileTitle.textContent = accountData.username;
+
+}
+
+
+// لە کاتی دروستکردنی هەژمار ناوەکە هەڵبگرە
+
+const oldSignup = localStorage.getItem("account");
+
+if(oldSignup){
+
+ let data = JSON.parse(oldSignup);
+
+ if(profileTitle){
+   profileTitle.textContent = data.username;
+ }
+
+}
+});
