@@ -517,27 +517,7 @@ loadMessages();
 };
 
 }
-    // Login System
-
-const loginPage = document.getElementById("loginPage");
-
-const usernameInput = document.getElementById("usernameInput");
-const passwordInput = document.getElementById("passwordInput");
-
-const loginBtn = document.getElementById("loginBtn");
-const signupBtn = document.getElementById("signupBtn");
-
-
-let account = JSON.parse(localStorage.getItem("account"));
-
-
-if(account){
-
-loginPage.style.display="none";
-
-}
-
-
+  
 
 // Signup
 
