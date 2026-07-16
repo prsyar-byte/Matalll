@@ -1,607 +1,407 @@
-document.addEventListener("DOMContentLoaded",()=>{
-
-// Settings
-const settingsBtn=document.getElementById("settingsBtn");
-const settingsPage=document.getElementById("settingsPage");
-const games=document.querySelector(".games");
-const tabs=document.querySelector(".tabs");
+// =========================
+// Dollar IQ - script.js
+// Part 1
+// =========================
 
 
-settingsBtn.onclick=()=>{
+// ===== کات =====
 
-if(settingsPage.style.display=="block"){
+function updateTime(){
 
-settingsPage.style.display="none";
-games.style.display="grid";
-tabs.style.display="flex";
+    const time = document.getElementById("time");
 
-}else{
+    if(!time) return;
 
-settingsPage.style.display="block";
-games.style.display="none";
-tabs.style.display="none";
+    const now = new Date();
+
+    time.textContent =
+    String(now.getHours()).padStart(2,"0")
+    + ":" +
+    String(now.getMinutes()).padStart(2,"0");
 
 }
 
-};
+updateTime();
 
+setInterval(updateTime,1000);
 
-// Dark Mode
-document.getElementById("darkModeBtn").onclick=()=>{
 
-document.body.classList.toggle("dark-mode");
 
-};
 
+// ===== نرخی دۆلار =====
 
-// Language
-document.getElementById("languageBtn").onclick=()=>{
+let dollarPrice = 153900;
 
-alert("🌐 کوردی / English / العربية");
 
-};
+function showDollarPrice(){
 
+    const price = document.getElementById("price");
 
-// Notification
-document.getElementById("notifyBtn").onclick=()=>{
+    if(price){
 
-alert("🔔 هیچ ئاگادارکردنەوەی نوێ نییە");
+        price.textContent =
+        dollarPrice.toLocaleString()
+        + " د.ع";
 
-};
-
-
-// Sound
-let sound=true;
-
-document.getElementById("soundBtn").onclick=()=>{
-
-sound=!sound;
-
-alert(sound ? "🔊 دەنگ چالاک کرا" : "🔇 دەنگ ناچالاک کرا");
-
-};
-
-
-
-// Games
-document.querySelectorAll(".card").forEach(card=>{
-
-card.onclick=()=>{
-
-alert("🎮 یاری: "+card.querySelector("h3").textContent);
-
-};
-
-});
-
-
-// Favorite
-document.querySelectorAll(".heart").forEach(h=>{
-
-h.onclick=(e)=>{
-
-e.stopPropagation();
-
-h.textContent=h.textContent=="♡"?"❤️":"♡";
-
-};
-
-});
-
-
-// Search
-const search=document.getElementById("search");
-
-search.onkeyup=()=>{
-
-let value=search.value.toLowerCase();
-
-document.querySelectorAll(".card").forEach(card=>{
-
-let name=card.querySelector("h3").textContent.toLowerCase();
-
-card.style.display=name.includes(value)?"block":"none";
-
-});
-
-};
-
-
-
-// Chat
-const chatBtn=document.querySelector(".nav-item:nth-child(3)");
-const chatPage=document.getElementById("chatPage");
-const sendBtn=document.getElementById("sendBtn");
-const messageInput=document.getElementById("messageInput");
-const chatBox=document.getElementById("chatBox");
-
-
-chatBtn.onclick=()=>{
-
-games.style.display="none";
-chatPage.style.display="block";
-
-};
-
-
-sendBtn.onclick=()=>{
-
-let text=messageInput.value;
-
-if(text!=""){
-
-let p=document.createElement("p");
-
-p.textContent="👤 "+text;
-
-chatBox.appendChild(p);
-
-messageInput.value="";
-
-}
-
-};
-
-
-
-// Profile
-const profileBtn=document.querySelector(".nav-item:nth-child(4)");
-const profilePage=document.getElementById("profilePage");
-const editProfileBtn=document.getElementById("editProfileBtn");
-const profileName=document.querySelector("#profilePage h3");
-
-
-profileBtn.onclick=()=>{
-
-games.style.display="none";
-chatPage.style.display="none";
-profilePage.style.display="block";
-
-};
-
-
-// Save Name
-let savedName=localStorage.getItem("username");
-
-if(savedName){
-
-profileName.textContent=savedName;
+    }
 
 }
 
 
-editProfileBtn.onclick=()=>{
-
-let name=prompt("ناوی نوێ بنووسە:");
-
-if(name){
-
-profileName.textContent=name;
-
-localStorage.setItem("username",name);
-
-}
-
-};
+showDollarPrice();
 
 
-// Home & Games Navigation
-
-const homeBtn = document.querySelector(".nav-item:nth-child(1)");
-const gamesBtn = document.querySelector(".nav-item:nth-child(2)");
-
-homeBtn.onclick = () => {
-
-  games.style.display = "grid";
-  tabs.style.display = "flex";
-
-  chatPage.style.display = "none";
-  profilePage.style.display = "none";
-  settingsPage.style.display = "none";
-
-};
 
 
-gamesBtn.onclick = () => {
+// ===== جوڵانی نرخ =====
 
-  games.style.display = "grid";
-  tabs.style.display = "flex";
+function fakeMovePrice(){
 
-  chatPage.style.display = "none";
-  profilePage.style.display = "none";
-  settingsPage.style.display = "none";
+    const change =
+    Math.floor(Math.random()*200-100);
 
-};
-    // Profile Image
+    dollarPrice += change;
 
-const changeImageBtn = document.getElementById("changeImageBtn");
-const imageInput = document.getElementById("imageInput");
-const profileImage = document.getElementById("profileImage");
-
-
-let savedImage = localStorage.getItem("profileImage");
-
-if(savedImage && profileImage){
-  profileImage.src = savedImage;
-}
-
-
-if(changeImageBtn){
-
-changeImageBtn.onclick = ()=>{
-
-imageInput.click();
-
-};
+    showDollarPrice();
 
 }
 
 
-if(imageInput){
+setInterval(fakeMovePrice,10000);
 
-imageInput.onchange = ()=>{
 
-let file = imageInput.files[0];
 
-if(file){
 
-let reader = new FileReader();
+// ===== گۆڕینی دراو =====
 
-reader.onload = function(e){
+function convertDollar(){
 
-profileImage.src = e.target.result;
+    const usd = document.getElementById("usd");
+    const result = document.getElementById("result");
 
-localStorage.setItem("profileImage", e.target.result);
+
+    if(!usd || !result) return;
+
+
+    const amount = Number(usd.value);
+
+
+    if(!amount || amount <= 0){
+
+        result.textContent =
+        "تکایە بڕی دۆلار بنووسە";
+
+        return;
+
+    }
+
+
+    result.textContent =
+    (amount * dollarPrice / 100)
+    .toLocaleString()
+    + " د.ع";
+
+}
+// =========================
+// Dollar IQ - script.js
+// Part 2
+// =========================
+
+
+// ===== نوێکردنەوەی نرخ =====
+
+function refreshRate(){
+
+    showDollarPrice();
 
 }
 
-reader.readAsDataURL(file);
+setInterval(refreshRate,60000);
 
-}
 
-};
 
-}
-    const scoreText = document.getElementById("score");
-const winsText = document.getElementById("wins");
 
-let score = localStorage.getItem("score") || 0;
-let wins = localStorage.getItem("wins") || 0;
+// ===== مێنیوی 3 هێڵ =====
 
-if(scoreText){
-  scoreText.textContent = score;
-}
+const menuBtn =
+document.getElementById("menuBtn");
 
-if(winsText){
-  winsText.textContent = wins;
-}
-    // Favorite Games Save
 
-const favCount = document.getElementById("favCount");
-const favGamesBox = document.getElementById("favGames");
+const sideMenu =
+document.getElementById("sideMenu");
 
-let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
 
-function updateFavorites(){
+if(menuBtn && sideMenu){
 
-  if(favCount){
-    favCount.textContent = favorites.length;
-  }
+    menuBtn.onclick = function(){
 
-  if(favGamesBox){
+        sideMenu.classList.toggle("active");
 
-    favGamesBox.innerHTML = "";
-
-    favorites.forEach(game=>{
-
-      let p = document.createElement("p");
-      p.textContent = "❤️ " + game;
-
-      favGamesBox.appendChild(p);
-
-    });
-
-  }
-
-}
-
-
-document.querySelectorAll(".heart").forEach(heart=>{
-
-heart.onclick=(e)=>{
-
-e.stopPropagation();
-
-let card = heart.parentElement;
-let name = card.querySelector("h3").textContent;
-
-
-if(heart.textContent=="♡"){
-
-heart.textContent="❤️";
-
-favorites.push(name);
-
-}else{
-
-heart.textContent="♡";
-
-favorites = favorites.filter(item=>item != name);
-
-}
-
-
-localStorage.setItem("favorites", JSON.stringify(favorites));
-
-updateFavorites();
-
-};
-
-});
-
-
-updateFavorites();
-    // Friends Online System
-
-const friendInput = document.getElementById("friendInput");
-const addFriendBtn = document.getElementById("addFriendBtn");
-const friendList = document.getElementById("friendList");
-
-let friends = JSON.parse(localStorage.getItem("friends")) || [];
-
-
-function showFriends(){
-
-  if(friendList){
-
-    friendList.innerHTML = "";
-
-    friends.forEach((friend,index)=>{
-
-      let div = document.createElement("div");
-
-      div.className = "friend";
-
-      div.innerHTML = `
-👤 ${friend.name}
-<br>
-${friend.online ? "🟢 ئۆنلاین" : "⚪ ئۆفلاین"}
-
-<br>
-
-<button onclick="openFriendChat('${friend.name}')">
-💬 چات
-</button>
-
-<button onclick="changeStatus(${index})">
-🔄
-</button>
-`;
-      friendList.appendChild(div);
-
-    });
-
-  }
-
-}
-
-
-// زیادکردنی هاوڕێ
-
-if(addFriendBtn){
-
-addFriendBtn.onclick = ()=>{
-
-let name = friendInput.value.trim();
-
-if(name){
-
-friends.push({
-  name:name,
-  online:true
-});
-
-
-localStorage.setItem(
-"friends",
-JSON.stringify(friends)
-);
-
-
-friendInput.value="";
-
-showFriends();
-
-}
-
-};
-
-}
-
-
-// گۆڕینی دۆخ
-
-function changeStatus(index){
-
-friends[index].online = !friends[index].online;
-
-localStorage.setItem(
-"friends",
-JSON.stringify(friends)
-);
-
-showFriends();
-
-}
-
-
-showFriends();
-    // Private Friend Chat
-
-const privateChat = document.getElementById("privateChat");
-const chatFriendName = document.getElementById("chatFriendName");
-const privateChatBox = document.getElementById("privateChatBox");
-const privateMessageInput = document.getElementById("privateMessageInput");
-const privateSendBtn = document.getElementById("privateSendBtn");
-
-
-let currentFriend = "";
-
-
-function openFriendChat(name){
-
-currentFriend = name;
-
-chatFriendName.textContent = "👤 " + name;
-
-privateChat.style.display="block";
-
-loadMessages();
-
-}
-
-
-function loadMessages(){
-
-privateChatBox.innerHTML="";
-
-let messages = JSON.parse(
-localStorage.getItem("chat_"+currentFriend)
-) || [];
-
-
-messages.forEach(msg=>{
-
-let p=document.createElement("p");
-
-p.textContent="👤 "+msg;
-
-privateChatBox.appendChild(p);
-
-});
+    };
 
 }
 
 
 
-if(privateSendBtn){
+// ===== Dark Mode =====
 
-privateSendBtn.onclick=()=>{
+function darkMode(){
 
-let text=privateMessageInput.value.trim();
-
-
-if(text){
-
-let messages = JSON.parse(
-localStorage.getItem("chat_"+currentFriend)
-) || [];
+    document.body.classList.toggle("dark");
 
 
-messages.push(text);
-
-
-localStorage.setItem(
-"chat_"+currentFriend,
-JSON.stringify(messages)
-);
-
-
-privateMessageInput.value="";
-
-loadMessages();
+    localStorage.setItem(
+        "darkMode",
+        document.body.classList.contains("dark")
+    );
 
 }
 
-};
+
+
+
+if(localStorage.getItem("darkMode") === "true"){
+
+    document.body.classList.add("dark");
 
 }
-  
-
-// Signup
-
-signupBtn.onclick = ()=>{
-
-let user = usernameInput.value;
-let pass = passwordInput.value;
 
 
-if(user && pass){
-
-localStorage.setItem(
-"account",
-JSON.stringify({
-username:user,
-password:pass
-})
-);
 
 
-alert("✅ هەژمار دروست کرا");
+// ===== پەیوەندی =====
 
-loginPage.style.display="none";
+function contactUs(){
 
+    alert(
+    "📞 پەیوەندی\n\n+964 770 535 3322"
+    );
+
+}
+
+
+
+
+// ===== تەلەفۆن =====
+
+function callPhone(){
+
+    window.open(
+    "tel:+9647705353322"
+    );
+
+}
+
+
+
+
+// ===== WhatsApp =====
+
+function openWhatsApp(){
+
+    window.open(
+    "https://wa.me/9647705353322",
+    "_blank"
+    );
+
+}
+// =========================
+// Dollar IQ - script.js
+// Part 3
+// Language System
+// =========================
+
+
+const languages = {
+
+ku:{
+home:"سەرەکی",
+chart:"گراف",
+gold:"زێڕ",
+more:"زیاتر",
+settings:"ڕێکخستن",
+rate:"نرخی 100 دۆلار",
+update:"نوێکراوەتەوە:",
+convert:"گۆڕینی دراو",
+goldPrice:"نرخی زێڕ",
+chartBox:"گراف",
+news:"هەواڵ",
+alert:"ئاگادارکردنەوە",
+calculator:"حاسبە"
+},
+
+
+ar:{
+home:"الرئيسية",
+chart:"الرسم البياني",
+gold:"الذهب",
+more:"المزيد",
+settings:"الإعدادات",
+rate:"سعر 100 دولار",
+update:"تم التحديث:",
+convert:"تحويل العملات",
+goldPrice:"سعر الذهب",
+chartBox:"الرسم البياني",
+news:"الأخبار",
+alert:"التنبيهات",
+calculator:"آلة حاسبة"
+},
+
+
+en:{
+home:"Home",
+chart:"Chart",
+gold:"Gold",
+more:"More",
+settings:"Settings",
+rate:"100 Dollar Price",
+update:"Updated:",
+convert:"Currency Converter",
+goldPrice:"Gold Price",
+chartBox:"Chart",
+news:"News",
+alert:"Notifications",
+calculator:"Calculator"
 }
 
 };
 
 
 
-// Login
-
-loginBtn.onclick = ()=>{
 
 
-let user = usernameInput.value;
-let pass = passwordInput.value;
+function applyLanguage(lang){
+
+    const t = languages[lang];
+
+    if(!t) return;
 
 
-let saved = JSON.parse(
-localStorage.getItem("account")
-);
+    const ids = {
+
+        homeText:t.home,
+        homeText2:t.home,
+
+        chartText:t.chart,
+        chartText2:t.chart,
+
+        goldText:t.gold,
+        goldText2:t.gold,
+
+        moreText:t.more,
+
+        settingsText:t.settings,
+        settingsBoxText:t.settings,
+
+        rateText:t.rate,
+
+        convertText:t.convert,
+
+        goldPriceText:t.goldPrice,
+
+        chartBoxText:t.chartBox,
+
+        newsText:t.news,
+
+        alertText:t.alert,
+
+        calculatorText:t.calculator
+    };
 
 
-if(saved && user==saved.username && pass==saved.password){
 
-alert("✅ بەخێربێیت "+user);
+    for(let id in ids){
 
-loginPage.style.display="none";
+        const element =
+        document.getElementById(id);
 
 
-}else{
+        if(element){
 
-alert("❌ زانیاری هەڵەیە");
+            element.textContent = ids[id];
+
+        }
+
+    }
 
 }
 
-};
-    // Connect Login Name With Profile
-
-const loginName = document.getElementById("usernameInput");
-const profileTitle = document.querySelector("#profilePage h3");
-
-let accountData = JSON.parse(localStorage.getItem("account"));
 
 
-if(accountData && profileTitle){
 
-  profileTitle.textContent = accountData.username;
+// ===== هەڵبژاردنی زمان =====
+
+function setLanguage(lang){
+
+    localStorage.setItem(
+        "language",
+        lang
+    );
+
+
+    location.href="index.html";
+
+}
+
+
+
+
+// ===== بارکردنی زمان =====
+
+window.addEventListener("load",()=>{
+
+
+    const lang =
+    localStorage.getItem("language")
+    || "ku";
+
+
+    applyLanguage(lang);
+
+function showAlert(){
+
+    if(Notification.permission === "granted"){
+
+        new Notification("💵 Dollar IQ",{
+            body:"نرخی دۆلار نوێکرایەوە"
+        });
+
+    }else{
+
+        Notification.requestPermission();
+
+    }
+
+}
+    function showAlert(){
+
+    alert(
+    "🔔 Dollar IQ\n\nنرخی دۆلار نوێکرایەوە"
+    );
+
+}
+    // ===== نرخی پاوەن =====
+
+let poundPrice = 205000;
+
+
+function showPoundPrice(){
+
+    const pound =
+    document.getElementById("poundPrice");
+
+
+    if(pound){
+
+        pound.textContent =
+        poundPrice.toLocaleString()
+        + " د.ع";
+
+    }
 
 }
 
 
-// لە کاتی دروستکردنی هەژمار ناوەکە هەڵبگرە
-
-const oldSignup = localStorage.getItem("account");
-
-if(oldSignup){
-
- let data = JSON.parse(oldSignup);
-
- if(profileTitle){
-   profileTitle.textContent = data.username;
- }
-
-}
+showPoundPrice();
 });
