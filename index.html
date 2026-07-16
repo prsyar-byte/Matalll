@@ -2,124 +2,107 @@
 <html lang="ku" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DZhaaa</title>
+<title>Dollar IQ</title>
 
 <link rel="stylesheet" href="style.css">
 
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
+
 
 <body>
 
-<header class="topbar">
 
-<div class="icon" id="settingsBtn">⚙️</div>
+<!-- Side Menu -->
 
-<div class="logo">
-<span>DZhaaa</span>
-</div>
+<div id="sideMenu" class="side-menu">
 
-<div class="right-icons">
+<h3>💵 Dollar IQ</h3>
 
-<div class="icon notification">
-🔔
-<span class="badge">3</span>
-</div>
 
-<div class="icon">
-👤
-</div>
+<div onclick="location.href='index.html'">
+
+🏠 <span id="homeText">
+سەرەکی
+</span>
 
 </div>
+
+
+<div onclick="location.href='chart.html'">
+
+📈 <span id="chartText">
+گراف
+</span>
+
+</div>
+
+
+<div onclick="location.href='gold.html'">
+
+🪙 <span id="goldText">
+زێڕ
+</span>
+
+</div>
+
+
+<div onclick="location.href='settings.html'">
+
+⚙️ <span id="settingsText">
+ڕێکخستن
+</span>
+
+</div>
+
+
+</div>
+
+
+
+<!-- Header -->
+
+<header class="top">
+
+
+<h2>
+💵 Dollar IQ
+</h2>
+
+
+<button id="menuBtn">
+
+<i class="fa-solid fa-bars"></i>
+
+</button>
+
 
 </header>
+    
+<!-- Dollar Price Card -->
+
+<div class="main-card">
+
+<h3 id="rateText">
+نرخی 100 دۆلار
+</h3>
 
 
-
-<!-- Settings -->
-
-<div id="settingsPage" class="page" style="display:none;">
-
-<h2>⚙️ ڕێکخستن</h2>
-
-<button class="setting-btn" id="darkModeBtn">
-🌙 دۆخی شەو
-</button>
-
-<button class="setting-btn" id="languageBtn">
-🌐 گۆڕینی زمان
-</button>
-
-<button class="setting-btn" id="notifyBtn">
-🔔 ئاگادارکردنەوە
-</button>
-
-<button class="setting-btn" id="soundBtn">
-🔊 دەنگ
-</button>
-
-<button class="setting-btn">
-ℹ️ دەربارەی DZhaaa
-</button>
-
+<div id="price">
+153,900 د.ع
 </div>
 
 
-
-
-<!-- Games -->
-
-<div class="tabs">
-
-<button class="active">هەموو</button>
-
-<button>ئۆنلاین</button>
-
-<button>هاوڕێیان</button>
-
-</div>
-
-
-
-<div class="search-box">
-
-<input id="search" placeholder="گەڕان بۆ یاری...">
-
-</div>
-
-
-
-<div class="games">
-
-
-<div class="card">
-<span class="heart">♡</span>
-<img src="https://picsum.photos/400/500?1">
-<h3>PUBG Mobile</h3>
-</div>
-
-
-<div class="card">
-<span class="heart">♡</span>
-<img src="https://picsum.photos/400/500?2">
-<h3>FC Mobile</h3>
-</div>
-
-
-<div class="card">
-<span class="heart">♡</span>
-<img src="https://picsum.photos/400/500?3">
-<h3>Minecraft</h3>
-</div>
-
-
-<div class="card">
-<span class="heart">♡</span>
-<img src="https://picsum.photos/400/500?4">
-<h3>Car Parking</h3>
-</div>
+<p id="updateText">
+نوێکراوەتەوە:
+<span id="time"></span>
+</p>
 
 
 </div>
@@ -127,149 +110,169 @@
 
 
 
+<!-- Main Boxes -->
 
-<!-- Chat -->
-
-<div id="chatPage" class="page" style="display:none;">
-
-<h2>💬 چات</h2>
-
-
-<div class="chat-box" id="chatBox">
-
-</div>
-
-
-<div class="chat-input">
-
-<input id="messageInput" placeholder="نامە بنووسە...">
-
-<button id="sendBtn">
-ناردن
-</button>
-
-</div>
-
-
-</div>
+<div class="grid">
 
 
 
+<div class="box" onclick="location.href='converter.html'">
 
+<i class="fa-solid fa-money-bill-transfer"></i>
 
-<!-- Profile -->
-
-<div id="profilePage" class="page" style="display:none;">
-
-<h2>👤 هەژمار</h2>
-
-
-<div class="profile">
-
-<div class="avatar">
-<img id="profileImage" src="" alt="Profile">
-</div>
-
-<input type="file" id="imageInput" accept="image/*" hidden>
-
-<button class="setting-btn" id="changeImageBtn">
-🖼️ گۆڕینی وێنە
-</button>
-
-
-<h3>بەکارهێنەر</h3>
-
-
-<p>🎮 یاری دڵخواز: 0</p>
-
-<p>⭐ خاڵ: 0</p>
-  
-<p>🏆 بردنەوە: <span id="wins">0</span></p>
-  
-
-<p>⭐ خاڵ: <span id="score">0</span></p>
-
-<p>❤️ یاری دڵخواز: <span id="favCount">0</span></p>
-
-<div id="favGames"></div>
-  
-  <h3>👥 هاوڕێکان</h3>
-
-<input id="friendInput" placeholder="ناوی هاوڕێ بنووسە">
-
-<button id="addFriendBtn" class="setting-btn">
-➕ زیادکردنی هاوڕێ
-</button>
-
-<div id="friendList"></div>
-  
-  <div id="privateChat" style="display:none;">
-
-<h3>💬 چاتی هاوڕێ</h3>
-
-<h4 id="chatFriendName"></h4>
-
-<div class="chat-box" id="privateChatBox">
-</div>
-
-<div class="chat-input">
-
-<input id="privateMessageInput" placeholder="نامە بنووسە...">
-
-<button id="privateSendBtn">
-ناردن
-</button>
-
-</div>
+<p id="convertText">
+گۆڕینی دراو
+</p>
 
 </div>
   
-<button id="editProfileBtn" class="setting-btn">
-✏️ گۆڕینی ناو
-</button>
+  
+<div class="box" onclick="location.href='currency.html'">
 
+<i class="fa-solid fa-money-bill-transfer"></i>
+
+<p>دراوەکان</p>
+
+</div>
+  
+  
+
+<div class="box" onclick="location.href='gold.html'">
+
+<i class="fa-solid fa-coins"></i>
+
+<p id="goldPriceText">
+نرخی زێڕ
+</p>
+
+</div>
+   
+
+  
+<div class="box" onclick="location.href='chart.html'">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<p id="chartBoxText">
+گراف
+</p>
 
 </div>
 
 
+
+
+<div class="box" onclick="location.href='news.html'">
+
+<i class="fa-solid fa-newspaper"></i>
+
+<p id="newsText">
+هەواڵ
+</p>
+
 </div>
 
 
 
-<!-- Bottom Menu -->
 
-<div class="bottom-nav">
+<div class="box" onclick="showAlert()">
+
+<i class="fa-solid fa-bell"></i>
+
+<p id="alertText">
+ئاگادارکردنەوە
+</p>
+
+</div>
 
 
-<div class="nav-item active">
-🏠
+
+<div class="box" onclick="location.href='calculator.html'">
+
+<i class="fa-solid fa-calculator"></i>
+
+<p id="calculatorText">
+حاسبە
+</p>
+
+</div>
+
+
+
+
+<div class="box" onclick="location.href='settings.html'">
+
+<i class="fa-solid fa-gear"></i>
+
+<p id="settingsBoxText">
+ڕێکخستن
+</p>
+
+</div>
+
+
+
+</div>
+    
+<!-- Bottom Navigation -->
+
+<nav class="bottom">
+
+
+<div onclick="location.href='index.html'">
+
+<i class="fa-solid fa-house"></i>
 <br>
+
+<span id="homeText2">
 سەرەکی
+</span>
+
 </div>
 
 
-<div class="nav-item">
-🎮
+
+<div onclick="location.href='chart.html'">
+
+<i class="fa-solid fa-chart-column"></i>
 <br>
-یاری
+
+<span id="chartText2">
+گراف
+</span>
+
 </div>
 
 
-<div class="nav-item">
-💬
+
+<div onclick="location.href='gold.html'">
+
+<i class="fa-solid fa-coins"></i>
 <br>
-چات
+
+<span id="goldText2">
+زێڕ
+</span>
+
 </div>
 
 
-<div class="nav-item">
-👤
+
+<div onclick="location.href='settings.html'">
+
+<i class="fa-solid fa-gear"></i>
 <br>
-هەژمار
+
+<span id="moreText">
+زیاتر
+</span>
+
 </div>
 
 
-</div>
+
+</nav>
+
 
 
 
