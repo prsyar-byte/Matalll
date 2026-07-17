@@ -1,297 +1,109 @@
-<!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<!DOCTYPE html>  <html lang="ku" dir="rtl">  <head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Dollar IQ</title>  <link rel="stylesheet" href="style.css">  <link rel="stylesheet"  
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">  </head>  <body>  <!-- App -->  <div>  <!-- Side Menu -->  <div id="sideMenu" class="side-menu">  <h3 id="menuTitle">💵 Dollar IQ</h3>  <div onclick="location.href='index.html'">  
+🏠 <span id="homeText">سەرەکی</span>  
+</div>  <div onclick="location.href='chart.html'">  
+📈 <span id="chartText">گراف</span>  
+</div>  <div onclick="location.href='gold.html'">  
+🪙 <span id="goldText">زێڕ</span>  
+</div>  <div onclick="location.href='settings.html'">  
+⚙️ <span id="settingsText">ڕێکخستن</span>  
+</div>  <div onclick="location.href='language.html'">  
+🌐 <span id="languageText">گۆڕینی زمان</span>  
+</div>  </div>  <!-- Header -->  <header class="top">  <h2 id="appTitle">  
+💵 Dollar IQ  
+</h2>  <button id="menuBtn">  <i class="fa-solid fa-bars"></i>
 
-<head>
+</button>  </header>  
+  <!-- Dollar Card -->  <div class="main-card">  <h3 id="rateText">  
+نرخی 100 دۆلار  
+</h3>  <div id="price">
+چاوەڕێی نرخ...
+</div>  <div class="rate-info">  <p id="change">
+چاوەڕێی نوێکردنەوە...
+</p>  <p id="date"></p>  </div>  <p id="updateText">  <span id="time"></span>
 
-<meta charset="UTF-8">
+</p>  </div>  <!-- Main Boxes -->  <div class="grid">  <div class="box" onclick="location.href='converter.html'">  <i class="fa-solid fa-money-bill-transfer"></i>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<p id="convertText">  
+گۆڕینی دراو  
+</p>  </div>  <div class="box" onclick="location.href='currency.html'">  <i class="fa-solid fa-money-bill-transfer"></i>
 
-<title>Dollar IQ</title>
+<p id="currencyBoxText">  
+دراوەکان  
+</p>  </div>  <div class="box" onclick="location.href='gold.html'">  <i class="fa-solid fa-coins"></i>
 
-<link rel="stylesheet" href="style.css">
+<p id="goldPriceText">  
+نرخی زێڕ  
+</p>  </div>  <div class="box" onclick="location.href='chart.html'">  <i class="fa-solid fa-chart-line"></i>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<p id="chartBoxText">  
+گراف  
+</p>  </div>  <div class="box" onclick="location.href='news.html'">  
+    <i class="fa-solid fa-newspaper"></i>  
+    <p id="newsText">هەواڵ</p>  
+</div>  <div class="box alert-box" onclick="location.href='alert.html'">  <i class="fa-solid fa-bell"></i>
 
-</head>
+<p id="alertText">  
+ئاگادارکردنەوە  
+</p>  </div>  <div class="box" onclick="location.href='calculator.html'">  <i class="fa-solid fa-calculator"></i>
 
+<p id="calculatorText">  
+حاسبە  
+</p>  </div>  <div class="box" onclick="location.href='settings.html'">  <i class="fa-solid fa-gear"></i>
 
-<body>
+<p id="settingsBoxText">  
+ڕێکخستن  
+</p>  </div>  </div>  
+  <!-- Bottom Navigation -->  <nav class="bottom">  <div onclick="location.href='index.html'">  <i class="fa-solid fa-house"></i>
 
+<br>  <span id="homeText2">  
+سەرەکی  
+</span>  </div>  <div onclick="location.href='chart.html'">  <i class="fa-solid fa-chart-column"></i>
 
-<!-- App -->
+<br>  <span id="chartText2">  
+گراف  
+</span>  </div>  <div onclick="location.href='gold.html'">  <i class="fa-solid fa-coins"></i>
 
-<div>
+<br>  <span id="goldText2">  
+زێڕ  
+</span>  </div>  <div onclick="location.href='settings.html'">  <i class="fa-solid fa-gear"></i>
 
+<br>  <span id="moreText">  
+زیاتر  
+</span>  </div>  </nav>  </div>  <!-- JavaScript Files -->  <script src="script.js"></script>  <!-- Settings Page -->
 
-<!-- Side Menu -->
+<div id="settingsPage" class="page" style="display:none;">  <header class="top">  <button onclick="closeSettings()">  <i class="fa-solid fa-arrow-right"></i>
 
-<div id="sideMenu" class="side-menu">
+</button>  <h2 id="settingsText">  
+⚙️ ڕێکخستن  
+</h2>  <div></div>  </header>  <div class="setting-box" onclick="darkMode()">  🌙 دۆخی شەو
 
-<h3 id="menuTitle">💵 Dollar IQ</h3>
+</div>  <div class="setting-box" onclick="changeLanguage('ku')">  🌐 گۆڕینی زمان
 
+</div>  <div class="setting-box">  🔔 ئاگادارکردنەوە
 
-<div onclick="location.href='index.html'">
-🏠 <span id="homeText">سەرەکی</span>
-</div>
+</div>  <div class="setting-box">  🔊 دەنگ
 
+</div>  <div id="aboutBtn" class="setting-box">  📱 دەربارەی ئەپ
 
-<div onclick="location.href='chart.html'">
-📈 <span id="chartText">گراف</span>
-</div>
+</div>  <div id="aboutPage" class="about-box" style="display:none;">  <h2>  💵 Dollar IQ
 
+</h2>  <p>  ئەپێک بۆ نیشاندانی نرخی دۆلار، زێڕ و دراوەکان.
 
-<div onclick="location.href='gold.html'">
-🪙 <span id="goldText">زێڕ</span>
-</div>
+</p>  <p>  Version 1.0
 
+</p>  </div>  </div>  <!-- Alert Page -->  <div id="alertPage" class="page" style="display:none;">  <header class="top">  <button onclick="history.back()">  <i class="fa-solid fa-arrow-right"></i>
 
-<div onclick="location.href='settings.html'">
-⚙️ <span id="settingsText">ڕێکخستن</span>
-</div>
+</button>  <h2 id="alertTitle">  ئاگادارکردنەوە
 
+</h2>  <div></div>  </header>  <div class="main-card alert-box">  <i class="fa-solid fa-bell"></i>
 
-<div onclick="location.href='language.html'">
-🌐 <span id="languageText">گۆڕینی زمان</span>
-</div>
+<p id="alertDesc">  کاتێک نرخ گەیشتە ئەم بڕە، ئاگادارت دەکەینەوە
 
+</p>  <input id="alertPrice"  
+type="number"  
+placeholder="نرخی دۆلار بنووسە">
 
-</div>
+<button id="alertBtn" onclick="saveAlert()">  پاشەکەوتکردن
 
-
-
-<!-- Header -->
-
-<header class="top">
-
-<h2 id="appTitle">
-💵 Dollar IQ
-</h2>
-
-
-<button id="menuBtn">
-
-<i class="fa-solid fa-bars"></i>
-
-</button>
-
-
-</header>
-  <!-- Dollar Card -->
-
-<div class="main-card">
-
-<h3 id="rateText">
-نرخی 100 دۆلار
-</h3>
-
-
-<div id="price">
-153,900 د.ع
-</div>
-
-
-<div class="rate-info">
-
-<p id="change">
-⬆️ +0 د.ع
-</p>
-
-
-<p id="date"></p>
-
-
-</div>
-
-
-<p id="updateText">
-
-<span id="time"></span>
-
-</p>
-
-
-</div>
-
-
-
-
-<!-- Main Boxes -->
-
-<div class="grid">
-
-
-<div class="box" onclick="location.href='converter.html'">
-
-<i class="fa-solid fa-money-bill-transfer"></i>
-
-<p id="convertText">
-گۆڕینی دراو
-</p>
-
-</div>
-
-
-
-<div class="box" onclick="location.href='currency.html'">
-
-<i class="fa-solid fa-money-bill-transfer"></i>
-
-<p id="currencyBoxText">
-دراوەکان
-</p>
-
-</div>
-
-
-
-
-<div class="box" onclick="location.href='gold.html'">
-
-<i class="fa-solid fa-coins"></i>
-
-<p id="goldPriceText">
-نرخی زێڕ
-</p>
-
-</div>
-
-
-
-
-<div class="box" onclick="location.href='chart.html'">
-
-<i class="fa-solid fa-chart-line"></i>
-
-<p id="chartBoxText">
-گراف
-</p>
-
-</div>
-
-
-
-<div class="box" onclick="location.href='news.html'">
-    <i class="fa-solid fa-newspaper"></i>
-    <p id="newsText">هەواڵ</p>
-</div>
-
-
-
-
-<div class="box alert-box" onclick="location.href='alert.html'">
-
-<i class="fa-solid fa-bell"></i>
-
-<p id="alertText">
-ئاگادارکردنەوە
-</p>
-
-</div>
-
-
-
-<div class="box" onclick="location.href='calculator.html'">
-
-<i class="fa-solid fa-calculator"></i>
-
-<p id="calculatorText">
-حاسبە
-</p>
-
-</div>
-
-
-
-
-<div class="box" onclick="location.href='settings.html'">
-
-<i class="fa-solid fa-gear"></i>
-
-<p id="settingsBoxText">
-ڕێکخستن
-</p>
-
-</div>
-
-
-</div>
-  <!-- Bottom Navigation -->
-
-<nav class="bottom">
-
-
-<div onclick="location.href='index.html'">
-
-<i class="fa-solid fa-house"></i>
-
-<br>
-
-<span id="homeText2">
-سەرەکی
-</span>
-
-</div>
-
-
-
-
-<div onclick="location.href='chart.html'">
-
-<i class="fa-solid fa-chart-column"></i>
-
-<br>
-
-<span id="chartText2">
-گراف
-</span>
-
-</div>
-
-
-
-
-<div onclick="location.href='gold.html'">
-
-<i class="fa-solid fa-coins"></i>
-
-<br>
-
-<span id="goldText2">
-زێڕ
-</span>
-
-</div>
-
-
-
-
-<div onclick="location.href='settings.html'">
-
-<i class="fa-solid fa-gear"></i>
-
-<br>
-
-<span id="moreText">
-زیاتر
-</span>
-
-</div>
-
-
-</nav>
-
-
-</div>
-
-
-
-<!-- JavaScript Files -->
-
-<script src="script.js"></script>
-
-
-</body>
-
-</html>
+</button>  <p id="alertResult"></p>  </div>  </div>   </body>  </html>
