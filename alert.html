@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ئاگادارکردنەوە</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header class="top">
+
+<button onclick="history.back()">
+<i class="fa-solid fa-arrow-right"></i>
+</button>
+
+<h2 id="alertTitle">
+ئاگادارکردنەوە
+</h2>
+
+<div></div>
+
+</header>
+
+<div class="main-card alert-box">
+
+<i class="fa-solid fa-bell"></i>
+
+<p id="alertDesc">
+کاتێک نرخ گەیشتە ئەم بڕە، ئاگادارت دەکەینەوە
+</p>
+
+<input
+id="alertPrice"
+type="number"
+placeholder="نرخی دۆلار بنووسە">
+
+<button
+id="alertBtn"
+onclick="saveAlert()">
+پاشەکەوتکردن
+</button>
+
+<p id="alertResult"></p>
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+
+function saveAlert(){
+
+let price = document.getElementById("alertPrice").value;
+
+if(!price){
+
+document.getElementById("alertResult").textContent =
+"⚠️ تکایە نرخ بنووسە";
+
+return;
+
+}
+
+localStorage.setItem("alertPrice",price);
+
+document.getElementById("alertResult").textContent =
+"✅ نرخی ئاگاداری دانرا";
+
+}
+
+</script>
+
+</body>
+</html>
