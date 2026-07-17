@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Dollar IQ</title>
@@ -19,46 +20,40 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <body>
 
 
+<!-- App -->
+
+<div>
+
+
 <!-- Side Menu -->
 
 <div id="sideMenu" class="side-menu">
 
-<h3>💵 Dollar IQ</h3>
+<h3 id="menuTitle">💵 Dollar IQ</h3>
 
 
 <div onclick="location.href='index.html'">
-
-🏠 <span id="homeText">
-سەرەکی
-</span>
-
+🏠 <span id="homeText">سەرەکی</span>
 </div>
 
 
 <div onclick="location.href='chart.html'">
-
-📈 <span id="chartText">
-گراف
-</span>
-
+📈 <span id="chartText">گراف</span>
 </div>
 
 
 <div onclick="location.href='gold.html'">
-
-🪙 <span id="goldText">
-زێڕ
-</span>
-
+🪙 <span id="goldText">زێڕ</span>
 </div>
 
 
 <div onclick="location.href='settings.html'">
+⚙️ <span id="settingsText">ڕێکخستن</span>
+</div>
 
-⚙️ <span id="settingsText">
-ڕێکخستن
-</span>
 
+<div onclick="location.href='language.html'">
+🌐 <span id="languageText">گۆڕینی زمان</span>
 </div>
 
 
@@ -70,8 +65,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <header class="top">
 
-
-<h2>
+<h2 id="appTitle">
 💵 Dollar IQ
 </h2>
 
@@ -84,8 +78,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 </header>
-    
-<!-- Dollar Price Card -->
+  <!-- Dollar Card -->
 
 <div class="main-card">
 
@@ -99,9 +92,23 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </div>
 
 
+<div class="rate-info">
+
+<p id="change">
+⬆️ +0 د.ع
+</p>
+
+
+<p id="date"></p>
+
+
+</div>
+
+
 <p id="updateText">
-نوێکراوەتەوە:
+
 <span id="time"></span>
+
 </p>
 
 
@@ -115,7 +122,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <div class="grid">
 
 
-
 <div class="box" onclick="location.href='converter.html'">
 
 <i class="fa-solid fa-money-bill-transfer"></i>
@@ -125,17 +131,21 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </p>
 
 </div>
-  
-  
+
+
+
 <div class="box" onclick="location.href='currency.html'">
 
 <i class="fa-solid fa-money-bill-transfer"></i>
 
-<p>دراوەکان</p>
+<p id="currencyBoxText">
+دراوەکان
+</p>
 
 </div>
-  
-  
+
+
+
 
 <div class="box" onclick="location.href='gold.html'">
 
@@ -146,9 +156,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </p>
 
 </div>
-   
 
-  
+
+
+
 <div class="box" onclick="location.href='chart.html'">
 
 <i class="fa-solid fa-chart-line"></i>
@@ -161,21 +172,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 
-
 <div class="box" onclick="location.href='news.html'">
-
-<i class="fa-solid fa-newspaper"></i>
-
-<p id="newsText">
-هەواڵ
-</p>
-
+    <i class="fa-solid fa-newspaper"></i>
+    <p id="newsText">هەواڵ</p>
 </div>
 
 
 
 
-<div class="box" onclick="showAlert()">
+<div class="box alert-box" onclick="location.href='alert.html'">
 
 <i class="fa-solid fa-bell"></i>
 
@@ -211,10 +216,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </div>
 
 
-
 </div>
-    
-<!-- Bottom Navigation -->
+  <!-- Bottom Navigation -->
 
 <nav class="bottom">
 
@@ -222,6 +225,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <div onclick="location.href='index.html'">
 
 <i class="fa-solid fa-house"></i>
+
 <br>
 
 <span id="homeText2">
@@ -232,9 +236,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 
+
 <div onclick="location.href='chart.html'">
 
 <i class="fa-solid fa-chart-column"></i>
+
 <br>
 
 <span id="chartText2">
@@ -245,9 +251,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 
+
 <div onclick="location.href='gold.html'">
 
 <i class="fa-solid fa-coins"></i>
+
 <br>
 
 <span id="goldText2">
@@ -258,9 +266,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 
+
 <div onclick="location.href='settings.html'">
 
 <i class="fa-solid fa-gear"></i>
+
 <br>
 
 <span id="moreText">
@@ -270,11 +280,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </div>
 
 
-
 </nav>
 
 
+</div>
 
+
+
+<!-- JavaScript Files -->
 
 <script src="script.js"></script>
 
