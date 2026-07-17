@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>گۆڕینی دراو</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<header class="top">
+
+<button onclick="history.back()">
+<i class="fa-solid fa-arrow-right"></i>
+</button>
+
+<h2>💱 گۆڕینی دراو</h2>
+
+<div></div>
+
+</header>
+
+
+
+<div class="convert-box">
+
+
+<h3>دراو ➜ دیناری عێراقی</h3>
+
+
+<select id="currency">
+
+<option value="1539">💵 دۆلار</option>
+
+<option value="2050">💷 پاوەن</option>
+
+<option value="1700">💶 یۆرۆ</option>
+
+<option value="4.6">🇹🇷 لیرەی تورکی</option>
+
+<option value="366">🇦🇪 دەرھەمی ئیمارات</option>
+
+<option value="380">🇸🇦 ڕیالی سعودی</option>
+
+<option value="0.01">🇮🇷 تۆمانی ئێران</option>
+
+</select>
+
+
+
+<input
+id="amount"
+type="number"
+placeholder="بڕی پارە بنووسە">
+
+
+
+<button class="convert-btn" onclick="convert()">
+
+گۆڕین
+
+</button>
+
+
+
+<div id="result" class="price">
+
+0 د.ع
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+function convert(){
+
+
+let amount =
+document.getElementById("amount").value;
+
+
+let rate =
+document.getElementById("currency").value;
+
+
+let result =
+amount * rate;
+
+
+
+document.getElementById("result").innerHTML =
+
+result.toLocaleString()+" د.ع";
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
