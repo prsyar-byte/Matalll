@@ -50,60 +50,54 @@ updateDate();
 
 
 
-// ===== Dollar Price =====
+// ===== Live Dollar Price =====
 
-let dollarPrice = 143900;
+const API_URL = "https://dollar-api.dzhwar19999.workers.dev/";
+
+async function getDollarPrice(){
+
+try{
+
+const response = await fetch(API_URL);
+
+const data = await response.json();
 
 
-function showDollarPrice(){
-
-let price = document.getElementById("price");
+const price = document.getElementById("price");
 
 if(price){
 
 price.textContent =
-dollarPrice.toLocaleString()+" د.ع";
+data.sell.toLocaleString()+" د.ع";
 
 }
 
-}
 
-showDollarPrice();
-let oldPrice = dollarPrice;
-
-setInterval(()=>{
-
-let change = Math.floor(Math.random()*200)-100;
-
-dollarPrice += change;
-
-showDollarPrice();
-
-let changeText = document.getElementById("change");
+const changeText = document.getElementById("change");
 
 if(changeText){
 
-if(dollarPrice > oldPrice){
+changeText.textContent =
+"🟢 کڕین: "+
+data.buy.toLocaleString()+
+" | 🔴 فرۆشتن: "+
+data.sell.toLocaleString();
 
-changeText.textContent = "⬆️ +" + (dollarPrice-oldPrice) + " د.ع";
-changeText.className="up";
+}
 
-}else if(dollarPrice < oldPrice){
 
-changeText.textContent = "⬇️ -" + (oldPrice-dollarPrice) + " د.ع";
-changeText.className="down";
+}catch(error){
 
-}else{
-
-changeText.textContent="⏸ 0 د.ع";
+console.log(error);
 
 }
 
 }
 
-oldPrice = dollarPrice;
 
-},10000);
+getDollarPrice();
+
+setInterval(getDollarPrice,60000);
 // ===== Menu =====
 
 const menuBtn = document.getElementById("menuBtn");
@@ -375,20 +369,15 @@ window.onload = function(){
     changeLanguage(savedLang);
 
 };
-// ===== Settings Box =====
+const aboutBtn=document.getElementById("aboutBtn");
+const aboutPage=document.getElementById("aboutPage");
 
-const settingsBtn = document.getElementById("settingsBtn");
-const settingsPage = document.getElementById("settingsPage");
+if(aboutBtn && aboutPage){
 
-if(settingsBtn && settingsPage){
+aboutBtn.onclick=function(){
 
-settingsBtn.onclick = function(){
-
-if(settingsPage.style.display === "block"){
-    settingsPage.style.display = "none";
-}else{
-    settingsPage.style.display = "block";
-}
+aboutPage.style.display =
+aboutPage.style.display=="block" ? "none" : "block";
 
 }
 
