@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>دراوەکان - Dollar IQ</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header class="top">
+
+<button onclick="history.back()">
+<i class="fa-solid fa-arrow-right"></i>
+</button>
+
+<h2 id="currencyTitle">
+💱 دراوەکان
+</h2>
+
+<div></div>
+
+</header>
+
+<!-- Currency Boxes -->
+
+<div class="grid">
+
+<div class="box">
+
+<div class="icon">💵</div>
+
+<h3 id="dollarText">
+دۆلار
+</h3>
+
+<p id="dollar">
+153,900 د.ع
+</p>
+
+</div>
+
+<div class="box">
+
+<div class="icon">🇮🇶</div>
+
+<h3 id="baghdadText">
+بۆرسەی بەغداد
+</h3>
+
+<p id="baghdad">
+153,900 د.ع
+</p>
+
+</div>
+
+<div class="box">
+
+<div class="icon">🇬🇧</div>
+
+<h3 id="poundText">
+پاوەن
+</h3>
+
+<p id="pound">
+205,000 د.ع
+</p>
+
+</div>
+
+<div class="box">
+
+<div class="icon">🇪🇺</div>
+
+<h3 id="europeText">
+یۆرۆ
+</h3>
+
+<p id="europe">
+170,000 د.ع
+</p>
+
+</div>
+  <div class="box">
+
+<div class="icon">🇮🇷</div>
+
+<h3 id="tomanText">
+تومانی ئێران
+</h3>
+
+<p id="toman">
+16,100,000
+</p>
+
+</div>
+
+<div class="box">
+
+<div class="icon">🇹🇷</div>
+
+<h3 id="liraText">
+لیرەی تورکی
+</h3>
+
+<p id="lira">
+4,664
+</p>
+
+</div>
+
+<div class="box">
+
+<div class="icon">🇦🇪</div>
+
+<h3 id="dirhamText">
+دەرهەمی ئیمارات
+</h3>
+
+<p id="dirham">
+366
+</p>
+
+</div>
+
+<div class="box">
+
+<div class="icon">🇸🇦</div>
+
+<h3 id="saudiText">
+ڕیالی سعودی
+</h3>
+
+<p id="saudi">
+380,000 د.ع
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+let rates = {
+
+dollar:153900,
+baghdad:153900,
+pound:205000,
+europe:170000,
+toman:16100000,
+lira:4664,
+dirham:366,
+saudi:380000
+
+};
+
+function updateRates(){
+
+rates.dollar += Math.floor(Math.random()*201)-100;
+rates.baghdad += Math.floor(Math.random()*201)-100;
+rates.pound += Math.floor(Math.random()*201)-100;
+rates.europe += Math.floor(Math.random()*201)-100;
+rates.toman += Math.floor(Math.random()*10001)-5000;
+rates.lira += Math.floor(Math.random()*11)-5;
+rates.dirham += Math.floor(Math.random()*3)-1;
+rates.saudi += Math.floor(Math.random()*101)-50;
+
+document.getElementById("dollar").textContent =
+rates.dollar.toLocaleString()+" د.ع";
+
+document.getElementById("baghdad").textContent =
+rates.baghdad.toLocaleString()+" د.ع";
+
+document.getElementById("pound").textContent =
+rates.pound.toLocaleString()+" د.ع";
+
+document.getElementById("europe").textContent =
+rates.europe.toLocaleString()+" د.ع";
+
+document.getElementById("toman").textContent =
+rates.toman.toLocaleString();
+
+document.getElementById("lira").textContent =
+rates.lira.toLocaleString();
+
+document.getElementById("dirham").textContent =
+rates.dirham.toLocaleString();
+
+document.getElementById("saudi").textContent =
+rates.saudi.toLocaleString()+" د.ع";
+
+}
+
+updateRates();
+
+setInterval(updateRates,3000);
+
+</script>
+  <script src="script.js"></script>
+
+</body>
+
+</html>
