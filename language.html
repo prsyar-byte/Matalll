@@ -1,0 +1,22 @@
+<!DOCTYPE html>  <html lang="ku" dir="rtl">  <head>  <meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>زمان</title>  <link rel="stylesheet" href="style.css">  </head>  <body>  <div class="language-page">  <h2>🌐 زمان هەڵبژێرە</h2>  <button onclick="setLanguage('ku')">  
+🇹🇯 کوردی  
+</button>  <button onclick="setLanguage('en')">  
+🇺🇸 English  
+</button>  <button onclick="setLanguage('ar')">  
+🇸🇦 العربية  
+</button>  <br><br>
+
+<button class="back-btn" onclick="history.back()">  
+گەڕانەوە  
+</button>  </div>  <script>  
+  
+function setLanguage(lang){  
+  
+localStorage.setItem("lang", lang);  
+  
+location.href="index.html";  
+  
+}  
+  
+</script>  <script src="script.js"></script>  </body>  </html>
