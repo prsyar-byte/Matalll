@@ -375,3 +375,21 @@ window.onload = function(){
     changeLanguage(savedLang);
 
 };
+// ===== Settings Box =====
+
+const settingsBtn = document.getElementById("settingsBtn");
+const settingsPage = document.getElementById("settingsPage");
+
+if(settingsBtn && settingsPage){
+
+settingsBtn.onclick = function(){
+
+if(settingsPage.style.display === "block"){
+    settingsPage.style.display = "none";
+}else{
+    settingsPage.style.display = "block";
+}
+
+}
+
+}
