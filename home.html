@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QuizApp - Home</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>بەخێربێیت بۆ QuizApp 🎓</h1>
+
+<p id="userName">چاوەڕێ بکە...</p>
+
+<div class="menu">
+
+<button onclick="location.href='quiz.html'">
+دەستپێکردنی تاقیکردنەوە
+</button>
+
+<button onclick="location.href='result.html'">
+ئەنجامەکان
+</button>
+
+<button onclick="location.href='leaderboard.html'">
+لیستی باشترین یاریزانەکان
+</button>
+
+<button onclick="logout()">
+چوونەدەرەوە
+</button>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+import { auth } from "./firebase.js";
+import { onAuthStateChanged, signOut } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+onAuthStateChanged(auth, (user)=>{
+
+if(user){
+
+document.getElementById("userName").innerHTML =
+"بەخێربێیت: " + user.email;
+
+}else{
+
+location.href="index.html";
+
+}
+
+});
+
+
+window.logout = function(){
+
+signOut(auth).then(()=>{
+
+location.href="index.html";
+
+});
+
+}
+
+</script>
+
+
+</body>
+</html>
