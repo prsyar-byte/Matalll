@@ -1,3 +1,8 @@
+// =====================
+// Dollar IQ script.js
+// =====================
+
+
 // ===== Time =====
 
 function updateTime(){
@@ -45,7 +50,9 @@ updateDate();
 
 // ===== Live Dollar Price =====
 
-const API_URL = "https://dollar-api.dzhwar19999.workers.dev/";
+const API_URL =
+"https://dollar-api.dzhwar19999.workers.dev/";
+
 
 async function getDollarPrice(){
 
@@ -55,6 +62,8 @@ const response = await fetch(API_URL);
 
 const data = await response.json();
 
+
+// فرۆشتن (نرخی سەرەکی)
 
 const price = document.getElementById("price");
 
@@ -66,16 +75,23 @@ data.sell.toLocaleString()+" د.ع";
 }
 
 
-const changeText = document.getElementById("change");
+// کڕین و فرۆشتن
+
+const changeText =
+document.getElementById("change");
+
 
 if(changeText){
 
-changeText.textContent =
+changeText.innerHTML =
+
 "🟢 کڕین: "+
-data.buy.toLocaleString()
-+
-" | 🔴 فرۆشتن: "+
-data.sell.toLocaleString();
+data.buy.toLocaleString()+
+" د.ع<br><br>"+
+
+"🔴 فرۆشتن: "+
+data.sell.toLocaleString()+
+" د.ع";
 
 }
 
@@ -92,11 +108,12 @@ console.log(error);
 getDollarPrice();
 
 setInterval(getDollarPrice,60000);
-// ===== Menu =====
+// =====================
+// Menu
+// =====================
 
 const menuBtn = document.getElementById("menuBtn");
 const sideMenu = document.getElementById("sideMenu");
-
 
 if(menuBtn && sideMenu){
 
@@ -109,7 +126,9 @@ sideMenu.classList.toggle("active");
 }
 
 
-// ===== Dark Mode =====
+// =====================
+// Dark Mode
+// =====================
 
 function darkMode(){
 
@@ -128,6 +147,12 @@ if(localStorage.getItem("darkMode") === "true"){
 document.body.classList.add("dark");
 
 }
+
+
+// =====================
+// Language System
+// =====================
+
 const languages = {
 
 ku:{
@@ -153,7 +178,7 @@ settingsText:"ڕێکخستن",
 languageText:"گۆڕینی زمان",
 
 alertTitle:"ئاگادارکردنەوە",
-alertDesc:"کاتێک نرخ گەیشتە ئەم بڕە، ئاگادارت دەکەینەوە",
+alertDesc:"کاتێک نرخ گەیشتە ئەم بڕە ئاگادارت دەکەینەوە",
 alertBtn:"پاشەکەوتکردن",
 alertPlaceholder:"نرخی دۆلار بنووسە"
 
@@ -220,8 +245,9 @@ alertPlaceholder:"أدخل سعر الدولار"
 }
 
 };
-
-
+// =====================
+// Change Language
+// =====================
 
 function changeLanguage(lang){
 
@@ -261,22 +287,22 @@ alertBtn:t.alertBtn
 
 for(let id in texts){
 
-let el=document.getElementById(id);
+let el = document.getElementById(id);
 
 if(el){
 
-el.textContent=texts[id];
+el.textContent = texts[id];
 
 }
 
 }
 
 
-let input=document.getElementById("alertPrice");
+const input = document.getElementById("alertPrice");
 
 if(input){
 
-input.placeholder=t.alertPlaceholder;
+input.placeholder = t.alertPlaceholder;
 
 }
 
@@ -286,34 +312,39 @@ localStorage.setItem("lang",lang);
 }
 
 
+// =====================
+// Load Language
+// =====================
 
-window.onload=function(){
+window.onload = function(){
 
-let lang=localStorage.getItem("lang") || "ku";
+let lang =
+localStorage.getItem("lang") || "ku";
 
 changeLanguage(lang);
 
 };
 // =====================
-// About Page
+// About Button
 // =====================
 
 const aboutBtn = document.getElementById("aboutBtn");
 const aboutPage = document.getElementById("aboutPage");
 
+
 if(aboutBtn && aboutPage){
 
 aboutBtn.onclick = function(){
 
-if(aboutPage.style.display === "block"){
+    if(aboutPage.style.display === "block"){
 
-aboutPage.style.display = "none";
+        aboutPage.style.display = "none";
 
-}else{
+    }else{
 
-aboutPage.style.display = "block";
+        aboutPage.style.display = "block";
 
-}
+    }
 
 };
 
