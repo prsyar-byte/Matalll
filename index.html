@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizApp - چوونەژوورەوە</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase -->
+  
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <img src="logo.png" class="logo">
+
+    <h1>QuizApp</h1>
+    <p>چوونە ژوورەوە</p>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="ئیمەیڵ">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="وشەی نهێنی">
+
+    <button id="loginBtn">
+        چوونە ژوورەوە
+    </button>
+
+    <button onclick="location.href='signup.html'">
+        تۆمارکردنی هەژمار
+    </button>
+
+    <button onclick="location.href='forgot.html'">
+        وشەی نهێنیم لەبیر چوو
+    </button>
+
+</div>
+<script type="module">
+
+import { login } from "./auth.js";
+
+
+document.getElementById("loginBtn").onclick = async () => {
+
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+
+try {
+
+await login(email, password);
+
+alert("بە سەرکەوتوویی چوویتە ژوورەوە ✅");
+
+location.href = "home.html";
+
+
+} catch(error){
+
+alert(error.message);
+
+}
+
+};
+
+</script>
+
+</body>
+</html>
