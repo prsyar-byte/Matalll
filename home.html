@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,18 @@
 <title>QuizApp - Home</title>
 
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>بەخێربێیت بۆ QuizApp 🎓</h1>
+<h1>🎓 بەخێربێیت بۆ QuizApp</h1>
 
-<p id="userName">چاوەڕێ بکە...</p>
+<h2 id="userName">چاوەڕێ بکە...</h2>
+
+<p id="userEmail"></p>
 
 <div class="menu">
 
@@ -39,24 +43,49 @@
 
 </div>
 
-
 <script type="module">
 
-import { auth } from "./firebase.js";
-import { onAuthStateChanged, signOut } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { auth, db } from "./firebase.js";
+
+import {
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+doc,
+getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-onAuthStateChanged(auth, (user)=>{
+onAuthStateChanged(auth, async (user)=>{
 
-if(user){
+if(!user){
+
+location.href="index.html";
+return;
+
+}
+
+const snap = await getDoc(doc(db,"users",user.uid));
+
+if(snap.exists()){
+
+const data = snap.data();
 
 document.getElementById("userName").innerHTML =
-"بەخێربێیت: " + user.email;
+"👤 " + data.name;
+
+document.getElementById("userEmail").innerHTML =
+"📧 " + data.email;
 
 }else{
 
-location.href="index.html";
+document.getElementById("userName").innerHTML =
+"👤 " + user.email;
+
+document.getElementById("userEmail").innerHTML =
+"";
 
 }
 
@@ -75,6 +104,6 @@ location.href="index.html";
 
 </script>
 
-
 </body>
+
 </html>
