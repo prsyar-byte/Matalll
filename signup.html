@@ -1,94 +1,139 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>تۆمارکردنی هەژمار</title>
+<title>QuizApp - Result</title>
 
 <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-<div class="login-box">
 
-<h1>QuizApp</h1>
+<div class="container material-card">
 
-<p>دروستکردنی هەژمار</p>
 
-<input 
-type="text" 
-id="name" 
-placeholder="ناوی یاریزان">
+<h1>🎉 ئەنجامی تاقیکردنەوە</h1>
 
-<input 
-type="email" 
-id="email" 
-placeholder="ئیمەیڵ">
 
-<input 
-type="password" 
-id="password" 
-placeholder="وشەی نهێنی">
 
-<button id="signupBtn">
-تۆمارکردن
-</button>
+<div class="result-score" id="scoreBox">
 
-<button onclick="location.href='index.html'">
-گەڕانەوە بۆ Login
-</button>
-
-<p id="message"></p>
+...
 
 </div>
 
 
-<script type="module">
 
-import { signup, saveUserData } from "./auth.js";
+<p class="result-text" id="message">
 
-
-document.getElementById("signupBtn").onclick = async () => {
-
-let name = document.getElementById("name").value;
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
+</p>
 
 
-try {
 
-const userCredential = await signup(email, password);
+<button 
+onclick="location.href='quiz.html'"
+class="primary-btn">
 
-const user = userCredential.user;
+🔄 دووبارە یاری بکە
 
-
-// هەڵگرتنی زانیاری یاریزان
-await saveUserData(user.uid, {
-
-    name: name,
-    email: email,
-    score: 0,
-    played: false
-
-});
+</button>
 
 
-alert("هەژمار بە سەرکەوتوویی دروست بوو ✅");
 
-location.href = "home.html";
+<button 
+onclick="location.href='home.html'"
+class="secondary-btn">
+
+🏠 گەڕانەوە بۆ سەرەتا
+
+</button>
 
 
-} catch(error){
 
-alert(error.message);
+</div>
+
+
+
+
+
+<script>
+
+
+let score =
+Number(localStorage.getItem("quizScore"));
+
+
+
+let scoreBox =
+document.getElementById("scoreBox");
+
+
+let message =
+document.getElementById("message");
+
+
+
+if(!isNaN(score)){
+
+
+
+scoreBox.innerHTML =
+"⭐ " + score;
+
+
+
+if(score >= 3){
+
+
+message.innerHTML =
+"زۆر باشە! 👏 توانیت زۆر باش یاری بکەیت";
+
+
+}
+else if(score > 0){
+
+
+message.innerHTML =
+"باشە، بەردەوام بە و هەوڵی زیاتر بدە 💪";
+
+
+}
+else{
+
+
+message.innerHTML =
+"جارێکی تر تاقیبکەرەوە 🚀";
+
 
 }
 
-};
+
+
+}else{
+
+
+scoreBox.innerHTML =
+"0";
+
+
+message.innerHTML =
+"هیچ ئەنجامێک نییە";
+
+
+}
+
+
 
 </script>
 
+
 </body>
+
 </html>
