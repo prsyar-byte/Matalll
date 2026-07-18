@@ -1,431 +1,47 @@
-<!DOCTYPE html>
-<html lang="ku" dir="rtl">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>QuizApp Admin</title>
-
-<link rel="stylesheet" href="style.css">
-
-</head>
-
-
-<body>
-
-
-<div class="container material-card">
-
-
-<h1>🔐 Admin Panel</h1>
-
-
-<h2>➕ زیادکردنی پرسیار</h2>
-
-
-<input id="question" placeholder="پرسیار بنووسە">
-
-<input id="a" placeholder="وەڵامی A">
-
-<input id="b" placeholder="وەڵامی B">
-
-<input id="c" placeholder="وەڵامی C">
-
-<input id="d" placeholder="وەڵامی D">
-
-
-<input 
-id="correct"
-type="number"
-min="0"
-max="3"
-placeholder="وەڵامی ڕاست 0-3">
-
-
-<button id="addBtn">
-زیادکردن
-</button>
-
-
-<p id="message"></p>
-
-
-<hr>
-
-
-<h2>📚 لیستی پرسیارەکان</h2>
-
-
-<div id="questionList"></div>
-
-
-</div>
-
-
-
-<script type="module">
-
-
-import { auth, db } from "./firebase.js";
-
-
-import {
-onAuthStateChanged
-} 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-
-import {
-
-doc,
-getDoc,
-collection,
-addDoc,
-getDocs,
-deleteDoc,
-updateDoc
-
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-
-const message =
-document.getElementById("message");
-
-
-const questionList =
-document.getElementById("questionList");
-
-
-
-
 // =================
 // CHECK ADMIN
 // =================
 
-
 onAuthStateChanged(auth, async(user)=>{
-
 
 if(!user){
 
 location.href="index.html";
-
 return;
 
 }
 
-
+// بۆ تاقیکردنەوە
+alert("UID: " + user.uid);
+console.log("UID:", user.uid);
 
 const userSnap =
 await getDoc(
 doc(db,"users",user.uid)
 );
 
-
-
 if(!userSnap.exists()){
 
+alert("User document نەدۆزرایەوە");
 location.href="home.html";
-
 return;
 
 }
 
+const data = userSnap.data();
 
-
-const data=userSnap.data();
-
-
+// بۆ تاقیکردنەوە
+alert("Role: " + data.role);
+console.log("Role:", data.role);
 
 if(data.role !== "admin"){
 
-
 alert("تۆ Admin نیت ❌");
-
 location.href="home.html";
-
-
-}
-
-
-
-});
-
-
-
-
-
-
-// =================
-// ADD QUESTION
-// =================
-
-
-document
-.getElementById("addBtn")
-.onclick = async()=>{
-
-
-try{
-
-
-let question =
-document.getElementById("question").value.trim();
-
-
-let answers=[
-
-document.getElementById("a").value.trim(),
-
-document.getElementById("b").value.trim(),
-
-document.getElementById("c").value.trim(),
-
-document.getElementById("d").value.trim()
-
-];
-
-
-let correct =
-Number(
-document.getElementById("correct").value
-);
-
-
-
-if(
-question==="" ||
-answers.includes("") ||
-isNaN(correct) ||
-correct<0 ||
-correct>3
-){
-
-message.innerHTML =
-"❌ هەموو خانەکان پڕ بکەرەوە";
-
 return;
 
 }
 
-
-
-await addDoc(
-
-collection(db,"questions"),
-
-{
-
-question,
-answers,
-correct,
-createdAt:new Date()
-
-}
-
-);
-
-
-
-message.innerHTML =
-"✅ پرسیار زیاد کرا";
-
-
-
-document.getElementById("question").value="";
-document.getElementById("a").value="";
-document.getElementById("b").value="";
-document.getElementById("c").value="";
-document.getElementById("d").value="";
-document.getElementById("correct").value="";
-
-
-
-loadQuestions();
-
-
-}
-
-catch(error){
-
-
-message.innerHTML =
-"❌ "+error.message;
-
-
-}
-
-
-};
-
-
-
-
-
-
-// =================
-// LOAD QUESTIONS
-// =================
-
-
-async function loadQuestions(){
-
-
-questionList.innerHTML =
-"چاوەڕێ بکە...";
-
-
-try{
-
-
-const snap =
-await getDocs(
-collection(db,"questions")
-);
-
-
-
-questionList.innerHTML="";
-
-
-
-snap.forEach((item)=>{
-
-
-const q=item.data();
-
-
-
-const div =
-document.createElement("div");
-
-
-div.className="material-card";
-
-
-div.innerHTML=`
-
-<h3>${q.question}</h3>
-
-<p>
-A) ${q.answers[0]}<br>
-B) ${q.answers[1]}<br>
-C) ${q.answers[2]}<br>
-D) ${q.answers[3]}
-</p>
-
-<p>
-وەڵامی ڕاست: ${q.correct}
-</p>
-
-
-<button onclick="deleteQuestion('${item.id}')">
-🗑️ سڕینەوە
-</button>
-
-
-<button onclick="editQuestion('${item.id}')">
-✏️ دەستکاری
-</button>
-
-
-`;
-
-
-
-questionList.appendChild(div);
-
+alert("بەخێربێیت Admin ✅");
 
 });
-
-
-}
-
-catch(error){
-
-questionList.innerHTML =
-"❌ "+error.message;
-
-}
-
-
-}
-
-
-
-
-
-// =================
-// DELETE
-// =================
-
-
-window.deleteQuestion = async(id)=>{
-
-
-await deleteDoc(
-doc(db,"questions",id)
-);
-
-
-loadQuestions();
-
-
-};
-
-
-
-
-
-
-// =================
-// EDIT
-// =================
-
-
-window.editQuestion = async(id)=>{
-
-
-let text =
-prompt("پرسیاری نوێ بنووسە");
-
-
-if(text){
-
-
-await updateDoc(
-
-doc(db,"questions",id),
-
-{
-question:text
-}
-
-);
-
-
-loadQuestions();
-
-
-}
-
-
-};
-
-
-
-
-loadQuestions();
-
-
-
-</script>
-
-
-</body>
-
-</html>
