@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QuizApp - Profile</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container material-card">
+
+
+<h1>👤 پڕۆفایلی یاریزان</h1>
+
+
+<div class="profile-card">
+
+
+<h2 id="name">
+چاوەڕێ بکە...
+</h2>
+
+
+<p id="email"></p>
+
+
+<p id="score">
+⭐ نمرە: 0
+</p>
+
+
+<p id="played">
+🎮 ژمارەی یاری: 0
+</p>
+
+
+</div>
+
+
+
+<button
+onclick="location.href='home.html'"
+class="secondary-btn">
+
+🏠 گەڕانەوە بۆ سەرەتا
+
+</button>
+
+
+</div>
+
+
+
+
+<script type="module">
+
+
+import { auth, db } from "./firebase.js";
+
+
+import {
+
+onAuthStateChanged
+
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+import {
+
+doc,
+getDoc
+
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+
+
+onAuthStateChanged(auth, async(user)=>{
+
+
+if(!user){
+
+location.href="index.html";
+
+return;
+
+}
+
+
+
+const snap =
+await getDoc(doc(db,"users",user.uid));
+
+
+
+if(snap.exists()){
+
+
+const data=snap.data();
+
+
+
+document.getElementById("name").innerHTML =
+"👤 " + data.name;
+
+
+document.getElementById("email").innerHTML =
+"📧 " + data.email;
+
+
+document.getElementById("score").innerHTML =
+"⭐ نمرە: " + (data.score || 0);
+
+
+document.getElementById("played").innerHTML =
+"🎮 ژمارەی یاری: " + (data.played ? data.played : 0);
+
+
+
+}
+
+
+
+});
+
+
+
+</script>
+
+
+</body>
+
+</html>
