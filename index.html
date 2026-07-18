@@ -20,37 +20,40 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <body>
 
 
+<!-- App -->
+
+<div>
+
+
 <!-- Side Menu -->
 
 <div id="sideMenu" class="side-menu">
 
-<h3>
-💵 Dollar IQ
-</h3>
+<h3 id="menuTitle">💵 Dollar IQ</h3>
 
 
 <div onclick="location.href='index.html'">
-🏠 سەرەکی
+🏠 <span id="homeText">سەرەکی</span>
 </div>
 
 
 <div onclick="location.href='chart.html'">
-📈 گراف
+📈 <span id="chartText">گراف</span>
 </div>
 
 
 <div onclick="location.href='gold.html'">
-🪙 زێڕ
+🪙 <span id="goldText">زێڕ</span>
 </div>
 
 
 <div onclick="location.href='settings.html'">
-⚙️ ڕێکخستن
+⚙️ <span id="settingsText">ڕێکخستن</span>
 </div>
 
 
 <div onclick="location.href='language.html'">
-🌐 گۆڕینی زمان
+🌐 <span id="languageText">گۆڕینی زمان</span>
 </div>
 
 
@@ -75,10 +78,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 </header>
-
-
-
- <!-- Dollar Price -->
+  <!-- Dollar Card -->
 
 <div class="main-card">
 
@@ -88,25 +88,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 <div id="price">
-چاوەڕێی نرخ...
+153,900 د.ع
 </div>
 
 
 <div class="rate-info">
 
-
 <p id="change">
-نوێکردنەوە...
-</p>
-
-
-<p id="buy">
-🟢 کڕین: چاوەڕێ...
-</p>
-
-
-<p id="sell">
-🔴 فرۆشتن: چاوەڕێ...
+⬆️ +0 د.ع
 </p>
 
 
@@ -117,12 +106,18 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 <p id="updateText">
+
 <span id="time"></span>
+
 </p>
 
 
 </div>
-    <!-- Main Boxes -->
+
+
+
+
+<!-- Main Boxes -->
 
 <div class="grid">
 
@@ -151,6 +146,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 
+
 <div class="box" onclick="location.href='gold.html'">
 
 <i class="fa-solid fa-coins"></i>
@@ -160,6 +156,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </p>
 
 </div>
+
 
 
 
@@ -176,18 +173,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 <div class="box" onclick="location.href='news.html'">
-
-<i class="fa-solid fa-newspaper"></i>
-
-<p id="newsText">
-هەواڵ
-</p>
-
+    <i class="fa-solid fa-newspaper"></i>
+    <p id="newsText">هەواڵ</p>
 </div>
 
 
 
-<div class="box" onclick="location.href='alert.html'">
+
+<div class="box alert-box" onclick="location.href='alert.html'">
 
 <i class="fa-solid fa-bell"></i>
 
@@ -211,6 +204,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 
+
 <div class="box" onclick="location.href='settings.html'">
 
 <i class="fa-solid fa-gear"></i>
@@ -223,7 +217,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 </div>
-    <!-- Bottom Navigation -->
+  <!-- Bottom Navigation -->
 
 <nav class="bottom">
 
@@ -242,6 +236,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 
+
 <div onclick="location.href='chart.html'">
 
 <i class="fa-solid fa-chart-column"></i>
@@ -256,6 +251,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 
 
+
 <div onclick="location.href='gold.html'">
 
 <i class="fa-solid fa-coins"></i>
@@ -267,6 +263,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </span>
 
 </div>
+
 
 
 
@@ -286,163 +283,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </nav>
 
 
-
-<!-- Settings Page -->
-
-<div id="settingsPage" class="page" style="display:none;">
-
-
-<header class="top">
-
-<button onclick="closeSettings()">
-
-<i class="fa-solid fa-arrow-right"></i>
-
-</button>
-
-
-<h2 id="settingsText">
-⚙️ ڕێکخستن
-</h2>
-
-
-</header>
-
-
-
-<div class="setting-box" onclick="darkMode()">
-
-🌙 دۆخی شەو
-
 </div>
 
 
 
-<div class="setting-box" onclick="changeLanguage('ku')">
-
-🌐 گۆڕینی زمان
-
-</div>
-
-
-
-<div class="setting-box">
-
-🔔 ئاگادارکردنەوە
-
-</div>
-
-
-
-<div class="setting-box">
-
-🔊 دەنگ
-
-</div>
-
-
-
-<div id="aboutBtn" class="setting-box">
-
-📱 دەربارەی ئەپ
-
-</div>
-
-
-
-<div id="aboutPage" class="about-box" style="display:none;">
-
-
-<h2>
-💵 Dollar IQ
-</h2>
-
-
-<p>
-ئەپێک بۆ نیشاندانی نرخی دۆلار، زێڕ و دراوەکان.
-</p>
-
-
-<p>
-Version 1.0
-</p>
-
-
-</div>
-
-
-</div>
-    <!-- Alert Page -->
-
-<div id="alertPage" class="page" style="display:none;">
-
-
-<header class="top">
-
-
-<button onclick="history.back()">
-
-<i class="fa-solid fa-arrow-right"></i>
-
-</button>
-
-
-
-<h2 id="alertTitle">
-
-ئاگادارکردنەوە
-
-</h2>
-
-
-<div></div>
-
-
-</header>
-
-
-
-
-<div class="main-card alert-box">
-
-
-<i class="fa-solid fa-bell"></i>
-
-
-
-<p id="alertDesc">
-
-کاتێک نرخ گەیشتە ئەم بڕە، ئاگادارت دەکەینەوە
-
-</p>
-
-
-
-<input id="alertPrice"
-type="number"
-placeholder="نرخی دۆلار بنووسە">
-
-
-
-<button id="alertBtn" onclick="saveAlert()">
-
-پاشەکەوتکردن
-
-</button>
-
-
-
-<p id="alertResult"></p>
-
-
-
-</div>
-
-
-</div>
-
-
-
+<!-- JavaScript Files -->
 
 <script src="script.js"></script>
 
