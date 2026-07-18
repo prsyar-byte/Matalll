@@ -1,9 +1,3 @@
-// =====================
-// Dollar IQ script.js
-// Part 1
-// =====================
-
-
 // ===== Time =====
 
 function updateTime(){
@@ -27,7 +21,6 @@ setInterval(updateTime,1000);
 updateTime();
 
 
-
 // ===== Date =====
 
 function updateDate(){
@@ -48,109 +41,6 @@ now.getFullYear();
 
 setInterval(updateDate,1000);
 updateDate();
-
-
-
-// ===== Live Dollar Price =====
-
-const API_URL = "https://dollar-api.dzhwar19999.workers.dev/";
-
-
-async function getDollarPrice(){
-
-try{
-
-const response = await fetch(API_URL);
-
-const data = await response.json();
-
-
-const price = document.getElementById("price");
-
-if(price){
-
-price.textContent =
-data.sell.toLocaleString()+" د.ع";
-
-}
-
-
-const changeText = document.getElementById("change");
-
-if(changeText){
-
-changeText.textContent =
-"🟢 کڕین: "+
-data.buy.toLocaleString()+
-" | 🔴 فرۆشتن: "+
-data.sell.toLocaleString();
-
-}
-
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-
-getDollarPrice();
-
-setInterval(getDollarPrice,60000);
-// =====================
-// Dollar IQ script.js
-// Part 1
-// =====================
-
-
-// ===== Time =====
-
-function updateTime(){
-
-const time = document.getElementById("time");
-
-if(!time) return;
-
-let now = new Date();
-
-time.textContent =
-String(now.getHours()).padStart(2,"0")
-+ ":" +
-String(now.getMinutes()).padStart(2,"0")
-+ ":" +
-String(now.getSeconds()).padStart(2,"0");
-
-}
-
-setInterval(updateTime,1000);
-updateTime();
-
-
-
-// ===== Date =====
-
-function updateDate(){
-
-const date = document.getElementById("date");
-
-if(!date) return;
-
-let now = new Date();
-
-date.textContent =
-"📅 "+
-now.getDate()+"/"+
-(now.getMonth()+1)+"/"+
-now.getFullYear();
-
-}
-
-setInterval(updateDate,1000);
-updateDate();
-
 
 
 // ===== Live Dollar Price =====
@@ -202,9 +92,6 @@ console.log(error);
 getDollarPrice();
 
 setInterval(getDollarPrice,60000);
-
-
-
 // ===== Menu =====
 
 const menuBtn = document.getElementById("menuBtn");
@@ -220,7 +107,6 @@ sideMenu.classList.toggle("active");
 }
 
 }
-
 
 
 // ===== Dark Mode =====
@@ -242,12 +128,6 @@ if(localStorage.getItem("darkMode") === "true"){
 document.body.classList.add("dark");
 
 }
-// =====================
-// Language System
-// Part 2
-// =====================
-
-
 const languages = {
 
 ku:{
@@ -343,8 +223,6 @@ alertPlaceholder:"أدخل سعر الدولار"
 
 
 
-// ===== Change Language =====
-
 function changeLanguage(lang){
 
 let t = languages[lang];
@@ -383,22 +261,22 @@ alertBtn:t.alertBtn
 
 for(let id in texts){
 
-let el = document.getElementById(id);
+let el=document.getElementById(id);
 
 if(el){
 
-el.textContent = texts[id];
+el.textContent=texts[id];
 
 }
 
 }
 
 
-let input = document.getElementById("alertPrice");
+let input=document.getElementById("alertPrice");
 
 if(input){
 
-input.placeholder = t.alertPlaceholder;
+input.placeholder=t.alertPlaceholder;
 
 }
 
@@ -409,24 +287,19 @@ localStorage.setItem("lang",lang);
 
 
 
-// ===== Load Language =====
+window.onload=function(){
 
-window.onload = function(){
-
-let lang = localStorage.getItem("lang") || "ku";
+let lang=localStorage.getItem("lang") || "ku";
 
 changeLanguage(lang);
 
 };
 // =====================
 // About Page
-// Part 3
 // =====================
-
 
 const aboutBtn = document.getElementById("aboutBtn");
 const aboutPage = document.getElementById("aboutPage");
-
 
 if(aboutBtn && aboutPage){
 
