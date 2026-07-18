@@ -26,6 +26,7 @@ setInterval(updateTime,1000);
 updateTime();
 
 
+
 // ===== Date =====
 
 function updateDate(){
@@ -48,74 +49,62 @@ setInterval(updateDate,1000);
 updateDate();
 
 
-// ===== Live Dollar Price =====
 
-const API_URL = "https://dollar-api.dzhwar19999.workers.dev/";
+// ===== Dollar Price =====
 
-async function getDollarPrice(){
+let dollarPrice = 143900;
 
-try{
 
-const response = await fetch(API_URL);
+function showDollarPrice(){
 
-const data = await response.json();
-console.log(data);
-
-const price = document.getElementById("price");
+let price = document.getElementById("price");
 
 if(price){
+
 price.textContent =
-data.sell.toLocaleString()+" د.ع";
-}
-
-
-
-const buy = document.getElementById("buy");
-
-if(buy){
-buy.textContent =
-"🟢 کڕین: "+
-data.buy.toLocaleString()+
-" د.ع";
-}
-
-
-
-const sell = document.getElementById("sell");
-
-if(sell){
-sell.textContent =
-"🔴 فرۆشتن: "+
-data.sell.toLocaleString()+
-" د.ع";
-}
-
-
-
-const change = document.getElementById("change");
-
-if(change){
-change.textContent =
-"نوێکردنەوەی نرخ";
-}
-
-
-
-}catch(error){
-
-console.log(error);
+dollarPrice.toLocaleString()+" د.ع";
 
 }
 
 }
 
+showDollarPrice();
+let oldPrice = dollarPrice;
 
-getDollarPrice();
+setInterval(()=>{
 
-setInterval(getDollarPrice,60000);
-// =====================
-// Menu
-// =====================
+let change = Math.floor(Math.random()*200)-100;
+
+dollarPrice += change;
+
+showDollarPrice();
+
+let changeText = document.getElementById("change");
+
+if(changeText){
+
+if(dollarPrice > oldPrice){
+
+changeText.textContent = "⬆️ +" + (dollarPrice-oldPrice) + " د.ع";
+changeText.className="up";
+
+}else if(dollarPrice < oldPrice){
+
+changeText.textContent = "⬇️ -" + (oldPrice-dollarPrice) + " د.ع";
+changeText.className="down";
+
+}else{
+
+changeText.textContent="⏸ 0 د.ع";
+
+}
+
+}
+
+oldPrice = dollarPrice;
+
+},10000);
+// ===== Menu =====
 
 const menuBtn = document.getElementById("menuBtn");
 const sideMenu = document.getElementById("sideMenu");
@@ -131,9 +120,8 @@ sideMenu.classList.toggle("active");
 }
 
 
-// =====================
-// Dark Mode
-// =====================
+
+// ===== Dark Mode =====
 
 function darkMode(){
 
@@ -152,24 +140,34 @@ if(localStorage.getItem("darkMode") === "true"){
 document.body.classList.add("dark");
 
 }
-
-
-// =====================
-// Language System
-// =====================
+// ===== Language =====
 
 const languages = {
 
 ku:{
-
 home:"سەرەکی",
 chart:"گراف",
 gold:"زێڕ",
 more:"زیاتر",
 
-appTitle:"💵 Dollar IQ",
-rateText:"نرخی 100 دۆلار",
+currencyTitle:"💱 دراوەکان",
+dollar:"دۆلار",
+baghdad:"بۆرسەی بەغداد",
+pound:"پاوەن",
+europe:"یۆرۆ",
+toman:"تومانی ئێران",
+lira:"لیرەی تورکی",
+dirham:"دەرهەمی ئیمارات",
+saudi:"ڕیالی سعودی",
 
+goldTitle:"🪙 نرخی زێڕ",
+gold24:"زێڕی 24 عیار",
+gold22:"زێڕی 22 عیار",
+gold21:"زێڕی 21 عیار",
+gold18:"زێڕی 18 عیار",
+ounce:"ئۆنسەی زێڕ",
+    appTitle:"💵 Dollar IQ",
+rateText:"نرخی 100 دۆلار",
 convertText:"گۆڕینی دراو",
 currencyBoxText:"دراوەکان",
 goldPriceText:"نرخی زێڕ",
@@ -178,28 +176,45 @@ newsText:"هەواڵ",
 alertText:"ئاگادارکردنەوە",
 calculatorText:"حاسبە",
 settingsBoxText:"ڕێکخستن",
-
-settingsText:"ڕێکخستن",
+homeText:"سەرەکی",
 languageText:"گۆڕینی زمان",
-
-alertTitle:"ئاگادارکردنەوە",
-alertDesc:"کاتێک نرخ گەیشتە ئەم بڕە ئاگادارت دەکەینەوە",
+    settingsText:"ڕێکخستن",
+    newsTitle:"📰 نوێترین هەواڵەکان",
+newsDollar:"💵 نرخی دۆلار نوێکرایەوە",
+newsGold:"🪙 نرخی زێڕ چاودێری دەکرێت",
+newsMarket:"📈 گۆڕانی بازاڕی دراو",
+    newsPageTitle:"هەواڵ",
+    alertTitle:"ئاگادارکردنەوە",
+alertDesc:"کاتێک نرخ گەیشتە ئەم بڕە، ئاگادارت دەکەینەوە",
 alertBtn:"پاشەکەوتکردن",
-alertPlaceholder:"نرخی دۆلار بنووسە"
-
+alertPlaceholder:"نرخی دۆلار بنووسە",
 },
 
 
 en:{
-
 home:"Home",
 chart:"Chart",
 gold:"Gold",
 more:"More",
 
-appTitle:"💵 Dollar IQ",
-rateText:"100 Dollar Rate",
+currencyTitle:"💱 Currencies",
+dollar:"US Dollar",
+baghdad:"Baghdad Market",
+pound:"British Pound",
+europe:"Euro",
+toman:"Iranian Toman",
+lira:"Turkish Lira",
+dirham:"UAE Dirham",
+saudi:"Saudi Riyal",
 
+goldTitle:"🪙 Gold Price",
+gold24:"24K Gold",
+gold22:"22K Gold",
+gold21:"21K Gold",
+gold18:"18K Gold",
+ounce:"Gold Ounce",
+    appTitle:"💵 Dollar IQ",
+rateText:"100 Dollar Rate",
 convertText:"Currency Converter",
 currencyBoxText:"Currencies",
 goldPriceText:"Gold Price",
@@ -208,28 +223,45 @@ newsText:"News",
 alertText:"Notifications",
 calculatorText:"Calculator",
 settingsBoxText:"Settings",
-
-settingsText:"Settings",
+homeText:"Home",
 languageText:"Change Language",
-
-alertTitle:"Notifications",
+    settingsText:"Settings",
+    newsTitle:"📰 Latest News",
+newsDollar:"💵 Dollar price updated",
+newsGold:"🪙 Gold price is monitored",
+newsMarket:"📈 Currency market changes",
+    newsPageTitle:"News",
+    alertTitle:"Notifications",
 alertDesc:"You will be notified when the price reaches this value.",
 alertBtn:"Save",
-alertPlaceholder:"Enter dollar price"
-
+alertPlaceholder:"Enter dollar price",
 },
 
 
 ar:{
-
 home:"الرئيسية",
 chart:"الرسم البياني",
 gold:"الذهب",
 more:"المزيد",
 
-appTitle:"💵 Dollar IQ",
-rateText:"سعر 100 دولار",
+currencyTitle:"💱 العملات",
+dollar:"الدولار",
+baghdad:"بورصة بغداد",
+pound:"الجنيه",
+europe:"اليورو",
+toman:"التومان الإيراني",
+lira:"الليرة التركية",
+dirham:"الدرهم الإماراتي",
+saudi:"الريال السعودي",
 
+goldTitle:"🪙 سعر الذهب",
+gold24:"ذهب عيار 24",
+gold22:"ذهب عيار 22",
+gold21:"ذهب عيار 21",
+gold18:"ذهب عيار 18",
+ounce:"أونصة الذهب",
+    appTitle:"💵 Dollar IQ",
+rateText:"سعر 100 دولار",
 convertText:"تحويل العملات",
 currencyBoxText:"العملات",
 goldPriceText:"سعر الذهب",
@@ -238,21 +270,22 @@ newsText:"الأخبار",
 alertText:"التنبيهات",
 calculatorText:"الحاسبة",
 settingsBoxText:"الإعدادات",
-
-settingsText:"الإعدادات",
+homeText:"الرئيسية",
 languageText:"تغيير اللغة",
-
-alertTitle:"التنبيهات",
+    settingsText:"الإعدادات",
+    newsTitle:"📰 آخر الأخبار",
+newsDollar:"💵 تم تحديث سعر الدولار",
+newsGold:"🪙 متابعة سعر الذهب",
+newsMarket:"📈 تغيرات سوق العملات",
+    newsPageTitle:"الأخبار",
+    alertTitle:"التنبيهات",
 alertDesc:"سيتم إشعارك عند وصول السعر إلى هذه القيمة.",
 alertBtn:"حفظ",
-alertPlaceholder:"أدخل سعر الدولار"
-
+alertPlaceholder:"أدخل سعر الدولار",
 }
 
 };
-// =====================
-// Change Language
-// =====================
+// ===== Apply Language =====
 
 function changeLanguage(lang){
 
@@ -268,9 +301,31 @@ chartText2:t.chart,
 goldText2:t.gold,
 moreText:t.more,
 
+homeText:t.homeText,
+chartText:t.chart,
+goldText:t.gold,
+settingsText:t.settingsText,
+languageText:t.languageText,
+
+currencyTitle:t.currencyTitle,
+dollarText:t.dollar,
+baghdadText:t.baghdad,
+poundText:t.pound,
+europeText:t.europe,
+tomanText:t.toman,
+liraText:t.lira,
+dirhamText:t.dirham,
+saudiText:t.saudi,
+
+goldTitle:t.goldTitle,
+gold24Text:t.gold24,
+gold22Text:t.gold22,
+gold21Text:t.gold21,
+gold18Text:t.gold18,
+ounceText:t.ounce,
+
 appTitle:t.appTitle,
 rateText:t.rateText,
-
 convertText:t.convertText,
 currencyBoxText:t.currencyBoxText,
 goldPriceText:t.goldPriceText,
@@ -279,78 +334,44 @@ newsText:t.newsText,
 alertText:t.alertText,
 calculatorText:t.calculatorText,
 settingsBoxText:t.settingsBoxText,
-
-settingsText:t.settingsText,
-languageText:t.languageText,
-
-alertTitle:t.alertTitle,
-alertDesc:t.alertDesc,
-alertBtn:t.alertBtn
+    newsTitle:t.newsTitle,
+newsDollar:t.newsDollar,
+newsGold:t.newsGold,
+newsMarket:t.newsMarket,
+    newsPageTitle:t.newsPageTitle,
+    alertTitle: t.alertTitle,
+alertDesc: t.alertDesc,
+alertBtn: t.alertBtn,
 
 };
 
 
 for(let id in texts){
 
-let el = document.getElementById(id);
+    let element = document.getElementById(id);
 
-if(el){
-
-el.textContent = texts[id];
-
-}
+    if(element){
+        element.textContent = texts[id];
+    }
 
 }
 
+const alertInput = document.getElementById("alertPrice");
 
-const input = document.getElementById("alertPrice");
-
-if(input){
-
-input.placeholder = t.alertPlaceholder;
-
+if(alertInput){
+    alertInput.placeholder = t.alertPlaceholder;
 }
-
 
 localStorage.setItem("lang",lang);
 
-}
+} // ← ئەم } ـە کەمە
 
-
-// =====================
-// Load Language
-// =====================
+// ===== Load Saved Language =====
 
 window.onload = function(){
 
-let lang =
-localStorage.getItem("lang") || "ku";
+    let savedLang = localStorage.getItem("lang") || "ku";
 
-changeLanguage(lang);
-
-};
-// =====================
-// About Button
-// =====================
-
-const aboutBtn = document.getElementById("aboutBtn");
-const aboutPage = document.getElementById("aboutPage");
-
-
-if(aboutBtn && aboutPage){
-
-aboutBtn.onclick = function(){
-
-    if(aboutPage.style.display === "block"){
-
-        aboutPage.style.display = "none";
-
-    }else{
-
-        aboutPage.style.display = "block";
-
-    }
+    changeLanguage(savedLang);
 
 };
-
-}
