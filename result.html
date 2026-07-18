@@ -2,56 +2,138 @@
 <html lang="ku" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>QuizApp - Result</title>
 
 <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-<div class="container">
+
+<div class="container material-card">
+
 
 <h1>🎉 ئەنجامی تاقیکردنەوە</h1>
 
-<h2 id="resultText">
-نمرەکەت: ...
-</h2>
 
 
-<button onclick="location.href='quiz.html'">
-دووبارە تاقیبکەرەوە
+<div class="result-score" id="scoreBox">
+
+...
+
+</div>
+
+
+
+<p class="result-text" id="message">
+
+</p>
+
+
+
+<button 
+onclick="location.href='quiz.html'"
+class="primary-btn">
+
+🔄 دووبارە یاری بکە
+
 </button>
 
 
-<button onclick="location.href='home.html'">
-گەڕانەوە بۆ سەرەتا
+
+<button 
+onclick="location.href='home.html'"
+class="secondary-btn">
+
+🏠 گەڕانەوە بۆ سەرەتا
+
 </button>
+
 
 
 </div>
 
 
+
+
+
 <script>
 
-let score = localStorage.getItem("quizScore");
 
-if(score !== null){
+let score =
+Number(localStorage.getItem("quizScore"));
 
-document.getElementById("resultText").innerHTML =
-"نمرەکەت: " + score;
+
+
+let scoreBox =
+document.getElementById("scoreBox");
+
+
+let message =
+document.getElementById("message");
+
+
+
+if(!isNaN(score)){
+
+
+
+scoreBox.innerHTML =
+"⭐ " + score;
+
+
+
+if(score >= 3){
+
+
+message.innerHTML =
+"زۆر باشە! 👏 توانیت زۆر باش یاری بکەیت";
+
+
+}
+else if(score > 0){
+
+
+message.innerHTML =
+"باشە، بەردەوام بە و هەوڵی زیاتر بدە 💪";
+
+
+}
+else{
+
+
+message.innerHTML =
+"جارێکی تر تاقیبکەرەوە 🚀";
+
+
+}
+
+
 
 }else{
 
-document.getElementById("resultText").innerHTML =
+
+scoreBox.innerHTML =
+"0";
+
+
+message.innerHTML =
 "هیچ ئەنجامێک نییە";
 
+
 }
+
+
 
 </script>
 
 
 </body>
+
 </html>
