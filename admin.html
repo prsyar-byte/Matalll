@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QuizApp - Admin</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container material-card">
+
+
+<h1>🔐 Admin Panel</h1>
+
+<p class="subtitle">
+بەڕێوەبردنی یاریزانەکان
+</p>
+
+
+
+<table class="table">
+
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>ناو</th>
+
+<th>ئیمەیڵ</th>
+
+<th>نمرە</th>
+
+</tr>
+
+</thead>
+
+
+
+<tbody id="users">
+
+<tr>
+
+<td colspan="4">
+چاوەڕێ بکە...
+</td>
+
+</tr>
+
+</tbody>
+
+
+</table>
+
+
+
+
+<button
+onclick="location.href='home.html'"
+class="secondary-btn">
+
+🏠 گەڕانەوە
+
+</button>
+
+
+</div>
+
+
+
+
+
+<script type="module">
+
+
+import { db } from "./firebase.js";
+
+
+import {
+
+collection,
+
+getDocs
+
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+
+
+const usersBox =
+document.getElementById("users");
+
+
+
+async function loadUsers(){
+
+
+try{
+
+
+const snapshot =
+await getDocs(collection(db,"users"));
+
+
+
+usersBox.innerHTML="";
+
+
+
+let i=1;
+
+
+
+snapshot.forEach((doc)=>{
+
+
+const data=doc.data();
+
+
+
+usersBox.innerHTML += `
+
+
+<tr>
+
+<td>${i}</td>
+
+<td>${data.name || "-"}</td>
+
+<td>${data.email || "-"}</td>
+
+<td>${data.score || 0}</td>
+
+
+</tr>
+
+
+`;
+
+
+
+i++;
+
+
+});
+
+
+
+if(i===1){
+
+
+usersBox.innerHTML=`
+
+<tr>
+
+<td colspan="4">
+هیچ یاریزانێک نییە
+</td>
+
+</tr>
+
+`;
+
+}
+
+
+
+}
+
+catch(error){
+
+
+console.log(error);
+
+
+usersBox.innerHTML=`
+
+<tr>
+
+<td colspan="4">
+هەڵە لە هێنانی زانیاری
+</td>
+
+</tr>
+
+`;
+
+}
+
+
+}
+
+
+
+loadUsers();
+
+
+
+</script>
+
+
+</body>
+
+</html>
