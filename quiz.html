@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QuizApp - Quiz</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📝 تاقیکردنەوە</h1>
+
+<h2 id="question"></h2>
+
+<div id="answers"></div>
+
+<p id="score">نمرە: 0</p>
+
+<button id="nextBtn" style="display:none;">
+پرسیاری دواتر
+</button>
+
+</div>
+
+
+<script type="module">
+
+import { db, auth } from "./firebase.js";
+
+import {
+collection,
+addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const questions = [
+{
+question:"پایتەختی عێراق چییە؟",
+answers:["هەولێر","بەغدا","سلێمانی","دهۆک"],
+correct:1
+},
+
+{
+question:"2 + 3 چەندە؟",
+answers:["4","5","6","7"],
+correct:1
+},
+
+{
+question:"HTML بۆ چی بەکاردێت؟",
+answers:[
+"دروستکردنی ماڵپەڕ",
+"یاری کردن",
+"وێنەگرتن",
+"چاپکردن"
+],
+correct:0
+}
+];
+
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+
+const question = document.getElementById("question");
+const answers = document.getElementById("answers");
+const nextBtn = document.getElementById("nextBtn");
+const scoreText = document.getElementById("score");
+
+
+function loadQuestion(){
+
+answered = false;
+
+nextBtn.style.display="none";
+
+let q = questions[currentQuestion];
+
+question.innerHTML = q.question;
+
+answers.innerHTML="";
+
+
+q.answers.forEach((answer,index)=>{
+
+let btn=document.createElement("button");
+
+btn.innerHTML = answer;
+
+
+btn.onclick = ()=>{
+
+if(!answered){
+
+answered = true;
+
+if(index === q.correct){
+
+score++;
+
+scoreText.innerHTML="نمرە: "+score;
+
+}
+
+nextBtn.style.display="block";
+
+}
+
+};
+
+
+answers.appendChild(btn);
+
+});
+
+}
+
+
+
+nextBtn.onclick = async ()=>{
+
+currentQuestion++;
+
+
+if(currentQuestion < questions.length){
+
+loadQuestion();
+
+}else{
+
+
+let user = auth.currentUser;
+
+
+await addDoc(collection(db,"scores"),{
+
+name: user ? user.email : "Guest",
+
+email: user ? user.email : "",
+
+score: score,
+
+date: new Date()
+
+});
+
+
+localStorage.setItem("quizScore",score);
+
+location.href="result.html";
+
+}
+
+};
+
+
+loadQuestion();
+
+
+</script>
+
+</body>
+</html>
