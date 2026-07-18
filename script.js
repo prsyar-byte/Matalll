@@ -77,20 +77,35 @@ data.sell.toLocaleString()+" د.ع";
 
 // کڕین و فرۆشتن
 
-const changeText =
-document.getElementById("change");
-
+const changeText = document.getElementById("change");
 
 if(changeText){
 
-changeText.innerHTML =
+changeText.textContent =
+"نرخی نوێکراوە";
 
-"🟢 کڕین: "+
-data.buy.toLocaleString()+
-" د.ع<br><br>"+
+}
 
-"🔴 فرۆشتن: "+
-data.sell.toLocaleString()+
+
+const buy = document.getElementById("buy");
+
+if(buy){
+
+buy.textContent =
+"🟢 کڕین: " +
+data.buy.toLocaleString() +
+" د.ع";
+
+}
+
+
+const sell = document.getElementById("sell");
+
+if(sell){
+
+sell.textContent =
+"🔴 فرۆشتن: " +
+data.sell.toLocaleString() +
 " د.ع";
 
 }
