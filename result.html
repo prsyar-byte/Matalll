@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QuizApp - Result</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎉 ئەنجامی تاقیکردنەوە</h1>
+
+<h2 id="resultText">
+نمرەکەت: ...
+</h2>
+
+
+<button onclick="location.href='quiz.html'">
+دووبارە تاقیبکەرەوە
+</button>
+
+
+<button onclick="location.href='home.html'">
+گەڕانەوە بۆ سەرەتا
+</button>
+
+
+</div>
+
+
+<script>
+
+let score = localStorage.getItem("quizScore");
+
+if(score !== null){
+
+document.getElementById("resultText").innerHTML =
+"نمرەکەت: " + score;
+
+}else{
+
+document.getElementById("resultText").innerHTML =
+"هیچ ئەنجامێک نییە";
+
+}
+
+</script>
+
+
+</body>
+</html>
