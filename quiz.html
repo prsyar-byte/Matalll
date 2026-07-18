@@ -2,170 +2,386 @@
 <html lang="ku" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>QuizApp - Quiz</title>
 
 <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-<div class="container">
 
-<h1>📝 تاقیکردنەوە</h1>
+<div class="container material-card">
 
-<h2 id="question"></h2>
+
+<h1>🧩 یاری QuizApp</h1>
+
+
+<p id="timer">
+⏱️ 30
+</p>
+
+
+<h2 id="question">
+چاوەڕێ بکە...
+</h2>
+
 
 <div id="answers"></div>
 
-<p id="score">نمرە: 0</p>
 
-<button id="nextBtn" style="display:none;">
-پرسیاری دواتر
-</button>
+<p id="score">
+⭐ نمرە: 0
+</p>
+
+
+<p id="message"></p>
+
 
 </div>
 
 
+
+
 <script type="module">
+
 
 import { db, auth } from "./firebase.js";
 
+
 import {
+
 collection,
+getDocs,
 addDoc
+
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-const questions = [
-{
-question:"پایتەختی عێراق چییە؟",
-answers:["هەولێر","بەغدا","سلێمانی","دهۆک"],
-correct:1
-},
-
-{
-question:"2 + 3 چەندە؟",
-answers:["4","5","6","7"],
-correct:1
-},
-
-{
-question:"HTML بۆ چی بەکاردێت؟",
-answers:[
-"دروستکردنی ماڵپەڕ",
-"یاری کردن",
-"وێنەگرتن",
-"چاپکردن"
-],
-correct:0
-}
-];
 
 
-let currentQuestion = 0;
+
+let questions = [];
+
+let current = 0;
+
 let score = 0;
+
 let answered = false;
 
+let time = 30;
 
-const question = document.getElementById("question");
-const answers = document.getElementById("answers");
-const nextBtn = document.getElementById("nextBtn");
-const scoreText = document.getElementById("score");
+let timer;
 
 
-function loadQuestion(){
 
-answered = false;
 
-nextBtn.style.display="none";
 
-let q = questions[currentQuestion];
+const questionBox =
+document.getElementById("question");
 
-question.innerHTML = q.question;
 
-answers.innerHTML="";
+const answersBox =
+document.getElementById("answers");
+
+
+const scoreBox =
+document.getElementById("score");
+
+
+const timerBox =
+document.getElementById("timer");
+
+
+const message =
+document.getElementById("message");
+
+
+
+
+
+
+async function getQuestions(){
+
+
+const snap =
+await getDocs(collection(db,"questions"));
+
+
+
+questions = [];
+
+
+
+snap.forEach((doc)=>{
+
+questions.push(doc.data());
+
+});
+
+
+
+if(questions.length === 0){
+
+questionBox.innerHTML =
+"هیچ پرسیارێک نییە";
+
+return;
+
+}
+
+
+
+showQuestion();
+
+
+}
+
+
+
+
+
+
+function startTimer(){
+
+
+clearInterval(timer);
+
+
+time = 30;
+
+
+
+timer=setInterval(()=>{
+
+
+time--;
+
+
+timerBox.innerHTML =
+"⏱️ " + time;
+
+
+
+if(time <= 0){
+
+
+clearInterval(timer);
+
+nextQuestion();
+
+
+}
+
+
+},1000);
+
+
+}
+
+
+
+
+
+
+
+function showQuestion(){
+
+
+answered=false;
+
+
+message.innerHTML="";
+
+
+answersBox.innerHTML="";
+
+
+
+let q =
+questions[current];
+
+
+
+questionBox.innerHTML =
+(current+1)+" - "+q.question;
+
 
 
 q.answers.forEach((answer,index)=>{
 
-let btn=document.createElement("button");
 
-btn.innerHTML = answer;
+let btn =
+document.createElement("button");
 
 
-btn.onclick = ()=>{
 
-if(!answered){
+btn.innerHTML =
+answer;
 
-answered = true;
+
+
+btn.onclick=()=>{
+
+
+if(answered) return;
+
+
+
+answered=true;
+
+
+
+clearInterval(timer);
+
+
 
 if(index === q.correct){
 
+
 score++;
 
-scoreText.innerHTML="نمرە: "+score;
 
-}
-
-nextBtn.style.display="block";
-
-}
-
-};
+scoreBox.innerHTML =
+"⭐ نمرە: "+score;
 
 
-answers.appendChild(btn);
+message.innerHTML =
+"✅ وەڵامی ڕاستە";
 
-});
-
-}
-
-
-
-nextBtn.onclick = async ()=>{
-
-currentQuestion++;
-
-
-if(currentQuestion < questions.length){
-
-loadQuestion();
 
 }else{
 
 
-let user = auth.currentUser;
+message.innerHTML =
+"❌ وەڵامی هەڵەیە";
 
-
-await addDoc(collection(db,"scores"),{
-
-name: user ? user.email : "Guest",
-
-email: user ? user.email : "",
-
-score: score,
-
-date: new Date()
-
-});
-
-
-localStorage.setItem("quizScore",score);
-
-location.href="result.html";
 
 }
+
+
+
+setTimeout(()=>{
+
+nextQuestion();
+
+},800);
+
+
 
 };
 
 
-loadQuestion();
+
+answersBox.appendChild(btn);
+
+
+
+});
+
+
+
+startTimer();
+
+
+}
+
+
+
+
+
+
+
+function nextQuestion(){
+
+
+current++;
+
+
+
+if(current < questions.length){
+
+
+showQuestion();
+
+
+}else{
+
+
+finishGame();
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+async function finishGame(){
+
+
+clearInterval(timer);
+
+
+
+let user =
+auth.currentUser;
+
+
+
+await addDoc(
+collection(db,"scores"),
+{
+
+
+name:user ? user.email : "Guest",
+
+email:user ? user.email : "",
+
+score:score,
+
+date:new Date()
+
+
+}
+);
+
+
+
+localStorage.setItem(
+"quizScore",
+score
+);
+
+
+
+location.href="result.html";
+
+
+}
+
+
+
+
+
+
+getQuestions();
+
 
 
 </script>
 
+
 </body>
+
 </html>
