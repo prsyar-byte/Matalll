@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>تۆمارکردنی هەژمار</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="login-box">
+
+<h1>QuizApp</h1>
+
+<p>دروستکردنی هەژمار</p>
+
+<input 
+type="text" 
+id="name" 
+placeholder="ناوی یاریزان">
+
+<input 
+type="email" 
+id="email" 
+placeholder="ئیمەیڵ">
+
+<input 
+type="password" 
+id="password" 
+placeholder="وشەی نهێنی">
+
+<button id="signupBtn">
+تۆمارکردن
+</button>
+
+<button onclick="location.href='index.html'">
+گەڕانەوە بۆ Login
+</button>
+
+<p id="message"></p>
+
+</div>
+
+
+<script type="module">
+
+import { signup, saveUserData } from "./auth.js";
+
+
+document.getElementById("signupBtn").onclick = async () => {
+
+let name = document.getElementById("name").value;
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+
+try {
+
+const userCredential = await signup(email, password);
+
+const user = userCredential.user;
+
+
+// هەڵگرتنی زانیاری یاریزان
+await saveUserData(user.uid, {
+
+    name: name,
+    email: email,
+    score: 0,
+    played: false
+
+});
+
+
+alert("هەژمار بە سەرکەوتوویی دروست بوو ✅");
+
+location.href = "home.html";
+
+
+} catch(error){
+
+alert(error.message);
+
+}
+
+};
+
+</script>
+
+</body>
+</html>
