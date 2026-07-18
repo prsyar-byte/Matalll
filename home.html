@@ -2,6 +2,7 @@
 <html lang="ku" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,98 +12,207 @@
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
+
 <h1>🎓 بەخێربێیت بۆ QuizApp</h1>
 
-<h2 id="userName">چاوەڕێ بکە...</h2>
+
+<h2 id="userName">
+چاوەڕێ بکە...
+</h2>
+
 
 <p id="userEmail"></p>
 
+
+
 <div class="menu">
 
+
 <button onclick="location.href='quiz.html'">
-دەستپێکردنی تاقیکردنەوە
+
+📝 دەستپێکردنی تاقیکردنەوە
+
 </button>
+
+
 
 <button onclick="location.href='result.html'">
-ئەنجامەکان
+
+🏆 ئەنجامەکان
+
 </button>
+
+
 
 <button onclick="location.href='leaderboard.html'">
-لیستی باشترین یاریزانەکان
+
+👑 لیستی باشترین یاریزانەکان
+
 </button>
+
+
+
+<button id="adminBtn"
+style="display:none;"
+onclick="location.href='admin.html'">
+
+🔐 Admin Panel
+
+</button>
+
+
 
 <button onclick="logout()">
-چوونەدەرەوە
+
+🚪 چوونەدەرەوە
+
 </button>
 
-</div>
+
 
 </div>
+
+
+</div>
+
+
+
+
 
 <script type="module">
 
+
 import { auth, db } from "./firebase.js";
 
-import {
-onAuthStateChanged,
-signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 import {
+
+onAuthStateChanged,
+
+signOut
+
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+
+import {
+
 doc,
+
 getDoc
+
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-onAuthStateChanged(auth, async (user)=>{
+
+
+
+
+onAuthStateChanged(auth, async(user)=>{
+
 
 if(!user){
 
+
 location.href="index.html";
+
+
 return;
+
 
 }
 
-const snap = await getDoc(doc(db,"users",user.uid));
+
+
+const snap = await getDoc(
+
+doc(db,"users",user.uid)
+
+);
+
+
+
 
 if(snap.exists()){
 
+
 const data = snap.data();
 
+
+
 document.getElementById("userName").innerHTML =
+
 "👤 " + data.name;
 
+
+
 document.getElementById("userEmail").innerHTML =
+
 "📧 " + data.email;
 
-}else{
 
-document.getElementById("userName").innerHTML =
-"👤 " + user.email;
 
-document.getElementById("userEmail").innerHTML =
-"";
+
+
+// Admin Check
+
+if(data.role === "admin"){
+
+
+document.getElementById("adminBtn").style.display="block";
+
 
 }
 
+
+
+}else{
+
+
+document.getElementById("userName").innerHTML =
+
+"👤 " + user.email;
+
+
+
+}
+
+
+
 });
+
+
+
+
+
 
 
 window.logout = function(){
 
+
 signOut(auth).then(()=>{
+
 
 location.href="index.html";
 
+
 });
+
 
 }
 
+
+
 </script>
+
+
 
 </body>
 
