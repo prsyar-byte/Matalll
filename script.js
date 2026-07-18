@@ -50,9 +50,7 @@ updateDate();
 
 // ===== Live Dollar Price =====
 
-const API_URL =
-"https://dollar-api.dzhwar19999.workers.dev/";
-
+const API_URL = "https://dollar-api.dzhwar19999.workers.dev/";
 
 async function getDollarPrice(){
 
@@ -63,52 +61,44 @@ const response = await fetch(API_URL);
 const data = await response.json();
 
 
-// فرۆشتن (نرخی سەرەکی)
-
 const price = document.getElementById("price");
 
 if(price){
-
 price.textContent =
 data.sell.toLocaleString()+" د.ع";
-
 }
 
-
-// کڕین و فرۆشتن
-
-const changeText = document.getElementById("change");
-
-if(changeText){
-
-changeText.textContent =
-"نرخی نوێکراوە";
-
-}
 
 
 const buy = document.getElementById("buy");
 
 if(buy){
-
 buy.textContent =
-"🟢 کڕین: " +
-data.buy.toLocaleString() +
+"🟢 کڕین: "+
+data.buy.toLocaleString()+
 " د.ع";
-
 }
+
 
 
 const sell = document.getElementById("sell");
 
 if(sell){
-
 sell.textContent =
-"🔴 فرۆشتن: " +
-data.sell.toLocaleString() +
+"🔴 فرۆشتن: "+
+data.sell.toLocaleString()+
 " د.ع";
-
 }
+
+
+
+const change = document.getElementById("change");
+
+if(change){
+change.textContent =
+"نوێکردنەوەی نرخ";
+}
+
 
 
 }catch(error){
