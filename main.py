@@ -5,9 +5,9 @@ import requests
 from bs4 import BeautifulSoup
 
 # لێرەدا تۆکنی بۆتەکەت دابنێ
-API_TOKEN = 'تۆکنی_خۆت_لێرە_دابنێ'
+API_TOKEN = '8723540558:AAHZUcMsNs4A27pQgg5aOZiG4jUx4cJ6Iwg'
 bot = telebot.TeleBot(API_TOKEN)
-8723540558:AAHZUcMsNs4A27pQgg5aOZiG4jUx4cJ6Iwg
+
 # لۆگینی سەرەکی سایتەکە
 TARGET_URL = "https://baxawan.com/"
 
@@ -85,3 +85,5 @@ def handle_guest_logins(message):
 # بەگەڕخستنی بۆتەکە
 print("بۆتەکە ئێستا کار دەکات...")
 bot.polling()
+
+
