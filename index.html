@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دەفتەری قەرز</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            padding: 15px;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .hidden { display: none !important; }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn:hover { transform: scale(1.03); }
+        .btn-primary { background: linear-gradient(45deg, #e94560, #f5a623); color: #fff; }
+        .btn-success { background: linear-gradient(45deg, #4ecdc4, #44bd63); color: #fff; }
+        .btn-danger { background: rgba(233,69,96,0.2); color: #e94560; border: 1px solid #e94560; }
+        .btn-danger:hover { background: #e94560; color: #fff; }
+        .btn-small { padding: 8px 15px; font-size: 0.85em; }
+        .btn-full { width: 100%; }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+
+        /* ===== LOGIN ===== */
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+        .login-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 25px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+        .login-box h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #e94560, #f5a623);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .login-box p { color: #aaa; margin-bottom: 25px; }
+        .form-group { margin-bottom: 18px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 8px; color: #ccc; font-size: 0.9em; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: #f5a623;
+        }
+        .form-group select option { background: #1a1a2e; }
+        .error-msg { color: #e94560; font-size: 0.85em; margin-top: 10px; display: none; }
+        .tab-btns { display: flex; gap: 10px; margin-bottom: 25px; }
+        .tab-btn {
+            flex: 1; padding: 12px; border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px; background: transparent; color: #aaa;
+            cursor: pointer; font-size: 0.95em; transition: all 0.3s;
+        }
+        .tab-btn.active { background: rgba(233,69,96,0.2); color: #e94560; border-color: #e94560; }
+
+        /* ===== NOTIFICATION ===== */
+        .notif-bar {
+            background: linear-gradient(135deg, rgba(245,166,35,0.2), rgba(233,69,96,0.2));
+            border: 1px solid rgba(245,166,35,0.4);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .notif-bar p { color: #f5a623; font-size: 0.95em; }
+        .notif-bar .notif-date { color: #888; font-size: 0.8em; }
+        .notif-close { background: none; border: none; color: #e94560; cursor: pointer; font-size: 1.2em; }
+
+        /* ===== LOCKED SCREEN ===== */
+        .locked-screen {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .locked-screen .lock-icon { font-size: 4em; margin-bottom: 20px; }
+        .locked-screen h2 { color: #e94560; margin-bottom: 15px; }
+        .locked-screen p { color: #aaa; line-height: 1.8; margin-bottom: 20px; }
+        .locked-screen .contact { color: #4ecdc4; font-weight: bold; }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px 0;
+        }
+        .app-header h1 {
+            font-size: 1.8em;
+            background: linear-gradient(45deg, #e94560, #f5a623);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .user-badge {
+            background: rgba(255,255,255,0.05);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        /* ===== SUB STATUS ===== */
+        .sub-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .sub-active { background: rgba(78,205,196,0.1); border: 1px solid rgba(78,205,196,0.3); }
+        .sub-inactive { background: rgba(233,69,96,0.1); border: 1px solid rgba(233,69,96,0.3); }
+        .sub-timer { text-align: center; }
+        .sub-timer .num { font-size: 2em; font-weight: bold; color: #4ecdc4; }
+        .sub-timer .lbl { font-size: 0.8em; color: #aaa; }
+
+        /* ===== SUMMARY ===== */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .sum-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+        .sum-card.debt { border-color: #e94560; }
+        .sum-card.credit { border-color: #4ecdc4; }
+        .sum-card h3 { color: #aaa; font-size: 0.9em; margin-bottom: 10px; }
+        .sum-card .val { font-size: 2em; font-weight: bold; }
+        .sum-card.debt .val { color: #e94560; }
+        .sum-card.credit .val { color: #4ecdc4; }
+        .sum-card .cnt { color: #666; font-size: 0.8em; margin-top: 5px; }
+
+        /* ===== FORM ===== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* ===== TABLE ===== */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { background: rgba(255,255,255,0.05); color: #f5a623; font-size: 0.85em; }
+        tr:hover { background: rgba(255,255,255,0.03); }
+        .t-debt { color: #e94560; font-weight: bold; }
+        .t-credit { color: #4ecdc4; font-weight: bold; }
+        .s-paid { color: #4ecdc4; }
+        .s-unpaid { color: #e94560; }
+        .actions { display: flex; gap: 5px; }
+
+        /* ===== ADMIN ===== */
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .admin-nav button {
+            padding: 10px 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            background: transparent;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .admin-nav button.active {
+            background: rgba(233,69,96,0.2);
+            color: #e94560;
+            border-color: #e94560;
+        }
+        .user-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.03);
+        }
+        .user-row .info { flex: 1; }
+        .user-row .info h4 { color: #fff; margin-bottom: 3px; }
+        .user-row .info p { color: #888; font-size: 0.85em; }
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .badge-active { background: rgba(78,205,196,0.2); color: #4ecdc4; }
+        .badge-inactive { background: rgba(233,69,96,0.2); color: #e94560; }
+        .admin-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        .msg-item {
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.03);
+        }
+        .msg-item .msg-text { color: #fff; margin-bottom: 5px; }
+        .msg-item .msg-date { color: #888; font-size: 0.8em; }
+
+        .filter-bar {
+            display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;
+        }
+        .filter-bar input, .filter-bar select {
+            padding: 10px 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 0.9em;
+        }
+        .filter-bar input:focus, .filter-bar select:focus { outline: none; border-color: #4ecdc4; }
+
+        .empty { text-align: center; padding: 40px; color: #666; }
+        .empty span { font-size: 3em; display: block; margin-bottom: 10px; }
+
+        @media (max-width: 600px) {
+            .app-header { flex-direction: column; text-align: center; }
+            .form-grid { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: 1fr; }
+            .user-row { flex-direction: column; text-align: center; }
+            .admin-actions { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== LOGIN PAGE ==================== -->
+<div class="login-page" id="pageLogin">
+    <div class="login-box">
+        <h1>📒 دەفتەری قەرز</h1>
+        <p>سیستەمی تۆمارکردن و بەدواداچوونی قەرز</p>
+
+        <div class="tab-btns">
+            <button class="tab-btn active" onclick="switchTab('user')">👤 بەکارهێنەر</button>
+            <button class="tab-btn" onclick="switchTab('admin')">🔧 ئەدمین</button>
+        </div>
+
+        <!-- User Login -->
+        <div id="tabUser">
+            <div class="form-group">
+                <label>👤 ناو</label>
+                <input type="text" id="uName" placeholder="ناوی تەواو...">
+            </div>
+            <div class="form-group">
+                <label>📧 ئیمەیل</label>
+                <input type="email" id="uEmail" placeholder="example@email.com">
+            </div>
+            <button class="btn btn-primary btn-full" onclick="userLogin()">🔓 چوونەژوورەوە</button>
+            <p class="error-msg" id="uError"></p>
+        </div>
+
+        <!-- Admin Login -->
+        <div id="tabAdmin" class="hidden">
+            <div class="form-group">
+                <label>🔑 وشەی نهێنی ئەدمین</label>
+                <input type="password" id="aPass" placeholder="وشەی نهێنی...">
+            </div>
+            <button class="btn btn-primary btn-full" onclick="adminLogin()">🔧 چوونەژوورەوە وەک ئەدمین</button>
+            <p class="error-msg" id="aError"></p>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== USER APP ==================== -->
+<div class="container hidden" id="pageUser">
+    <div class="app-header">
+        <h1>📒 دەفتەری قەرز</h1>
+        <div>
+            <span class="user-badge" id="userBadge"></span>
+            <button class="btn btn-danger btn-small" onclick="logout()" style="margin-right:10px;">🚪 دەرچوون</button>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div id="userNotifs"></div>
+
+    <!-- Subscription Status -->
+    <div class="sub-status" id="subStatusBox">
+        <div>
+            <h3 id="subTitle">دۆخی بەشداری</h3>
+            <p id="subText" style="color:#aaa;font-size:0.9em;margin-top:5px;"></p>
+        </div>
+        <div class="sub-timer">
+            <div class="num" id="subDays">--</div>
+            <div class="lbl">ڕۆژی ماوە</div>
+        </div>
+    </div>
+
+    <!-- LOCKED SCREEN -->
+    <div class="card hidden" id="lockedScreen">
+        <div class="locked-screen">
+            <div class="lock-icon">🔒</div>
+            <h2>دەفتەری قەرز قوفڵە!</h2>
+            <p>
+                بەشداریکردنت چالاک نییە.<br>
+                تکایە پارەدان ئەنجام بدە بۆ چالاککردن.<br><br>
+                📞 پەیوەندی بکە بە: <span class="contact">07705353322</span><br>
+                💰 دوای پارەدان، ئەدمین چالاکت دەکات بۆ <strong>٣٦٥ ڕۆژ</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- ACTIVE APP -->
+    <div id="activeApp" class="hidden">
+        <!-- Summary -->
+        <div class="summary-grid">
+            <div class="sum-card debt">
+                <h3>🔴 کۆی قەرزەکانم (من قەرزارم)</h3>
+                <div class="val" id="sumDebt">0</div>
+                <div class="cnt" id="cntDebt">0 تۆمار</div>
+            </div>
+            <div class="sum-card credit">
+                <h3>🟢 کۆی وەرگرتن (خەڵکی قەرزارمن)</h3>
+                <div class="val" id="sumCredit">0</div>
+                <div class="cnt" id="cntCredit">0 تۆمار</div>
+            </div>
+        </div>
+
+        <!-- Add Form -->
+        <div class="card">
+            <h2 style="color:#f5a623;margin-bottom:20px;">➕ تۆماری نوێ</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>ناوی کەس</label>
+                    <input type="text" id="rName" placeholder="ناو...">
+                </div>
+                <div class="form-group">
+                    <label>بڕی پارە</label>
+                    <input type="number" id="rAmount" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>جۆر</label>
+                    <select id="rType">
+                        <option value="debt">🔴 من قەرزارم</option>
+                        <option value="credit">🟢 خەڵکی قەرزارمن</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>بەروار</label>
+                    <input type="date" id="rDate">
+                </div>
+                <div class="form-group">
+                    <label>کاتژمێر</label>
+                    <input type="time" id="rTime">
+                </div>
+                <div class="form-group">
+                    <label>تێبینی</label>
+                    <input type="text" id="rNote" placeholder="تێبینی...">
+                </div>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="addRecord()">➕ زیادکردن</button>
+        </div>
+
+        <!-- Records Table -->
+        <div class="card">
+            <h2 style="color:#4ecdc4;margin-bottom:20px;">📋 لیستی قەرزەکان</h2>
+            <div class="filter-bar">
+                <input type="text" id="searchIn" placeholder="🔍 گەڕان..." oninput="renderRecords()">
+                <select id="filterT" onchange="renderRecords()">
+                    <option value="all">هەموو</option>
+                    <option value="debt">🔴 قەرز</option>
+                    <option value="credit">🟢 وەرگرتن</option>
+                </select>
+                <select id="filterS" onchange="renderRecords()">
+                    <option value="all">هەموو دۆخ</option>
+                    <option value="unpaid">نەدراو</option>
+                    <option value="paid">دراو</option>
+                </select>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th><th>ناو</th><th>بڕ</th><th>جۆر</th>
+                            <th>بەروار</th><th>کات</th><th>دۆخ</th><th>تێبینی</th><th>کردار</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recBody"></tbody>
+                </table>
+            </div>
+            <div class="empty hidden" id="recEmpty"><span>📭</span><p>هیچ تۆمارێک نییە</p></div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== ADMIN PANEL ==================== -->
+<div class="container hidden" id="pageAdmin">
+    <div class="app-header">
+        <h1>🔧 پانێلی ئەدمین</h1>
+        <button class="btn btn-danger btn-small" onclick="logout()">🚪 دەرچوون</button>
+    </div>
+
+    <div class="admin-nav">
+        <button class="active" onclick="adminTab('users')">👥 بەکارهێنەران</button>
+        <button onclick="adminTab('messages')">📢 نامەکان</button>
+    </div>
+
+    <!-- Users Management -->
+    <div id="adminUsers">
+        <div class="card">
+            <h2 style="color:#f5a623;margin-bottom:20px;">👥 بەڕێوەبردنی بەکارهێنەران</h2>
+            <div id="adminUserList"></div>
+            <div class="empty hidden" id="noUsers"><span>👤</span><p>هیچ بەکارهێنەرێک تۆمار نەبووە</p></div>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="adminMessages" class="hidden">
+        <div class="card">
+            <h2 style="color:#4ecdc4;margin-bottom:20px;">📢 ناردنی نامە بۆ هەموو بەکارهێنەران</h2>
+            <div class="form-group">
+                <label>دەقی نامە</label>
+                <textarea id="msgText" rows="4" placeholder="نامەکەت بنووسە..."></textarea>
+            </div>
+            <button class="btn btn-success btn-full" onclick="sendMsg()">📤 ناردنی نامە</button>
+        </div>
+        <div class="card">
+            <h2 style="color:#f5a623;margin-bottom:20px;">📋 نامە نێردراوەکان</h2>
+            <div id="msgList"></div>
+            <div class="empty hidden" id="noMsgs"><span>📭</span><p>هیچ نامەیەک نییە</p></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== CONFIG =====
+const ADMIN_PASS = 'admin2026';
+const SUB_DAYS = 365;
+
+// ===== DATA =====
+function getUsers() { return JSON.parse(localStorage.getItem('dq_users') || '[]'); }
+function saveUsers(u) { localStorage.setItem('dq_users', JSON.stringify(u)); }
+function getRecords(email) { return JSON.parse(localStorage.getItem('dq_rec_' + email) || '[]'); }
+function saveRecords(email, r) { localStorage.setItem('dq_rec_' + email, JSON.stringify(r)); }
+function getMsgs() { return JSON.parse(localStorage.getItem('dq_msgs') || '[]'); }
+function saveMsgs(m) { localStorage.setItem('dq_msgs', JSON.stringify(m)); }
+
+let currentUser = null;
+let isAdmin = false;
+
+// ===== LOGIN TABS =====
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', (tab === 'user' && i === 0) || (tab === 'admin' && i === 1));
+    });
+    document.getElementById('tabUser').classList.toggle('hidden', tab !== 'user');
+    document.getElementById('tabAdmin').classList.toggle('hidden', tab !== 'admin');
+}
+
+// ===== USER LOGIN =====
+function userLogin() {
+    const name = document.getElementById('uName').value.trim();
+    const email = document.getElementById('uEmail').value.trim().toLowerCase();
+    const err = document.getElementById('uError');
+
+    if (!name) { err.textContent = '⚠️ ناو بنووسە!'; err.style.display = 'block'; return; }
+    if (!email || !email.includes('@')) { err.textContent = '⚠️ ئیمەیل دروست بنووسە!'; err.style.display = 'block'; return; }
+
+    let users = getUsers();
+    let user = users.find(u => u.email === email);
+
+    if (!user) {
+        user = { name, email, subStart: null, subEnd: null, active: false, joined: new Date().toISOString() };
+        users.push(user);
+        saveUsers(users);
+    }
+
+    currentUser = user;
+    isAdmin = false;
+    showUserApp();
+}
+
+// ===== ADMIN LOGIN =====
+function adminLogin() {
+    const pass = document.getElementById('aPass').value;
+    const err = document.getElementById('aError');
+
+    if (pass !== ADMIN_PASS) {
+        err.textContent = '⚠️ وشەی نهێنی هەڵەیە!';
+        err.style.display = 'block';
+        return;
+    }
+
+    isAdmin = true;
+    currentUser = null;
+    showAdminPanel();
+}
+
+// ===== LOGOUT =====
+function logout() {
+    currentUser = null;
+    isAdmin = false;
+    document.getElementById('pageUser').classList.add('hidden');
+    document.getElementById('pageAdmin').classList.add('hidden');
+    document.getElementById('pageLogin').classList.remove('hidden');
+    document.getElementById('uName').value = '';
+    document.getElementById('uEmail').value = '';
+    document.getElementById('aPass').value = '';
+}
+
+// ===== USER APP =====
+function showUserApp() {
+    document.getElementById('pageLogin').classList.add('hidden');
+    document.getElementById('pageAdmin').classList.add('hidden');
+    document.getElementById('pageUser').classList.remove('hidden');
+    document.getElementById('userBadge').textContent = `👤 ${currentUser.name} | 📧 ${currentUser.email}`;
+
+    checkUserSub();
+    renderNotifs();
+    setDefaultDT();
+}
+
+function checkUserSub() {
+    const users = getUsers();
+    const user = users.find(u => u.email === currentUser.email);
+    currentUser = user;
+
+    const box = document.getElementById('subStatusBox');
+    const title = document.getElementById('subTitle');
+    const text = document.getElementById('subText');
+    const days = document.getElementById('subDays');
+    const locked = document.getElementById('lockedScreen');
+    const active = document.getElementById('activeApp');
+
+    if (!user || !user.active || !user.subEnd) {
+        box.className = 'sub-status sub-inactive';
+        title.textContent = '❌ بەشداری چالاک نییە';
+        text.textContent = 'تکایە پارەدان ئەنجام بدە و پەیوەندی بکە بە 07705353322';
+        days.textContent = '--';
+        locked.classList.remove('hidden');
+        active.classList.add('hidden');
+        return;
+    }
+
+    const end = new Date(user.subEnd);
+    const now = new Date();
+    const diff = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+
+    if (diff <= 0) {
+        // Expired - deactivate
+        user.active = false;
+        saveUsers(users);
+        box.className = 'sub-status sub-inactive';
+        title.textContent = '❌ بەشداری بەسەرچووە!';
+        text.textContent = 'تکایە نوێکردنەوە ئەنجام بدە - پەیوەندی: 07705353322';
+        days.textContent = '0';
+        locked.classList.remove('hidden');
+        active.classList.add('hidden');
+        return;
+    }
+
+    const months = Math.floor(diff / 30);
+    const remDays = diff % 30;
+    box.className = 'sub-status sub-active';
+    title.textContent = '✅ بەشداری چالاکە';
+    text.textContent = `ماوە: ${months} مانگ و ${remDays} ڕۆژ | دەستپێک: ${user.subStart ? new Date(user.subStart).toLocaleDateString('ku') : '-'}`;
+    days.textContent = diff;
+    locked.classList.add('hidden');
+    active.classList.remove('hidden');
+    renderRecords();
+    updateSummary();
+}
+
+// ===== RECORDS =====
+function setDefaultDT() {
+    const now = new Date();
+    document.getElementById('rDate').value = now.toISOString().split('T')[0];
+    document.getElementById('rTime').value = now.toTimeString().slice(0, 5);
+}
+
+function addRecord() {
+    const name = document.getElementById('rName').value.trim();
+    const amount = parseFloat(document.getElementById('rAmount').value);
+    const type = document.getElementById('rType').value;
+    const date = document.getElementById('rDate').value;
+    const time = document.getElementById('rTime').value;
+    const note = document.getElementById('rNote').value.trim();
+
+    if (!name) { alert('⚠️ ناو بنووسە!'); return; }
+    if (!amount || amount <= 0) { alert('⚠️ بڕ بنووسە!'); return; }
+    if (!date) { alert('⚠️ بەروار هەڵبژێرە!'); return; }
+
+    let recs = getRecords(currentUser.email);
+    recs.push({ id: Date.now(), name, amount, type, date, time: time || '--:--', note: note || '-', paid: false });
+    saveRecords(currentUser.email, recs);
+
+    document.getElementById('rName').value = '';
+    document.getElementById('rAmount').value = '';
+    document.getElementById('rNote').value = '';
+    setDefaultDT();
+    renderRecords();
+    updateSummary();
+}
+
+function delRecord(id) {
+    if (!confirm('سڕینەوە؟')) return;
+    let recs = getRecords(currentUser.email).filter(r => r.id !== id);
+    saveRecords(currentUser.email, recs);
+    renderRecords();
+    updateSummary();
+}
+
+function togglePaid(id) {
+    let recs = getRecords(currentUser.email);
+    const r = recs.find(x => x.id === id);
+    if (r) { r.paid = !r.paid; saveRecords(currentUser.email, recs); renderRecords(); updateSummary(); }
+}
+
+function renderRecords() {
+    const search = document.getElementById('searchIn').value.trim().toLowerCase();
+    const ft = document.getElementById('filterT').value;
+    const fs = document.getElementById('filterS').value;
+
+    let recs = getRecords(currentUser.email).filter(r => {
+        const mN = r.name.toLowerCase().includes(search);
+        const mT = ft === 'all' || r.type === ft;
+        const mS = fs === 'all' || (fs === 'paid' && r.paid) || (fs === 'unpaid' && !r.paid);
+        return mN && mT && mS;
+    });
+
+    const body = document.getElementById('recBody');
+    const empty = document.getElementById('recEmpty');
+
+    if (recs.length === 0) { body.innerHTML = ''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+
+    body.innerHTML = recs.map((r, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td>${r.name}</td>
+            <td><strong>${r.amount.toLocaleString()}</strong></td>
+            <td class="${r.type === 'debt' ? 't-debt' : 't-credit'}">${r.type === 'debt' ? '🔴 قەرز' : '🟢 وەرگرتن'}</td>
+            <td>${r.date}</td>
+            <td>${r.time}</td>
+            <td class="${r.paid ? 's-paid' : 's-unpaid'}">${r.paid ? '✅ دراو' : '⏳ نەدراو'}</td>
+            <td>${r.note}</td>
+            <td><div class="actions">
+                <button class="btn btn-success btn-small" onclick="togglePaid(${r.id})">${r.paid ? '↩️' : '✅'}</button>
+                <button class="btn btn-danger btn-small" onclick="delRecord(${r.id})">🗑️</button>
+            </div></td>
+        </tr>
+    `).join('');
+}
+
+function updateSummary() {
+    const recs = getRecords(currentUser.email).filter(r => !r.paid);
+    const debts = recs.filter(r => r.type === 'debt');
+    const credits = recs.filter(r => r.type === 'credit');
+
+    document.getElementById('sumDebt').textContent = debts.reduce((s, r) => s + r.amount, 0).toLocaleString();
+    document.getElementById('sumCredit').textContent = credits.reduce((s, r) => s + r.amount, 0).toLocaleString();
+    document.getElementById('cntDebt').textContent = debts.length + ' تۆمار';
+    document.getElementById('cntCredit').textContent = credits.length + ' تۆمار';
+}
+
+// ===== NOTIFICATIONS =====
+function renderNotifs() {
+    const msgs = getMsgs();
+    const container = document.getElementById('userNotifs');
+    if (msgs.length === 0) { container.innerHTML = ''; return; }
+
+    container.innerHTML = msgs.map(m => `
+        <div class="notif-bar">
+            <div>
+                <p>📢 ${m.text}</p>
+                <span class="notif-date">${new Date(m.date).toLocaleString('ku')}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ===== ADMIN PANEL =====
+function showAdminPanel() {
+    document.getElementById('pageLogin').classList.add('hidden');
+    document.getElementById('pageUser').classList.add('hidden');
+    document.getElementById('pageAdmin').classList.remove('hidden');
+    renderAdminUsers();
+    renderAdminMsgs();
+}
+
+function adminTab(tab) {
+    document.querySelectorAll('.admin-nav button').forEach((b, i) => {
+        b.classList.toggle('active', (tab === 'users' && i === 0) || (tab === 'messages' && i === 1));
+    });
+    document.getElementById('adminUsers').classList.toggle('hidden', tab !== 'users');
+    document.getElementById('adminMessages').classList.toggle('hidden', tab !== 'messages');
+}
+
+function renderAdminUsers() {
+    const users = getUsers();
+    const list = document.getElementById('adminUserList');
+    const noUsers = document.getElementById('noUsers');
+
+    if (users.length === 0) { list.innerHTML = ''; noUsers.classList.remove('hidden'); return; }
+    noUsers.classList.add('hidden');
+
+    list.innerHTML = users.map(u => {
+        const isActive = u.active && u.subEnd && new Date(u.subEnd) > new Date();
+        const daysLeft = isActive ? Math.ceil((new Date(u.subEnd) - new Date()) / (1000*60*60*24)) : 0;
+        const recs = getRecords(u.email);
+
+        return `
+        <div class="user-row">
+            <div class="info">
+                <h4>👤 ${u.name}</h4>
+                <p>📧 ${u.email} | 📝 ${recs.length} تۆمار | 📅 ${u.joined ? new Date(u.joined).toLocaleDateString('ku') : '-'}</p>
+                ${isActive ? `<p style="color:#4ecdc4;">⏰ ${daysLeft} ڕۆژی ماوە</p>` : ''}
+            </div>
+            <span class="badge ${isActive ? 'badge-active' : 'badge-inactive'}">
+                ${isActive ? '✅ چالاک' : '❌ ناچالاک'}
+            </span>
+            <div class="admin-actions">
+                <button class="btn btn-success btn-small" onclick="activateUser('${u.email}')">✅ چالاک (٣٦٥ ڕۆژ)</button>
+                <button class="btn btn-danger btn-small" onclick="deactivateUser('${u.email}')">🚫 ناچالاک</button>
+                <button class="btn btn-danger btn-small" onclick="deleteUser('${u.email}')">🗑️ سڕینەوە</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function activateUser(email) {
+    let users = getUsers();
+    const u = users.find(x => x.email === email);
+    if (u) {
+        const now = new Date();
+        const end = new Date();
+        end.setDate(end.getDate() + SUB_DAYS);
+        u.active = true;
+        u.subStart = now.toISOString();
+        u.subEnd = end.toISOString();
+        saveUsers(users);
+        renderAdminUsers();
+        alert(`✅ ${u.name} چالاککرا بۆ ${SUB_DAYS} ڕۆژ!`);
+    }
+}
+
+function deactivateUser(email) {
+    if (!confirm('ناچالاککردن؟')) return;
+    let users = getUsers();
+    const u = users.find(x => x.email === email);
+    if (u) { u.active = false; saveUsers(users); renderAdminUsers(); }
+}
+
+function deleteUser(email) {
+    if (!confirm('سڕینەوەی بەکارهێنەر و هەموو داتاکانی؟')) return;
+    let users = getUsers().filter(u => u.email !== email);
+    saveUsers(users);
+    localStorage.removeItem('dq_rec_' + email);
+    renderAdminUsers();
+}
+
+// ===== ADMIN MESSAGES =====
+function sendMsg() {
+    const text = document.getElementById('msgText').value.trim();
+    if (!text) { alert('⚠️ نامە بنووسە!'); return; }
+
+    let msgs = getMsgs();
+    msgs.unshift({ id: Date.now(), text, date: new Date().toISOString() });
+    saveMsgs(msgs);
+    document.getElementById('msgText').value = '';
+    renderAdminMsgs();
+    alert('✅ نامە نێردرا بۆ هەموو بەکارهێنەران!');
+}
+
+function renderAdminMsgs() {
+    const msgs = getMsgs();
+    const list = document.getElementById('msgList');
+    const noMsgs = document.getElementById('noMsgs');
+
+    if (msgs.length === 0) { list.innerHTML = ''; noMsgs.classList.remove('hidden'); return; }
+    noMsgs.classList.add('hidden');
+
+    list.innerHTML = msgs.map(m => `
+        <div class="msg-item">
+            <div class="msg-text">📢 ${m.text}</div>
+            <div class="msg-date">${new Date(m.date).toLocaleString('ku')}
+                <button class="btn btn-danger btn-small" style="margin-right:10px;" onclick="delMsg(${m.id})">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function delMsg(id) {
+    let msgs = getMsgs().filter(m => m.id !== id);
+    saveMsgs(msgs);
+    renderAdminMsgs();
+}
+
+// ===== AUTO CHECK =====
+setInterval(() => {
+    if (currentUser && !isAdmin) {
+        checkUserSub();
+        renderNotifs();
+    }
+}, 30000);
+</script>
+</body>
+</html>
