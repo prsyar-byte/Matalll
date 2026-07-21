@@ -381,4 +381,84 @@ function checkSub(){
         document.getElementById('activeArea').classList.add('hidden');
         return;
     }
-    const m=Math.floor(diff/30), d=d
+    const m=Math.floor(diff/30), d=diff%30;
+    box.className='sub-status sub-active';
+    title.textContent='✅ بەشداری چالاکە';
+    text.textContent='ماوە: '+m+' مانگ و '+d+' ڕۆژ';
+    days.textContent=diff;
+    document.getElementById('lockedArea').classList.add('hidden');
+    document.getElementById('activeArea').classList.remove('hidden');
+}
+
+// ===== NOTIFICATIONS =====
+function renderNotifs(msgs){
+    const area=document.getElementById('notifArea');
+    if(!msgs.length){ area.innerHTML=''; return; }
+    area.innerHTML=msgs.map(m=>'<div class="notif-bar"><p>📢 '+m.text+'</p><span class="nd">'+new Date(m.date).toLocaleString('ku')+'</span></div>').join('');
+}
+
+// ===== RECORDS =====
+function setDT(){
+    const now=new Date();
+    document.getElementById('rDate').value=now.toISOString().split('T')[0];
+    document.getElementById('rTime').value=now.toTimeString().slice(0,5);
+}
+
+async function addRec(){
+    const n=document.getElementById('rName').value.trim();
+    const a=parseFloat(document.getElementById('rAmount').value);
+    const t=document.getElementById('rType').value;
+    const d=document.getElementById('rDate').value;
+    const tm=document.getElementById('rTime').value;
+    const nt=document.getElementById('rNote').value.trim();
+    if(!n){alert('⚠️ ناو بنووسە!');return}
+    if(!a||a<=0){alert('⚠️ بڕ بنووسە!');return}
+    if(!d){alert('⚠️ بەروار هەڵبژێرە!');return}
+    try {
+        await db.collection('records').add({
+            userEmail:me.email, name:n, amount:a, type:t, date:d,
+            time:tm||'--:--', note:nt||'-', paid:false, createdAt:Date.now()
+        });
+        document.getElementById('rName').value='';
+        document.getElementById('rAmount').value='';
+        document.getElementById('rNote').value='';
+        setDT();
+    } catch(e){ alert('هەڵە: '+e.message); }
+}
+
+async function delRec(id){
+    if(!confirm('سڕینەوە؟'))return;
+    await db.collection('records').doc(id).delete();
+}
+
+async function togPaid(id){
+    const rec=allRecords.find(r=>r.id===id);
+    if(rec) await db.collection('records').doc(id).update({paid:!rec.paid});
+}
+
+function renderRecs(){
+    const s=document.getElementById('srch').value.trim().toLowerCase();
+    const ft=document.getElementById('fT').value;
+    const fs=document.getElementById('fS').value;
+    let recs=allRecords.filter(r=>{
+        return r.name.toLowerCase().includes(s)&&(ft==='all'||r.type===ft)&&(fs==='all'||(fs==='paid'&&r.paid)||(fs==='unpaid'&&!r.paid));
+    });
+    const body=document.getElementById('recBody');
+    const empty=document.getElementById('recEmpty');
+    if(!recs.length){body.innerHTML='';empty.classList.remove('hidden');return}
+    empty.classList.add('hidden');
+    body.innerHTML=recs.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td><strong>'+r.amount.toLocaleString()+'</strong></td><td class="'+(r.type==='debt'?'t-debt':'t-credit')+'">'+(r.type==='debt'?'🔴 قەرز':'🟢 وەرگرتن')+'</td><td>'+r.date+'</td><td>'+r.time+'</td><td class="'+(r.paid?'s-paid':'s-unpaid')+'">'+(r.paid?'✅ دراو':'⏳ نەدراو')+'</td><td>'+r.note+'</td><td><div class="actions"><button class="btn btn-success btn-small" onclick="togPaid(\''+r.id+'\')">'+(r.paid?'↩️':'✅')+'</button><button class="btn btn-danger btn-small" onclick="delRec(\''+r.id+'\')">🗑️</button></div></td></tr>').join('');
+}
+
+function updateSum(){
+    const recs=allRecords.filter(r=>!r.paid);
+    const d=recs.filter(r=>r.type==='debt');
+    const c=recs.filter(r=>r.type==='credit');
+    document.getElementById('sumDebt').textContent=d.reduce((s,r)=>s+r.amount,0).toLocaleString();
+    document.getElementById('sumCredit').textContent=c.reduce((s,r)=>s+r.amount,0).toLocaleString();
+    document.getElementById('cntDebt').textContent=d.length+' تۆمار';
+    document.getElementById('cntCredit').textContent=c.length+' تۆمار';
+}
+</script>
+</body>
+</html>
