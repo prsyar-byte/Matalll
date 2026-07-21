@@ -46,6 +46,8 @@
         .app-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:20px 0}
         .app-header h1{font-size:1.8em;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
         .user-badge{background:rgba(255,255,255,.05);padding:10px 20px;border-radius:10px;font-size:.9em;color:#ccc}
+        .live-clock{background:linear-gradient(135deg,rgba(245,166,35,.15),rgba(233,69,96,.15));border:1px solid rgba(245,166,35,.3);border-radius:15px;padding:14px 20px;text-align:center;margin-bottom:18px;font-size:1.6em;color:#f5a623;font-weight:bold;letter-spacing:2px;direction:ltr}
+        .live-clock .date-part{display:block;color:#aaa;font-size:.5em;font-weight:normal;margin-top:4px;letter-spacing:0;direction:rtl}
         .sub-status{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;padding:20px;border-radius:15px;margin-bottom:20px}
         .sub-active{background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.3)}
         .sub-inactive{background:rgba(233,69,96,.1);border:1px solid rgba(233,69,96,.3)}
@@ -57,7 +59,8 @@
         .locked-screen h2{color:#e94560;margin-bottom:15px}
         .locked-screen p{color:#aaa;line-height:1.8;margin-bottom:20px}
         .locked-screen .contact{color:#4ecdc4;font-weight:bold;font-size:1.2em}
-        .notif-bar{background:linear-gradient(135deg,rgba(245,166,35,.2),rgba(233,69,96,.2));border:1px solid rgba(245,166,35,.4);border-radius:12px;padding:15px 20px;margin-bottom:15px}
+        .notif-bar{background:linear-gradient(135deg,rgba(245,166,35,.2),rgba(233,69,96,.2));border:1px solid rgba(245,166,35,.4);border-radius:12px;padding:15px 20px;margin-bottom:15px;animation:pop .4s ease}
+        @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
         .notif-bar p{color:#f5a623;font-size:.95em}
         .notif-bar .nd{color:#888;font-size:.8em}
         .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin-bottom:25px}
@@ -86,7 +89,7 @@
         .empty span{font-size:3em;display:block;margin-bottom:10px}
         .loading{text-align:center;padding:20px;color:#f5a623}
         .install-btn{position:fixed;bottom:20px;left:20px;background:linear-gradient(45deg,#4ecdc4,#44bd63);color:#fff;padding:14px 25px;border-radius:50px;border:none;font-size:1em;font-weight:bold;cursor:pointer;box-shadow:0 5px 25px rgba(78,205,196,.4);z-index:999;display:none}
-        @media(max-width:600px){.app-header{flex-direction:column;text-align:center}.form-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr}th,td{padding:8px;font-size:.8em}}
+        @media(max-width:600px){.app-header{flex-direction:column;text-align:center}.form-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr}th,td{padding:8px;font-size:.8em}.live-clock{font-size:1.3em}}
     </style>
 </head>
 <body>
@@ -118,6 +121,9 @@
         </div>
     </div>
 
+    <!-- کاتژمێری زیندوو -->
+    <div class="live-clock" id="liveClock">🕐 --:--:--<span class="date-part">---</span></div>
+
     <div id="notifArea"></div>
 
     <div class="sub-status" id="subBox">
@@ -137,7 +143,7 @@
             <h2>دەفتەری قەرز قوفڵە!</h2>
             <p>
                 بەشداریکردنت چالاک نییە.<br>
-                💰 پارەدان ئەنجام بدە بۆ چالاککردن (٣٦٥ ڕۆژ)<br><br>
+                💰 پارەدان ئەنجام بدە بۆ چالاککردن (١٢ مانگ و ٥ ڕۆژ)<br><br>
                 📞 پەیوەندی بکە بە:<br>
                 <span class="contact">07705353322</span><br><br>
                 دوای پارەدان، ئەدمین چالاکت دەکات ✅<br>
@@ -207,6 +213,42 @@ let me = null;
 let allRecords = [];
 let unsubUser = null, unsubRecs = null, unsubMsgs = null;
 
+// ===== نۆتفیکەیشن =====
+let lastMsgId = localStorage.getItem('dq_lastMsgId') || null;
+let msgsFirstLoad = true;
+
+function requestNotifPermission(){
+    if('Notification' in window && Notification.permission === 'default'){
+        Notification.requestPermission();
+    }
+}
+
+function showNotif(text){
+    if('Notification' in window && Notification.permission === 'granted'){
+        try {
+            new Notification('📢 دەفتەری قەرز', { body: text, icon: '/Matalll/icons/icon-192.png' });
+        } catch(e){ console.log(e); }
+    }
+}
+
+// ===== کاتژمێری زیندوو =====
+let clockTimer = null;
+function updateClock(){
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    const days = ['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];
+    const dayName = days[now.getDay()];
+    const dateStr = now.toLocaleDateString('ku-IQ');
+    document.getElementById('liveClock').innerHTML = '🕐 ' + h + ':' + m + ':' + s + '<span class="date-part">' + dayName + ' - ' + dateStr + '</span>';
+}
+function startClock(){
+    updateClock();
+    if(clockTimer) clearInterval(clockTimer);
+    clockTimer = setInterval(updateClock, 1000);
+}
+
 // ===== PWA =====
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').style.display='block'; });
@@ -252,7 +294,6 @@ async function doLogin(){
         if(typeof firebase === 'undefined') msg = 'Firebase SDK بار نەبووە!';
         err.textContent = '⚠️ ' + msg;
         err.style.display='block';
-        alert('هەڵەی ورد:\n' + msg);
     }
     load.classList.add('hidden');
 }
@@ -261,6 +302,7 @@ function doLogout(){
     if(unsubUser) unsubUser();
     if(unsubRecs) unsubRecs();
     if(unsubMsgs) unsubMsgs();
+    if(clockTimer) clearInterval(clockTimer);
     localStorage.removeItem('dq_email');
     me = null; allRecords = [];
     document.getElementById('pageApp').classList.add('hidden');
@@ -273,6 +315,8 @@ function showApp(){
     document.getElementById('pageLogin').classList.add('hidden');
     document.getElementById('pageApp').classList.remove('hidden');
     document.getElementById('userBadge').textContent='👤 '+me.name+' | 📧 '+me.email;
+    startClock();
+    requestNotifPermission();
     checkSub(); setDT();
 }
 
@@ -281,13 +325,32 @@ function setupListeners(){
     unsubUser = db.collection('users').doc(me.email).onSnapshot(snap => {
         if(snap.exists){ me = snap.data(); checkSub(); }
     }, err => console.log('user listener error:', err));
+
     unsubRecs = db.collection('records').where('userEmail','==',me.email).onSnapshot(snap => {
         allRecords = snap.docs.map(d => ({...d.data(), id:d.id}));
         allRecords.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         renderRecs(); updateSum();
     }, err => console.log('records listener error:', err));
+
     unsubMsgs = db.collection('messages').orderBy('createdAt','desc').onSnapshot(snap => {
-        renderNotifs(snap.docs.map(d=>d.data()));
+        const msgs = snap.docs.map(d=>({...d.data(), id:d.id}));
+        renderNotifs(msgs);
+        // نۆتفیکەیشنی مۆبایل بۆ نامەی نوێ
+        if(msgs.length > 0){
+            const newest = msgs[0];
+            const newId = newest.id;
+            if(msgsFirstLoad){
+                lastMsgId = newId;
+                localStorage.setItem('dq_lastMsgId', lastMsgId);
+                msgsFirstLoad = false;
+            } else if(newId !== lastMsgId){
+                lastMsgId = newId;
+                localStorage.setItem('dq_lastMsgId', lastMsgId);
+                showNotif(newest.text);
+            }
+        } else {
+            msgsFirstLoad = false;
+        }
     }, err => console.log('messages listener error:', err));
 }
 
@@ -318,84 +381,4 @@ function checkSub(){
         document.getElementById('activeArea').classList.add('hidden');
         return;
     }
-    const m=Math.floor(diff/30), d=diff%30;
-    box.className='sub-status sub-active';
-    title.textContent='✅ بەشداری چالاکە';
-    text.textContent='ماوە: '+m+' مانگ و '+d+' ڕۆژ';
-    days.textContent=diff;
-    document.getElementById('lockedArea').classList.add('hidden');
-    document.getElementById('activeArea').classList.remove('hidden');
-}
-
-// ===== NOTIFICATIONS =====
-function renderNotifs(msgs){
-    const area=document.getElementById('notifArea');
-    if(!msgs.length){ area.innerHTML=''; return; }
-    area.innerHTML=msgs.map(m=>'<div class="notif-bar"><p>📢 '+m.text+'</p><span class="nd">'+new Date(m.date).toLocaleString('ku')+'</span></div>').join('');
-}
-
-// ===== RECORDS =====
-function setDT(){
-    const now=new Date();
-    document.getElementById('rDate').value=now.toISOString().split('T')[0];
-    document.getElementById('rTime').value=now.toTimeString().slice(0,5);
-}
-
-async function addRec(){
-    const n=document.getElementById('rName').value.trim();
-    const a=parseFloat(document.getElementById('rAmount').value);
-    const t=document.getElementById('rType').value;
-    const d=document.getElementById('rDate').value;
-    const tm=document.getElementById('rTime').value;
-    const nt=document.getElementById('rNote').value.trim();
-    if(!n){alert('⚠️ ناو بنووسە!');return}
-    if(!a||a<=0){alert('⚠️ بڕ بنووسە!');return}
-    if(!d){alert('⚠️ بەروار هەڵبژێرە!');return}
-    try {
-        await db.collection('records').add({
-            userEmail:me.email, name:n, amount:a, type:t, date:d,
-            time:tm||'--:--', note:nt||'-', paid:false, createdAt:Date.now()
-        });
-        document.getElementById('rName').value='';
-        document.getElementById('rAmount').value='';
-        document.getElementById('rNote').value='';
-        setDT();
-    } catch(e){ alert('هەڵە: '+e.message); }
-}
-
-async function delRec(id){
-    if(!confirm('سڕینەوە؟'))return;
-    await db.collection('records').doc(id).delete();
-}
-
-async function togPaid(id){
-    const rec=allRecords.find(r=>r.id===id);
-    if(rec) await db.collection('records').doc(id).update({paid:!rec.paid});
-}
-
-function renderRecs(){
-    const s=document.getElementById('srch').value.trim().toLowerCase();
-    const ft=document.getElementById('fT').value;
-    const fs=document.getElementById('fS').value;
-    let recs=allRecords.filter(r=>{
-        return r.name.toLowerCase().includes(s)&&(ft==='all'||r.type===ft)&&(fs==='all'||(fs==='paid'&&r.paid)||(fs==='unpaid'&&!r.paid));
-    });
-    const body=document.getElementById('recBody');
-    const empty=document.getElementById('recEmpty');
-    if(!recs.length){body.innerHTML='';empty.classList.remove('hidden');return}
-    empty.classList.add('hidden');
-    body.innerHTML=recs.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td><strong>'+r.amount.toLocaleString()+'</strong></td><td class="'+(r.type==='debt'?'t-debt':'t-credit')+'">'+(r.type==='debt'?'🔴 قەرز':'🟢 وەرگرتن')+'</td><td>'+r.date+'</td><td>'+r.time+'</td><td class="'+(r.paid?'s-paid':'s-unpaid')+'">'+(r.paid?'✅ دراو':'⏳ نەدراو')+'</td><td>'+r.note+'</td><td><div class="actions"><button class="btn btn-success btn-small" onclick="togPaid(\''+r.id+'\')">'+(r.paid?'↩️':'✅')+'</button><button class="btn btn-danger btn-small" onclick="delRec(\''+r.id+'\')">🗑️</button></div></td></tr>').join('');
-}
-
-function updateSum(){
-    const recs=allRecords.filter(r=>!r.paid);
-    const d=recs.filter(r=>r.type==='debt');
-    const c=recs.filter(r=>r.type==='credit');
-    document.getElementById('sumDebt').textContent=d.reduce((s,r)=>s+r.amount,0).toLocaleString();
-    document.getElementById('sumCredit').textContent=c.reduce((s,r)=>s+r.amount,0).toLocaleString();
-    document.getElementById('cntDebt').textContent=d.length+' تۆمار';
-    document.getElementById('cntCredit').textContent=c.length+' تۆمار';
-}
-</script>
-</body>
-</html>
+    const m=Math.floor(diff/30), d=d
