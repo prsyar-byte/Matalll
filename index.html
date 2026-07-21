@@ -384,4 +384,18 @@ function renderRecs(){
     const empty=document.getElementById('recEmpty');
     if(!recs.length){body.innerHTML='';empty.classList.remove('hidden');return}
     empty.classList.add('hidden');
-    body.
+    body.innerHTML=recs.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td><strong>'+r.amount.toLocaleString()+'</strong></td><td class="'+(r.type==='debt'?'t-debt':'t-credit')+'">'+(r.type==='debt'?'🔴 قەرز':'🟢 وەرگرتن')+'</td><td>'+r.date+'</td><td>'+r.time+'</td><td class="'+(r.paid?'s-paid':'s-unpaid')+'">'+(r.paid?'✅ دراو':'⏳ نەدراو')+'</td><td>'+r.note+'</td><td><div class="actions"><button class="btn btn-success btn-small" onclick="togPaid(\''+r.id+'\')">'+(r.paid?'↩️':'✅')+'</button><button class="btn btn-danger btn-small" onclick="delRec(\''+r.id+'\')">🗑️</button></div></td></tr>').join('');
+}
+
+function updateSum(){
+    const recs=allRecords.filter(r=>!r.paid);
+    const d=recs.filter(r=>r.type==='debt');
+    const c=recs.filter(r=>r.type==='credit');
+    document.getElementById('sumDebt').textContent=d.reduce((s,r)=>s+r.amount,0).toLocaleString();
+    document.getElementById('sumCredit').textContent=c.reduce((s,r)=>s+r.amount,0).toLocaleString();
+    document.getElementById('cntDebt').textContent=d.length+' تۆمار';
+    document.getElementById('cntCredit').textContent=c.length+' تۆمار';
+}
+</script>
+</body>
+</html>
