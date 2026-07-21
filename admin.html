@@ -54,6 +54,14 @@
         .stat .lbl{color:#aaa;font-size:.85em;margin-top:5px}
         .empty{text-align:center;padding:40px;color:#666}
         .empty span{font-size:3em;display:block;margin-bottom:10px}
+
+        .emoji-pick{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+        .emoji-pick span{font-size:1.5em;cursor:pointer;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,.05);transition:all .2s}
+        .emoji-pick span:hover{background:rgba(245,166,35,.2);transform:scale(1.2)}
+        .cat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.03)}
+        .cat-row .cat-info{font-size:1.15em;display:flex;align-items:center;gap:8px}
+        .cat-row .cat-emoji{font-size:1.6em}
+
         @media(max-width:600px){.user-row{flex-direction:column;text-align:center}.u-actions{justify-content:center}.stats{grid-template-columns:1fr 1fr}}
     </style>
 </head>
@@ -87,8 +95,10 @@
     <div class="nav">
         <button class="active" onclick="aTab('users')">👥 بەکارهێنەران</button>
         <button onclick="aTab('msgs')">📢 نامەکان</button>
+        <button onclick="aTab('cats')">🏷️ پۆلەکانی خەرجی</button>
     </div>
 
+    <!-- USERS -->
     <div id="secUsers">
         <div class="card">
             <h2 style="color:#f5a623;margin-bottom:20px">👥 بەڕێوەبردنی بەکارهێنەران</h2>
@@ -97,6 +107,7 @@
         </div>
     </div>
 
+    <!-- MESSAGES -->
     <div id="secMsgs" class="hidden">
         <div class="card">
             <h2 style="color:#4ecdc4;margin-bottom:20px">📢 ناردنی نامە بۆ هەمووان</h2>
@@ -111,6 +122,32 @@
             <h2 style="color:#f5a623;margin-bottom:20px">📋 نامە نێردراوەکان</h2>
             <div id="mList"></div>
             <div class="empty hidden" id="noM"><span>📭</span><p>هیچ نامەیەک نییە</p></div>
+        </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div id="secCats" class="hidden">
+        <div class="card">
+            <h2 style="color:#f5a623;margin-bottom:8px" id="catFormTitle">➕ پۆلی نوێی خەرجی</h2>
+            <p style="color:#aaa;font-size:.85em;margin-bottom:18px">ئەم پۆلانە لە ئەپەکەی هەموو بەکارهێنەراندا دەردەکەون ✨</p>
+            <div class="form-group">
+                <label>ناوی پۆل</label>
+                <input type="text" id="catName" placeholder="بۆ نموونە: ئەڤارە">
+            </div>
+            <div class="form-group">
+                <label>ئیمۆجی (بنووسە یان لە خوارەوە هەڵبژێرە)</label>
+                <input type="text" id="catEmoji" placeholder="🛒">
+                <div class="emoji-pick">
+                    <span onclick="pickEmoji('🛒')">🛒</span><span onclick="pickEmoji('🏪')">🏪</span><span onclick="pickEmoji('🍞')">🍞</span><span onclick="pickEmoji('🍔')">🍔</span><span onclick="pickEmoji('☕')">☕</span><span onclick="pickEmoji('🥗')"></span><span onclick="pickEmoji('🚗')"></span><span onclick="pickEmoji('⛽')"></span><span onclick="pickEmoji('💊')">💊</span><span onclick="pickEmoji('🏥')">🏥</span><span onclick="pickEmoji('👕')">👕</span><span onclick="pickEmoji('👟')"></span><span onclick="pickEmoji('🏠')"></span><span onclick="pickEmoji('💡')">💡</span><span onclick="pickEmoji('💧')">💧</span><span onclick="pickEmoji('📱')"></span><span onclick="pickEmoji('🎁')"></span><span onclick="pickEmoji('📚')"></span><span onclick="pickEmoji('✈️')">✈️</span><span onclick="pickEmoji('🐾')"></span><span onclick="pickEmoji('⚽')"></span><span onclick="pickEmoji('🔧')"></span><span onclick="pickEmoji('💰')">💰</span><span onclick="pickEmoji('📦')">📦</span>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-full" id="catSaveBtn" onclick="saveCat()">➕ زیادکردن</button>
+            <button class="btn btn-danger btn-full hidden" id="catCancelBtn" onclick="cancelEdit()" style="margin-top:10px">❌ پاشگەزبوونەوە</button>
+        </div>
+        <div class="card">
+            <h2 style="color:#4ecdc4;margin-bottom:20px">📋 پۆلەکانی ئێستا</h2>
+            <div id="catList"></div>
+            <div class="empty hidden" id="noC"><span>🏷️</span><p>هیچ پۆلێک نییە</p></div>
         </div>
     </div>
 </div>
@@ -128,8 +165,19 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+const DEFAULT_CATS = [
+    {v:'bazar', name:'بازاڕ', emoji:'🛒'},
+    {v:'market', name:'مارکێت', emoji:'🏪'},
+    {v:'nan', name:'نان', emoji:'🍞'},
+    {v:'transport', name:'گواستنەوە', emoji:'🚗'},
+    {v:'health', name:'تەندروستی', emoji:'💊'},
+    {v:'other', name:'تر', emoji:'📦'}
+];
+
 let allUsers = [];
-let unsubUsers = null, unsubMsgs = null;
+let allCats = [];
+let editingCatId = null;
+let unsubUsers=null, unsubMsgs=null, unsubCats=null;
 
 function aLogin(){
     const p=document.getElementById('aPass').value;
@@ -140,14 +188,14 @@ function aLogin(){
 }
 
 function aLogout(){
-    if(unsubUsers) unsubUsers();
-    if(unsubMsgs) unsubMsgs();
+    if(unsubUsers) unsubUsers(); if(unsubMsgs) unsubMsgs(); if(unsubCats) unsubCats();
     document.getElementById('aPanel').classList.add('hidden');
     document.getElementById('aLogin').classList.remove('hidden');
     document.getElementById('aPass').value='';
 }
 
 function setupAdmin(){
+    ensureDefaultCats();
     unsubUsers = db.collection('users').onSnapshot(snap => {
         allUsers = snap.docs.map(d => d.data());
         allUsers.sort((a,b)=>(b.joined||'').localeCompare(a.joined||''));
@@ -156,14 +204,31 @@ function setupAdmin(){
     unsubMsgs = db.collection('messages').orderBy('createdAt','desc').onSnapshot(snap => {
         renderMsgs(snap.docs.map(d=>({...d.data(), id:d.id})));
     }, err => console.log('messages listener error:', err));
+    unsubCats = db.collection('expense_cats').orderBy('order','asc').onSnapshot(snap => {
+        allCats = snap.docs.map(d=>({id:d.id, ...d.data()}));
+        renderCats();
+    }, err => console.log('cats listener error:', err));
+}
+
+// ئەگەر هیچ پۆلێک نەبوو، پۆلە بنەڕەتییەکان دابنێ (یەک جار)
+function ensureDefaultCats(){
+    db.collection('expense_cats').get().then(snap=>{
+        if(snap.empty){
+            const batch=db.batch();
+            DEFAULT_CATS.forEach((c,i)=>{
+                batch.set(db.collection('expense_cats').doc(c.v), {name:c.name, emoji:c.emoji, order:i});
+            });
+            batch.commit().then(()=>console.log('default cats created'));
+        }
+    }).catch(e=>console.log(e));
 }
 
 function aTab(t){
-    document.querySelectorAll('.nav button').forEach((b,i)=>{
-        b.classList.toggle('active',(t==='users'&&i===0)||(t==='msgs'&&i===1));
-    });
+    const tabs={users:0,msgs:1,cats:2};
+    document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active', i===tabs[t]));
     document.getElementById('secUsers').classList.toggle('hidden',t!=='users');
     document.getElementById('secMsgs').classList.toggle('hidden',t!=='msgs');
+    document.getElementById('secCats').classList.toggle('hidden',t!=='cats');
 }
 
 function updateStats(){
@@ -228,6 +293,62 @@ function renderMsgs(msgs){
 
 async function delMsg(id){
     await db.collection('messages').doc(id).delete();
+}
+
+// ===== CATEGORIES =====
+function pickEmoji(e){ document.getElementById('catEmoji').value=e; }
+
+async function saveCat(){
+    const name=document.getElementById('catName').value.trim();
+    const emoji=document.getElementById('catEmoji').value.trim()||'📦';
+    if(!name){alert('⚠️ ناوی پۆل بنووسە!');return}
+    try{
+        if(editingCatId){
+            await db.collection('expense_cats').doc(editingCatId).update({name:name, emoji:emoji});
+            alert('✅ پۆلەکە گۆڕدرا!');
+        } else {
+            await db.collection('expense_cats').doc('cat_'+Date.now()).set({name:name, emoji:emoji, order:Date.now()});
+            alert('✅ پۆلی نوێ زیاد کرا!');
+        }
+        cancelEdit();
+    }catch(e){ alert('هەڵە: '+e.message); }
+}
+
+function editCat(id){
+    const c=allCats.find(x=>x.id===id);
+    if(!c) return;
+    document.getElementById('catName').value=c.name||'';
+    document.getElementById('catEmoji').value=c.emoji||'';
+    editingCatId=id;
+    document.getElementById('catFormTitle').textContent='✏️ گۆڕینی پۆل';
+    document.getElementById('catSaveBtn').textContent='💾 پاشەکەوتکردنی گۆڕانکاری';
+    document.getElementById('catCancelBtn').classList.remove('hidden');
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function cancelEdit(){
+    editingCatId=null;
+    document.getElementById('catName').value='';
+    document.getElementById('catEmoji').value='';
+    document.getElementById('catFormTitle').textContent='➕ پۆلی نوێی خەرجی';
+    document.getElementById('catSaveBtn').textContent='➕ زیادکردن';
+    document.getElementById('catCancelBtn').classList.add('hidden');
+}
+
+async function delCat(id){
+    if(!confirm('سڕینەوەی ئەم پۆلە؟\n(خەرجییە کۆنەکانی ئەم پۆلە نامسڕێنەوە، تەنها پۆلەکە لە لیستەکە دەچێت)'))return;
+    try{
+        await db.collection('expense_cats').doc(id).delete();
+        if(editingCatId===id) cancelEdit();
+    }catch(e){ alert('هەڵە: '+e.message); }
+}
+
+function renderCats(){
+    const list=document.getElementById('catList');
+    const noC=document.getElementById('noC');
+    if(!allCats.length){list.innerHTML='';noC.classList.remove('hidden');return}
+    noC.classList.add('hidden');
+    list.innerHTML=allCats.map(c=>'<div class="cat-row"><div class="cat-info"><span class="cat-emoji">'+(c.emoji||'📦')+'</span> '+ (c.name||'') +'</div><div class="u-actions"><button class="btn btn-success btn-small" onclick="editCat(\''+c.id+'\')">✏️ گۆڕین</button><button class="btn btn-danger btn-small" onclick="delCat(\''+c.id+'\')">🗑️ سڕینەوە</button></div></div>').join('');
 }
 </script>
 </body>
