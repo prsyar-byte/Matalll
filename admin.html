@@ -2,26 +2,17 @@
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>دەفتەری قەرز</title>
-    <link rel="manifest" href="/Matalll/manifest.json">
-    <meta name="theme-color" content="#e94560">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="قەرز">
-    <link rel="apple-touch-icon" href="/Matalll/icons/icon-192.png">
-    <link rel="icon" type="image/png" href="/Matalll/icons/icon-192.png">
-
+    <title>پانێلی ئەدمین</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);min-height:100vh;padding:15px;color:#fff}
-        .container{max-width:900px;margin:0 auto}
+        body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#1a0a0a,#2d1b1b,#1a0a0a);min-height:100vh;padding:15px;color:#fff}
+        .container{max-width:950px;margin:0 auto}
         .hidden{display:none!important}
         .card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:30px;backdrop-filter:blur(10px);margin-bottom:20px}
         .btn{padding:12px 25px;border:none;border-radius:10px;font-size:1em;cursor:pointer;font-weight:bold;transition:all .3s}
@@ -34,164 +25,97 @@
         .btn-full{width:100%}
         .form-group{margin-bottom:18px;text-align:right}
         .form-group label{display:block;margin-bottom:8px;color:#ccc;font-size:.9em}
-        .form-group input,.form-group select{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1em;transition:border-color .3s}
-        .form-group input:focus,.form-group select:focus{outline:none;border-color:#f5a623}
-        .form-group select option{background:#1a1a2e}
-        .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px}
+        .form-group input,.form-group textarea{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1em}
+        .form-group input:focus,.form-group textarea:focus{outline:none;border-color:#f5a623}
         .login-page{display:flex;justify-content:center;align-items:center;min-height:90vh}
-        .login-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:25px;padding:50px 40px;width:100%;max-width:420px;text-align:center}
-        .login-box h1{font-size:2em;margin-bottom:10px;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .login-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:25px;padding:50px 40px;width:100%;max-width:400px;text-align:center}
+        .login-box h1{font-size:1.8em;margin-bottom:10px;color:#e94560}
         .login-box p{color:#aaa;margin-bottom:25px}
-        .error-msg{color:#e94560;font-size:.85em;margin-top:10px;display:none;word-break:break-word}
+        .error-msg{color:#e94560;font-size:.85em;margin-top:10px;display:none}
         .app-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:20px 0}
-        .app-header h1{font-size:1.8em;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .user-badge{background:rgba(255,255,255,.05);padding:10px 20px;border-radius:10px;font-size:.9em;color:#ccc}
-        .sub-status{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;padding:20px;border-radius:15px;margin-bottom:20px}
-        .sub-active{background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.3)}
-        .sub-inactive{background:rgba(233,69,96,.1);border:1px solid rgba(233,69,96,.3)}
-        .sub-timer{text-align:center}
-        .sub-timer .num{font-size:2em;font-weight:bold;color:#4ecdc4}
-        .sub-timer .lbl{font-size:.8em;color:#aaa}
-        .locked-screen{text-align:center;padding:60px 20px}
-        .locked-screen .lock-icon{font-size:4em;margin-bottom:20px}
-        .locked-screen h2{color:#e94560;margin-bottom:15px}
-        .locked-screen p{color:#aaa;line-height:1.8;margin-bottom:20px}
-        .locked-screen .contact{color:#4ecdc4;font-weight:bold;font-size:1.2em}
-        .notif-bar{background:linear-gradient(135deg,rgba(245,166,35,.2),rgba(233,69,96,.2));border:1px solid rgba(245,166,35,.4);border-radius:12px;padding:15px 20px;margin-bottom:15px}
-        .notif-bar p{color:#f5a623;font-size:.95em}
-        .notif-bar .nd{color:#888;font-size:.8em}
-        .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin-bottom:25px}
-        .sum-card{background:rgba(255,255,255,.05);border-radius:15px;padding:25px;text-align:center;border:2px solid transparent}
-        .sum-card.debt{border-color:#e94560}
-        .sum-card.credit{border-color:#4ecdc4}
-        .sum-card h3{color:#aaa;font-size:.9em;margin-bottom:10px}
-        .sum-card .val{font-size:2em;font-weight:bold}
-        .sum-card.debt .val{color:#e94560}
-        .sum-card.credit .val{color:#4ecdc4}
-        .sum-card .cnt{color:#666;font-size:.8em;margin-top:5px}
-        .table-wrap{overflow-x:auto}
-        table{width:100%;border-collapse:collapse}
-        th,td{padding:12px;text-align:right;border-bottom:1px solid rgba(255,255,255,.05)}
-        th{background:rgba(255,255,255,.05);color:#f5a623;font-size:.85em}
-        tr:hover{background:rgba(255,255,255,.03)}
-        .t-debt{color:#e94560;font-weight:bold}
-        .t-credit{color:#4ecdc4;font-weight:bold}
-        .s-paid{color:#4ecdc4}
-        .s-unpaid{color:#e94560}
-        .actions{display:flex;gap:5px}
-        .filter-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-        .filter-bar input,.filter-bar select{padding:10px 15px;border:1px solid rgba(255,255,255,.2);border-radius:10px;background:rgba(255,255,255,.05);color:#fff;font-size:.9em}
-        .filter-bar input:focus,.filter-bar select:focus{outline:none;border-color:#4ecdc4}
+        .app-header h1{font-size:1.8em;color:#e94560}
+        .nav{display:flex;gap:10px;margin-bottom:25px;flex-wrap:wrap}
+        .nav button{padding:10px 20px;border:1px solid rgba(255,255,255,.2);border-radius:10px;background:transparent;color:#ccc;cursor:pointer;transition:all .3s}
+        .nav button.active{background:rgba(233,69,96,.2);color:#e94560;border-color:#e94560}
+        .user-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
+        .user-row .info{flex:1}
+        .user-row .info h4{color:#fff;margin-bottom:3px}
+        .user-row .info p{color:#888;font-size:.85em}
+        .badge{padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:bold}
+        .badge-on{background:rgba(78,205,196,.2);color:#4ecdc4}
+        .badge-off{background:rgba(233,69,96,.2);color:#e94560}
+        .u-actions{display:flex;gap:8px;flex-wrap:wrap}
+        .msg-item{padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
+        .msg-item .mt{color:#fff;margin-bottom:5px}
+        .msg-item .md{color:#888;font-size:.8em}
+        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:25px}
+        .stat{background:rgba(255,255,255,.05);border-radius:12px;padding:20px;text-align:center}
+        .stat .num{font-size:2em;font-weight:bold;color:#f5a623}
+        .stat .lbl{color:#aaa;font-size:.85em;margin-top:5px}
         .empty{text-align:center;padding:40px;color:#666}
         .empty span{font-size:3em;display:block;margin-bottom:10px}
-        .loading{text-align:center;padding:20px;color:#f5a623}
-        .install-btn{position:fixed;bottom:20px;left:20px;background:linear-gradient(45deg,#4ecdc4,#44bd63);color:#fff;padding:14px 25px;border-radius:50px;border:none;font-size:1em;font-weight:bold;cursor:pointer;box-shadow:0 5px 25px rgba(78,205,196,.4);z-index:999;display:none}
-        @media(max-width:600px){.app-header{flex-direction:column;text-align:center}.form-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr}th,td{padding:8px;font-size:.8em}}
+        @media(max-width:600px){.user-row{flex-direction:column;text-align:center}.u-actions{justify-content:center}.stats{grid-template-columns:1fr 1fr}}
     </style>
 </head>
 <body>
 
-<div class="login-page" id="pageLogin">
+<div class="login-page" id="aLogin">
     <div class="login-box">
-        <h1>📒 دەفتەری قەرز</h1>
-        <p>ناو و ئیمەیل بنووسە بۆ چوونەژوورەوە</p>
+        <h1>🔧 پانێلی ئەدمین</h1>
+        <p>تەنها بۆ بەڕێوەبەر</p>
         <div class="form-group">
-            <label>👤 ناو</label>
-            <input type="text" id="uName" placeholder="ناوی تەواو...">
+            <label>🔑 وشەی نهێنی</label>
+            <input type="password" id="aPass" placeholder="وشەی نهێنی..." onkeypress="if(event.key==='Enter')aLogin()">
         </div>
-        <div class="form-group">
-            <label>📧 ئیمەیل</label>
-            <input type="email" id="uEmail" placeholder="example@email.com">
-        </div>
-        <button class="btn btn-primary btn-full" onclick="doLogin()">🔓 چوونەژوورەوە / تۆمارکردن</button>
-        <p class="error-msg" id="uError"></p>
-        <p class="loading hidden" id="loginLoad">⏳ چاوەڕێ بکە...</p>
+        <button class="btn btn-primary btn-full" onclick="aLogin()">🔧 چوونەژوورەوە</button>
+        <p class="error-msg" id="aErr"></p>
     </div>
 </div>
 
-<div class="container hidden" id="pageApp">
+<div class="container hidden" id="aPanel">
     <div class="app-header">
-        <h1>📒 دەفتەری قەرز</h1>
-        <div>
-            <span class="user-badge" id="userBadge"></span>
-            <button class="btn btn-danger btn-small" onclick="doLogout()" style="margin-right:10px">🚪 دەرچوون</button>
-        </div>
+        <h1>🔧 پانێلی ئەدمین</h1>
+        <button class="btn btn-danger btn-small" onclick="aLogout()">🚪 دەرچوون</button>
     </div>
 
-    <div id="notifArea"></div>
-
-    <div class="sub-status" id="subBox">
-        <div>
-            <h3 id="subTitle"></h3>
-            <p id="subText" style="color:#aaa;font-size:.9em;margin-top:5px"></p>
-        </div>
-        <div class="sub-timer">
-            <div class="num" id="subDays">--</div>
-            <div class="lbl">ڕۆژی ماوە</div>
-        </div>
+    <div class="stats">
+        <div class="stat"><div class="num" id="stTotal">0</div><div class="lbl">کۆی بەکارهێنەران</div></div>
+        <div class="stat"><div class="num" id="stActive">0</div><div class="lbl">چالاک</div></div>
+        <div class="stat"><div class="num" id="stInactive">0</div><div class="lbl">ناچالاک</div></div>
     </div>
 
-    <div class="card hidden" id="lockedArea">
-        <div class="locked-screen">
-            <div class="lock-icon">🔒</div>
-            <h2>دەفتەری قەرز قوفڵە!</h2>
-            <p>
-                بەشداریکردنت چالاک نییە.<br>
-                💰 پارەدان ئەنجام بدە بۆ چالاککردن (٣٦٥ ڕۆژ)<br><br>
-                📞 پەیوەندی بکە بە:<br>
-                <span class="contact">07705353322</span><br><br>
-                دوای پارەدان، ئەدمین چالاکت دەکات ✅<br>
-                <small style="color:#4ecdc4">✨ کاتێک چالاک دەکرێیت، ئەم پەڕەیە خۆکارانە دەکرێتەوە!</small>
-            </p>
-        </div>
+    <div class="nav">
+        <button class="active" onclick="aTab('users')">👥 بەکارهێنەران</button>
+        <button onclick="aTab('msgs')">📢 نامەکان</button>
     </div>
 
-    <div id="activeArea" class="hidden">
-        <div class="summary-grid">
-            <div class="sum-card debt">
-                <h3>🔴 کۆی قەرزەکانم (من قەرزارم)</h3>
-                <div class="val" id="sumDebt">0</div>
-                <div class="cnt" id="cntDebt">0 تۆمار</div>
-            </div>
-            <div class="sum-card credit">
-                <h3>🟢 کۆی وەرگرتن (خەڵکی قەرزارمن)</h3>
-                <div class="val" id="sumCredit">0</div>
-                <div class="cnt" id="cntCredit">0 تۆمار</div>
-            </div>
-        </div>
-
+    <div id="secUsers">
         <div class="card">
-            <h2 style="color:#f5a623;margin-bottom:20px">➕ تۆماری نوێ</h2>
-            <div class="form-grid">
-                <div class="form-group"><label>ناوی کەس</label><input type="text" id="rName" placeholder="ناو..."></div>
-                <div class="form-group"><label>بڕی پارە</label><input type="number" id="rAmount" placeholder="0" min="0"></div>
-                <div class="form-group"><label>جۆر</label><select id="rType"><option value="debt">🔴 من قەرزارم</option><option value="credit">🟢 خەڵکی قەرزارمن</option></select></div>
-                <div class="form-group"><label>بەروار</label><input type="date" id="rDate"></div>
-                <div class="form-group"><label>کاتژمێر</label><input type="time" id="rTime"></div>
-                <div class="form-group"><label>تێبینی</label><input type="text" id="rNote" placeholder="تێبینی..."></div>
-            </div>
-            <button class="btn btn-primary btn-full" onclick="addRec()">➕ زیادکردن</button>
+            <h2 style="color:#f5a623;margin-bottom:20px">👥 بەڕێوەبردنی بەکارهێنەران</h2>
+            <div id="uList"></div>
+            <div class="empty hidden" id="noU"><span>👤</span><p>هیچ بەکارهێنەرێک نییە</p></div>
         </div>
+    </div>
 
+    <div id="secMsgs" class="hidden">
         <div class="card">
-            <h2 style="color:#4ecdc4;margin-bottom:20px">📋 لیستی قەرزەکان</h2>
-            <div class="filter-bar">
-                <input type="text" id="srch" placeholder="🔍 گەڕان..." oninput="renderRecs()">
-                <select id="fT" onchange="renderRecs()"><option value="all">هەموو</option><option value="debt">🔴 قەرز</option><option value="credit">🟢 وەرگرتن</option></select>
-                <select id="fS" onchange="renderRecs()"><option value="all">هەموو دۆخ</option><option value="unpaid">نەدراو</option><option value="paid">دراو</option></select>
+            <h2 style="color:#4ecdc4;margin-bottom:20px">📢 ناردنی نامە بۆ هەمووان</h2>
+            <div class="form-group">
+                <label>دەقی نامە</label>
+                <textarea id="msgIn" rows="4" placeholder="نامەکەت بنووسە..."></textarea>
             </div>
-            <div class="table-wrap">
-                <table><thead><tr><th>#</th><th>ناو</th><th>بڕ</th><th>جۆر</th><th>بەروار</th><th>کات</th><th>دۆخ</th><th>تێبینی</th><th>کردار</th></tr></thead><tbody id="recBody"></tbody></table>
-            </div>
-            <div class="empty hidden" id="recEmpty"><span>📭</span><p>هیچ تۆمارێک نییە</p></div>
+            <button class="btn btn-success btn-full" onclick="sendMsg()">📤 ناردن</button>
+        </div>
+        <div class="card">
+            <h2 style="color:#f5a623;margin-bottom:20px">📋 نامە نێردراوەکان</h2>
+            <div id="mList"></div>
+            <div class="empty hidden" id="noM"><span>📭</span><p>هیچ نامەیەک نییە</p></div>
         </div>
     </div>
 </div>
-
-<button class="install-btn" id="installBtn" onclick="installApp()">📲 دامەزراندنی ئەپ</button>
 
 <script>
-// ===== FIREBASE =====
+const PASS='admin2026';
 const firebaseConfig = {
     apiKey: "AIzaSyCriV6DFNt94PcYXufA2cugLxTZ3wc5Do0",
     authDomain: "deftar-qarz.firebaseapp.com",
@@ -203,185 +127,106 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-let me = null;
-let allRecords = [];
-let unsubUser = null, unsubRecs = null, unsubMsgs = null;
+let allUsers = [];
+let unsubUsers = null, unsubMsgs = null;
 
-// ===== PWA =====
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').style.display='block'; });
-function installApp(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(r=>{ if(r.outcome==='accepted') document.getElementById('installBtn').style.display='none'; deferredPrompt=null; }); } }
-window.addEventListener('appinstalled', ()=>{ document.getElementById('installBtn').style.display='none'; });
-if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('/Matalll/sw.js').catch(()=>{}); }); }
-
-// ===== AUTO LOGIN =====
-const savedEmail = localStorage.getItem('dq_email');
-if(savedEmail) autoLogin(savedEmail);
-
-async function autoLogin(email){
-    try {
-        const doc = await db.collection('users').doc(email).get();
-        if(doc.exists){ me = doc.data(); setupListeners(); showApp(); }
-        else localStorage.removeItem('dq_email');
-    } catch(e){ console.log('autoLogin error:', e); }
+function aLogin(){
+    const p=document.getElementById('aPass').value;
+    if(p!==PASS){document.getElementById('aErr').textContent='⚠️ وشەی نهێنی هەڵەیە!';document.getElementById('aErr').style.display='block';return}
+    document.getElementById('aLogin').classList.add('hidden');
+    document.getElementById('aPanel').classList.remove('hidden');
+    setupAdmin();
 }
 
-// ===== LOGIN =====
-async function doLogin(){
-    const n = document.getElementById('uName').value.trim();
-    const e = document.getElementById('uEmail').value.trim().toLowerCase();
-    const err = document.getElementById('uError');
-    const load = document.getElementById('loginLoad');
-    if(!n){ err.textContent='⚠️ ناو بنووسە!'; err.style.display='block'; return; }
-    if(!e || !e.includes('@') || !e.includes('.')){ err.textContent='⚠️ ئیمەیل دروست بنووسە!'; err.style.display='block'; return; }
-    err.style.display='none';
-    load.classList.remove('hidden');
-    try {
-        const userRef = db.collection('users').doc(e);
-        const doc = await userRef.get();
-        if(!doc.exists){
-            await userRef.set({ name:n, email:e, active:false, subStart:null, subEnd:null, joined:new Date().toISOString() });
-        }
-        localStorage.setItem('dq_email', e);
-        me = { name:n, email:e };
-        setupListeners();
-        showApp();
-    } catch(err2){
-        console.error('Firebase Error:', err2);
-        let msg = (err2 && err2.message) ? err2.message : String(err2);
-        if(typeof firebase === 'undefined') msg = 'Firebase SDK بار نەبووە!';
-        err.textContent = '⚠️ ' + msg;
-        err.style.display='block';
-        alert('هەڵەی ورد:\n' + msg);
-    }
-    load.classList.add('hidden');
-}
-
-function doLogout(){
-    if(unsubUser) unsubUser();
-    if(unsubRecs) unsubRecs();
+function aLogout(){
+    if(unsubUsers) unsubUsers();
     if(unsubMsgs) unsubMsgs();
-    localStorage.removeItem('dq_email');
-    me = null; allRecords = [];
-    document.getElementById('pageApp').classList.add('hidden');
-    document.getElementById('pageLogin').classList.remove('hidden');
-    document.getElementById('uName').value='';
-    document.getElementById('uEmail').value='';
+    document.getElementById('aPanel').classList.add('hidden');
+    document.getElementById('aLogin').classList.remove('hidden');
+    document.getElementById('aPass').value='';
 }
 
-function showApp(){
-    document.getElementById('pageLogin').classList.add('hidden');
-    document.getElementById('pageApp').classList.remove('hidden');
-    document.getElementById('userBadge').textContent='👤 '+me.name+' | 📧 '+me.email;
-    checkSub(); setDT();
-}
-
-// ===== REAL-TIME LISTENERS =====
-function setupListeners(){
-    unsubUser = db.collection('users').doc(me.email).onSnapshot(snap => {
-        if(snap.exists){ me = snap.data(); checkSub(); }
-    }, err => console.log('user listener error:', err));
-    unsubRecs = db.collection('records').where('userEmail','==',me.email).onSnapshot(snap => {
-        allRecords = snap.docs.map(d => ({...d.data(), id:d.id}));
-        allRecords.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-        renderRecs(); updateSum();
-    }, err => console.log('records listener error:', err));
+function setupAdmin(){
+    unsubUsers = db.collection('users').onSnapshot(snap => {
+        allUsers = snap.docs.map(d => d.data());
+        allUsers.sort((a,b)=>(b.joined||'').localeCompare(a.joined||''));
+        renderUsers(); updateStats();
+    }, err => console.log('users listener error:', err));
     unsubMsgs = db.collection('messages').orderBy('createdAt','desc').onSnapshot(snap => {
-        renderNotifs(snap.docs.map(d=>d.data()));
+        renderMsgs(snap.docs.map(d=>({...d.data(), id:d.id})));
     }, err => console.log('messages listener error:', err));
 }
 
-// ===== SUBSCRIPTION =====
-function checkSub(){
-    const box=document.getElementById('subBox');
-    const title=document.getElementById('subTitle');
-    const text=document.getElementById('subText');
-    const days=document.getElementById('subDays');
-    if(!me || !me.active || !me.subEnd){
-        box.className='sub-status sub-inactive';
-        title.textContent='❌ بەشداری چالاک نییە';
-        text.textContent='پارەدان ئەنجام بدە → پەیوەندی: 07705353322';
-        days.textContent='--';
-        document.getElementById('lockedArea').classList.remove('hidden');
-        document.getElementById('activeArea').classList.add('hidden');
-        return;
-    }
-    const end=new Date(me.subEnd);
-    const diff=Math.ceil((end-new Date())/(1000*60*60*24));
-    if(diff<=0){
-        db.collection('users').doc(me.email).update({active:false});
-        box.className='sub-status sub-inactive';
-        title.textContent='❌ بەشداری بەسەرچووە!';
-        text.textContent='نوێکردنەوە پێویستە → 07705353322';
-        days.textContent='0';
-        document.getElementById('lockedArea').classList.remove('hidden');
-        document.getElementById('activeArea').classList.add('hidden');
-        return;
-    }
-    const m=Math.floor(diff/30), d=diff%30;
-    box.className='sub-status sub-active';
-    title.textContent='✅ بەشداری چالاکە';
-    text.textContent='ماوە: '+m+' مانگ و '+d+' ڕۆژ';
-    days.textContent=diff;
-    document.getElementById('lockedArea').classList.add('hidden');
-    document.getElementById('activeArea').classList.remove('hidden');
-}
-
-// ===== NOTIFICATIONS =====
-function renderNotifs(msgs){
-    const area=document.getElementById('notifArea');
-    if(!msgs.length){ area.innerHTML=''; return; }
-    area.innerHTML=msgs.map(m=>'<div class="notif-bar"><p>📢 '+m.text+'</p><span class="nd">'+new Date(m.date).toLocaleString('ku')+'</span></div>').join('');
-}
-
-// ===== RECORDS =====
-function setDT(){
-    const now=new Date();
-    document.getElementById('rDate').value=now.toISOString().split('T')[0];
-    document.getElementById('rTime').value=now.toTimeString().slice(0,5);
-}
-
-async function addRec(){
-    const n=document.getElementById('rName').value.trim();
-    const a=parseFloat(document.getElementById('rAmount').value);
-    const t=document.getElementById('rType').value;
-    const d=document.getElementById('rDate').value;
-    const tm=document.getElementById('rTime').value;
-    const nt=document.getElementById('rNote').value.trim();
-    if(!n){alert('⚠️ ناو بنووسە!');return}
-    if(!a||a<=0){alert('⚠️ بڕ بنووسە!');return}
-    if(!d){alert('⚠️ بەروار هەڵبژێرە!');return}
-    try {
-        await db.collection('records').add({
-            userEmail:me.email, name:n, amount:a, type:t, date:d,
-            time:tm||'--:--', note:nt||'-', paid:false, createdAt:Date.now()
-        });
-        document.getElementById('rName').value='';
-        document.getElementById('rAmount').value='';
-        document.getElementById('rNote').value='';
-        setDT();
-    } catch(e){ alert('هەڵە: '+e.message); }
-}
-
-async function delRec(id){
-    if(!confirm('سڕینەوە؟'))return;
-    await db.collection('records').doc(id).delete();
-}
-
-async function togPaid(id){
-    const rec=allRecords.find(r=>r.id===id);
-    if(rec) await db.collection('records').doc(id).update({paid:!rec.paid});
-}
-
-function renderRecs(){
-    const s=document.getElementById('srch').value.trim().toLowerCase();
-    const ft=document.getElementById('fT').value;
-    const fs=document.getElementById('fS').value;
-    let recs=allRecords.filter(r=>{
-        return r.name.toLowerCase().includes(s)&&(ft==='all'||r.type===ft)&&(fs==='all'||(fs==='paid'&&r.paid)||(fs==='unpaid'&&!r.paid));
+function aTab(t){
+    document.querySelectorAll('.nav button').forEach((b,i)=>{
+        b.classList.toggle('active',(t==='users'&&i===0)||(t==='msgs'&&i===1));
     });
-    const body=document.getElementById('recBody');
-    const empty=document.getElementById('recEmpty');
-    if(!recs.length){body.innerHTML='';empty.classList.remove('hidden');return}
-    empty.classList.add('hidden');
-    body.
+    document.getElementById('secUsers').classList.toggle('hidden',t!=='users');
+    document.getElementById('secMsgs').classList.toggle('hidden',t!=='msgs');
+}
+
+function updateStats(){
+    const now=new Date();
+    const active=allUsers.filter(u=>u.active&&u.subEnd&&new Date(u.subEnd)>now).length;
+    document.getElementById('stTotal').textContent=allUsers.length;
+    document.getElementById('stActive').textContent=active;
+    document.getElementById('stInactive').textContent=allUsers.length-active;
+}
+
+function renderUsers(){
+    const list=document.getElementById('uList');
+    const noU=document.getElementById('noU');
+    if(!allUsers.length){list.innerHTML='';noU.classList.remove('hidden');return}
+    noU.classList.add('hidden');
+    const now=new Date();
+    list.innerHTML=allUsers.map(u=>{
+        const isOn=u.active&&u.subEnd&&new Date(u.subEnd)>now;
+        const days=isOn?Math.ceil((new Date(u.subEnd)-now)/(1000*60*60*24)):0;
+        return '<div class="user-row"><div class="info"><h4>👤 '+u.name+'</h4><p>📧 '+u.email+'</p><p>📅 تۆمار: '+(u.joined?new Date(u.joined).toLocaleDateString('ku'):'-')+'</p>'+(isOn?'<p style="color:#4ecdc4">⏰ '+days+' ڕۆژی ماوە</p>':'')+'</div><span class="badge '+(isOn?'badge-on':'badge-off')+'">'+(isOn?'✅ چالاک':'❌ ناچالاک')+'</span><div class="u-actions"><button class="btn btn-success btn-small" onclick="activate(\''+u.email+'\')">✅ چالاک ٣٦٥</button><button class="btn btn-danger btn-small" onclick="deactivate(\''+u.email+'\')">🚫 ناچالاک</button><button class="btn btn-danger btn-small" onclick="delUser(\''+u.email+'\')">🗑️ سڕینەوە</button></div></div>';
+    }).join('');
+}
+
+async function activate(email){
+    const now=new Date();
+    const end=new Date();
+    end.setDate(end.getDate()+365);
+    await db.collection('users').doc(email).update({active:true, subStart:now.toISOString(), subEnd:end.toISOString()});
+    alert('✅ چالاککرا بۆ ٣٦٥ ڕۆژ!');
+}
+
+async function deactivate(email){
+    if(!confirm('ناچالاککردن؟'))return;
+    await db.collection('users').doc(email).update({active:false});
+}
+
+async function delUser(email){
+    if(!confirm('سڕینەوەی بەکارهێنەر و هەموو داتاکانی؟'))return;
+    await db.collection('users').doc(email).delete();
+    const recs=await db.collection('records').where('userEmail','==',email).get();
+    const batch=db.batch();
+    recs.docs.forEach(d=>batch.delete(d.ref));
+    await batch.commit();
+}
+
+async function sendMsg(){
+    const t=document.getElementById('msgIn').value.trim();
+    if(!t){alert('⚠️ نامە بنووسە!');return}
+    await db.collection('messages').add({text:t, date:new Date().toISOString(), createdAt:Date.now()});
+    document.getElementById('msgIn').value='';
+    alert('✅ نامە نێردرا بۆ هەموو بەکارهێنەران!');
+}
+
+function renderMsgs(msgs){
+    const list=document.getElementById('mList');
+    const noM=document.getElementById('noM');
+    if(!msgs.length){list.innerHTML='';noM.classList.remove('hidden');return}
+    noM.classList.add('hidden');
+    list.innerHTML=msgs.map(m=>'<div class="msg-item"><div class="mt">📢 '+m.text+'</div><div class="md">'+new Date(m.date).toLocaleString('ku')+' <button class="btn btn-danger btn-small" style="margin-right:10px" onclick="delMsg(\''+m.id+'\')">🗑️</button></div></div>').join('');
+}
+
+async function delMsg(id){
+    await db.collection('messages').doc(id).delete();
+}
+</script>
+</body>
+</html>
