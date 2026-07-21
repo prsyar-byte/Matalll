@@ -4,311 +4,368 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>دەفتەری قەرز</title>
     <link rel="manifest" href="/Matalll/manifest.json">
     <meta name="theme-color" content="#e94560">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="قەرز">
     <link rel="apple-touch-icon" href="/Matalll/icons/icon-192.png">
     <link rel="icon" type="image/png" href="/Matalll/icons/icon-192.png">
+
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        :root{--card:#fffdf7;--card-bd:rgba(120,90,50,.12);--card-sh:0 4px 18px rgba(120,90,50,.10);--txt:#3a3530;--txt2:#8a8178;--txt3:#7a7064;--txt4:#a89f94;--inp:#fff;--inp-bd:#ddd2bd;--opt:#fff;--tbl-bd:rgba(120,90,50,.10);--tbl-hd:rgba(120,90,50,.06);--tbl-hv:rgba(120,90,50,.04);--nav:#fffdf7;--nav-bd:rgba(120,90,50,.12);--nav-sh:0 -4px 20px rgba(120,90,50,.12);--nav-off:#a89f94;--spec:#fffdf7;--sum-sh:0 4px 15px rgba(120,90,50,.08);--clk-bg:#fffdf7;--exp-bg:#fffdf7;--login-bg:#fffdf7;--login-bd:rgba(120,90,50,.15);--login-sh:0 10px 40px rgba(120,90,50,.15);--ph-bg:rgba(120,90,50,.06);--ph-bd:#ddd2bd;--info-bg:rgba(120,90,50,.04);--info-row:rgba(120,90,50,.08);--tbtn:rgba(120,90,50,.10);--modal-bg:#fffdf7;--chart-hole:#fffdf7}
-        body.dark{--card:rgba(255,255,255,.05);--card-bd:rgba(255,255,255,.1);--card-sh:none;--txt:#fff;--txt2:#aaa;--txt3:#ccc;--txt4:#666;--inp:rgba(255,255,255,.05);--inp-bd:rgba(255,255,255,.2);--opt:#1a1a2e;--tbl-bd:rgba(255,255,255,.05);--tbl-hd:rgba(255,255,255,.05);--tbl-hv:rgba(255,255,255,.03);--nav:rgba(15,12,41,.97);--nav-bd:rgba(255,255,255,.12);--nav-sh:0 -4px 20px rgba(0,0,0,.4);--nav-off:#777;--spec:rgba(255,255,255,.05);--sum-sh:none;--clk-bg:linear-gradient(135deg,rgba(245,166,35,.15),rgba(233,69,96,.15));--exp-bg:linear-gradient(135deg,rgba(233,69,96,.2),rgba(245,166,35,.2));--login-bg:rgba(255,255,255,.05);--login-bd:rgba(255,255,255,.15);--login-sh:none;--ph-bg:rgba(255,255,255,.08);--ph-bd:rgba(255,255,255,.2);--info-bg:rgba(255,255,255,.04);--info-row:rgba(255,255,255,.05);--tbtn:rgba(255,255,255,.10);--modal-bg:#1a1a2e;--chart-hole:#1a1a2e}
-        body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;min-height:100vh;padding:15px 15px 90px;color:var(--txt);background-color:#efe7d6;background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(150,110,70,.08) 31px,rgba(150,110,70,.08) 32px);transition:background-color .3s,color .3s}
+
+        :root{
+            --card:#fffdf7; --card-bd:rgba(120,90,50,.12); --card-sh:0 4px 18px rgba(120,90,50,.10);
+            --txt:#3a3530; --txt2:#8a8178; --txt3:#7a7064; --txt4:#a89f94;
+            --inp:#fff; --inp-bd:#ddd2bd; --opt:#fff;
+            --tbl-bd:rgba(120,90,50,.10); --tbl-hd:rgba(120,90,50,.06); --tbl-hv:rgba(120,90,50,.04);
+            --nav:#fffdf7; --nav-bd:rgba(120,90,50,.12); --nav-sh:0 -4px 20px rgba(120,90,50,.12); --nav-off:#a89f94;
+            --spec:#fffdf7; --sum-sh:0 4px 15px rgba(120,90,50,.08);
+            --clk-bg:#fffdf7; --clk-sh:0 4px 15px rgba(245,166,35,.12);
+            --exp-bg:#fffdf7; --exp-sh:0 4px 15px rgba(245,166,35,.12);
+            --login-bg:#fffdf7; --login-bd:rgba(120,90,50,.15); --login-sh:0 10px 40px rgba(120,90,50,.15);
+            --ph-bg:rgba(120,90,50,.06); --ph-bd:#ddd2bd; --info-bg:rgba(120,90,50,.04); --info-row:rgba(120,90,50,.08);
+            --tbtn:rgba(120,90,50,.10);
+        }
+        body.dark{
+            --card:rgba(255,255,255,.05); --card-bd:rgba(255,255,255,.1); --card-sh:none;
+            --txt:#fff; --txt2:#aaa; --txt3:#ccc; --txt4:#666;
+            --inp:rgba(255,255,255,.05); --inp-bd:rgba(255,255,255,.2); --opt:#1a1a2e;
+            --tbl-bd:rgba(255,255,255,.05); --tbl-hd:rgba(255,255,255,.05); --tbl-hv:rgba(255,255,255,.03);
+            --nav:rgba(15,12,41,.97); --nav-bd:rgba(255,255,255,.12); --nav-sh:0 -4px 20px rgba(0,0,0,.4); --nav-off:#777;
+            --spec:rgba(255,255,255,.05); --sum-sh:none;
+            --clk-bg:linear-gradient(135deg,rgba(245,166,35,.15),rgba(233,69,96,.15)); --clk-sh:none;
+            --exp-bg:linear-gradient(135deg,rgba(233,69,96,.2),rgba(245,166,35,.2)); --exp-sh:none;
+            --login-bg:rgba(255,255,255,.05); --login-bd:rgba(255,255,255,.15); --login-sh:none;
+            --ph-bg:rgba(255,255,255,.08); --ph-bd:rgba(255,255,255,.2); --info-bg:rgba(255,255,255,.04); --info-row:rgba(255,255,255,.05);
+            --tbtn:rgba(255,255,255,.10);
+        }
+
+        body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;min-height:100vh;padding:15px 15px 90px;color:var(--txt);
+            background-color:#efe7d6;
+            background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(150,110,70,.08) 31px,rgba(150,110,70,.08) 32px);
+            transition:background-color .3s,color .3s}
         body.dark{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);background-attachment:fixed}
-        body.rtl{direction:rtl}body.ltr{direction:ltr}
+
         .container{max-width:900px;margin:0 auto}
         .hidden{display:none!important}
-        .card{background:var(--card);border:1px solid var(--card-bd);border-radius:20px;padding:22px;box-shadow:var(--card-sh);margin-bottom:16px;transition:background .3s,border-color .3s}
+        .card{background:var(--card);border:1px solid var(--card-bd);border-radius:20px;padding:25px;box-shadow:var(--card-sh);margin-bottom:18px;transition:background .3s,border-color .3s}
         .btn{padding:12px 25px;border:none;border-radius:10px;font-size:1em;cursor:pointer;font-weight:bold;transition:all .3s}
         .btn:hover{transform:scale(1.03)}
         .btn-primary{background:linear-gradient(45deg,#e94560,#f5a623);color:#fff}
         .btn-success{background:linear-gradient(45deg,#4ecdc4,#44bd63);color:#fff}
         .btn-danger{background:rgba(233,69,96,.12);color:#e94560;border:1px solid #e94560}
         .btn-danger:hover{background:#e94560;color:#fff}
-        .btn-ghost{background:var(--tbtn);color:var(--txt);border:1px solid var(--card-bd)}
-        .btn-small{padding:8px 13px;font-size:.82em}
+        .btn-small{padding:8px 15px;font-size:.85em}
         .btn-full{width:100%}
         .btn-theme{background:var(--tbtn);border:1px solid var(--card-bd);width:42px;height:38px;border-radius:10px;font-size:1.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;padding:0}
+        .btn-theme:hover{transform:scale(1.1)}
         .hdr-btns{display:flex;gap:8px;align-items:center}
-        .form-group{margin-bottom:14px;text-align:right}
-        body.ltr .form-group{text-align:left}
-        .form-group label{display:block;margin-bottom:7px;color:var(--txt3);font-size:.88em;font-weight:600}
-        .form-group input,.form-group select{width:100%;padding:12px 14px;border:1px solid var(--inp-bd);border-radius:12px;background:var(--inp);color:var(--txt);font-size:1em;transition:border-color .3s,background .3s}
+
+        .form-group{margin-bottom:15px;text-align:right}
+        .form-group label{display:block;margin-bottom:8px;color:var(--txt3);font-size:.9em;font-weight:600}
+        .form-group input,.form-group select{width:100%;padding:13px 16px;border:1px solid var(--inp-bd);border-radius:12px;background:var(--inp);color:var(--txt);font-size:1em;transition:border-color .3s,background .3s}
         .form-group input:focus,.form-group select:focus{outline:none;border-color:#f5a623}
         .form-group select option{background:var(--opt);color:var(--txt)}
-        .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+        .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+
         .login-page{display:flex;justify-content:center;align-items:center;min-height:90vh}
-        .login-box{background:var(--login-bg);border:1px solid var(--login-bd);border-radius:25px;padding:45px 35px;width:100%;max-width:420px;text-align:center;box-shadow:var(--login-sh)}
+        .login-box{background:var(--login-bg);border:1px solid var(--login-bd);border-radius:25px;padding:50px 40px;width:100%;max-width:420px;text-align:center;box-shadow:var(--login-sh);transition:background .3s}
         .login-box h1{font-size:2em;margin-bottom:10px;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .login-box p{color:var(--txt2);margin-bottom:22px}
+        .login-box p{color:var(--txt2);margin-bottom:25px}
         .error-msg{color:#e94560;font-size:.85em;margin-top:10px;display:none;word-break:break-word}
-        .pin-screen{display:flex;justify-content:center;align-items:center;min-height:90vh}
-        .pin-box{background:var(--login-bg);border:1px solid var(--login-bd);border-radius:25px;padding:45px 35px;width:100%;max-width:360px;text-align:center;box-shadow:var(--login-sh)}
-        .pin-dots{display:flex;justify-content:center;gap:14px;margin:25px 0}
-        .pin-dot{width:18px;height:18px;border-radius:50%;border:2px solid #f5a623;transition:all .2s}
-        .pin-dot.filled{background:#f5a623}
-        .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
-        .pin-key{padding:18px;border:none;border-radius:14px;background:var(--tbtn);color:var(--txt);font-size:1.4em;font-weight:bold;cursor:pointer;transition:all .2s}
-        .pin-key:active{transform:scale(.92);background:rgba(245,166,35,.3)}
-        .app-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;padding:10px 0}
+
+        .app-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;padding:10px 0}
         .app-header .hdr-left{display:flex;align-items:center;gap:10px}
-        .app-header h1{font-size:1.4em;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .hdr-photo{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #f5a623}
-        .live-clock{background:var(--clk-bg);border:1px solid rgba(245,166,35,.45);border-radius:18px;padding:16px;text-align:center;margin-bottom:16px;font-size:1.9em;color:#e08a1e;font-weight:bold;letter-spacing:2px;direction:ltr;box-shadow:var(--card-sh)}
+        .app-header h1{font-size:1.5em;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .hdr-photo{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #f5a623}
+
+        .live-clock{background:var(--clk-bg);border:1px solid rgba(245,166,35,.45);border-radius:18px;padding:18px;text-align:center;margin-bottom:18px;font-size:2em;color:#e08a1e;font-weight:bold;letter-spacing:2px;direction:ltr;box-shadow:var(--clk-sh);transition:background .3s}
         body.dark .live-clock{color:#f5a623}
-        .live-clock .date-part{display:block;color:var(--txt2);font-size:.4em;font-weight:normal;margin-top:6px;letter-spacing:0}
-        .sub-status{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;padding:16px;border-radius:15px;margin-bottom:16px}
+        .live-clock .date-part{display:block;color:var(--txt2);font-size:.4em;font-weight:normal;margin-top:6px;letter-spacing:0;direction:rtl}
+
+        .sub-status{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;padding:18px;border-radius:15px;margin-bottom:18px}
         .sub-active{background:rgba(78,205,196,.12);border:1px solid rgba(78,205,196,.45)}
         .sub-inactive{background:rgba(233,69,96,.08);border:1px solid rgba(233,69,96,.4)}
         .sub-timer{text-align:center}
-        .sub-timer .num{font-size:1.7em;font-weight:bold;color:#2a9d8f}
-        body.dark .sub-timer .num{color:#4ecdc4}
-        .sub-timer .lbl{font-size:.78em;color:var(--txt2)}
-        .locked-screen{text-align:center;padding:35px 20px}
+        .sub-timer .num{font-size:1.8em;font-weight:bold;color:#2a9d8f}
+        .sub-timer .lbl{font-size:.8em;color:var(--txt2)}
+
+        .locked-screen{text-align:center;padding:40px 20px}
         .locked-screen .lock-icon{font-size:3.5em;margin-bottom:15px}
         .locked-screen h2{color:#e94560;margin-bottom:12px}
         .locked-screen p{color:var(--txt2);line-height:1.8}
         .locked-screen .contact{color:#2a9d8f;font-weight:bold;font-size:1.2em}
-        .notif-bar{background:rgba(245,166,35,.14);border:1px solid rgba(245,166,35,.45);border-radius:12px;padding:13px 16px;margin-bottom:12px;animation:pop .4s ease}
+
+        .notif-bar{background:rgba(245,166,35,.14);border:1px solid rgba(245,166,35,.45);border-radius:12px;padding:14px 18px;margin-bottom:12px;animation:pop .4s ease}
         @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-        .notif-bar p{color:#c97a14;font-size:.9em;font-weight:600}
+        .notif-bar p{color:#c97a14;font-size:.92em;font-weight:600}
         body.dark .notif-bar p{color:#f5a623}
-        .notif-bar .nd{color:var(--txt2);font-size:.76em}
-        .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}
-        .sum-card{background:var(--spec);border-radius:15px;padding:18px;text-align:center;border:2px solid transparent;box-shadow:var(--sum-sh)}
-        .sum-card.debt{border-color:#e94560}.sum-card.credit{border-color:#4ecdc4}.sum-card.expense{border-color:#f5a623}
-        .sum-card h3{color:var(--txt2);font-size:.76em;margin-bottom:7px}
-        .sum-card .val{font-size:1.4em;font-weight:bold}
-        .sum-card.debt .val{color:#e94560}.sum-card.credit .val{color:#2a9d8f}.sum-card.expense .val{color:#e08a1e}
-        body.dark .sum-card.credit .val{color:#4ecdc4}body.dark .sum-card.expense .val{color:#f5a623}
-        .sum-card .cnt{color:var(--txt4);font-size:.72em;margin-top:4px}
-        .exp-total{background:var(--exp-bg);border:1px solid rgba(245,166,35,.45);border-radius:18px;padding:20px;text-align:center;margin-bottom:16px;box-shadow:var(--card-sh)}
-        .exp-total .lbl{color:var(--txt3);font-size:.88em;margin-bottom:5px;font-weight:600}
-        .exp-total .val{font-size:2em;font-weight:bold;color:#e08a1e}
+        .notif-bar .nd{color:var(--txt2);font-size:.78em}
+
+        .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+        .sum-card{background:var(--spec);border-radius:15px;padding:20px;text-align:center;border:2px solid transparent;box-shadow:var(--sum-sh);transition:background .3s}
+        .sum-card.debt{border-color:#e94560}
+        .sum-card.credit{border-color:#4ecdc4}
+        .sum-card.expense{border-color:#f5a623}
+        .sum-card h3{color:var(--txt2);font-size:.8em;margin-bottom:8px}
+        .sum-card .val{font-size:1.4em;font-weight:bold;line-height:1.4}
+        .sum-card.debt .val{color:#e94560}
+        .sum-card.credit .val{color:#2a9d8f}
+        body.dark .sum-card.credit .val{color:#4ecdc4}
+        .sum-card.expense .val{color:#e08a1e}
+        body.dark .sum-card.expense .val{color:#f5a623}
+        .sum-card .cnt{color:var(--txt4);font-size:.75em;margin-top:4px}
+
+        .exp-total{background:var(--exp-bg);border:1px solid rgba(245,166,35,.45);border-radius:18px;padding:22px;text-align:center;margin-bottom:18px;box-shadow:var(--exp-sh);transition:background .3s}
+        .exp-total .lbl{color:var(--txt3);font-size:.9em;margin-bottom:6px;font-weight:600}
+        .exp-total .val{font-size:1.7em;font-weight:bold;color:#e08a1e;line-height:1.4}
         body.dark .exp-total .val{color:#f5a623}
-        .exp-total .mon{color:var(--txt2);font-size:.78em;margin-top:4px}
-        .budget-bar{height:14px;background:var(--tbtn);border-radius:10px;overflow:hidden;margin:10px 0 6px}
-        .budget-fill{height:100%;background:linear-gradient(90deg,#4ecdc4,#44bd63);border-radius:10px;transition:width .4s}
-        .budget-fill.warn{background:linear-gradient(90deg,#f5a623,#e94560)}
-        .budget-fill.over{background:#e94560}
-        .budget-info{display:flex;justify-content:space-between;font-size:.8em;color:var(--txt2)}
-        .chart-wrap{display:flex;align-items:center;gap:15px;flex-wrap:wrap;justify-content:center}
-        .chart-legend{display:flex;flex-direction:column;gap:6px;font-size:.82em}
-        .chart-legend .lg{display:flex;align-items:center;gap:7px}
-        .chart-legend .dot{width:12px;height:12px;border-radius:3px}
+        .exp-total .mon{color:var(--txt2);font-size:.8em;margin-top:4px}
+
+        .export-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+        .export-row button{flex:1;min-width:75px;padding:9px 6px;border:1px solid var(--card-bd);background:var(--tbtn);color:var(--txt);border-radius:10px;font-size:.78em;font-weight:bold;cursor:pointer;transition:all .3s}
+        .export-row button:hover{background:rgba(245,166,35,.25);transform:scale(1.04)}
+
         .table-wrap{overflow-x:auto}
         table{width:100%;border-collapse:collapse}
-        th,td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--tbl-bd);font-size:.85em}
-        body.ltr th,body.ltr td{text-align:left}
-        th{background:var(--tbl-hd);color:#c97a14;font-size:.78em}
+        th,td{padding:10px;text-align:right;border-bottom:1px solid var(--tbl-bd);font-size:.88em}
+        th{background:var(--tbl-hd);color:#c97a14;font-size:.8em}
         body.dark th{color:#f5a623}
         tr:hover{background:var(--tbl-hv)}
-        .t-debt{color:#e94560;font-weight:bold}.t-credit{color:#2a9d8f;font-weight:bold}
+        .t-debt{color:#e94560;font-weight:bold}
+        .t-credit{color:#2a9d8f;font-weight:bold}
         body.dark .t-credit{color:#4ecdc4}
-        .s-paid{color:#2a9d8f}body.dark .s-paid{color:#4ecdc4}.s-unpaid{color:#e94560}
-        .actions{display:flex;gap:4px;flex-wrap:wrap}
-        .filter-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-        .filter-bar input,.filter-bar select{padding:9px 12px;border:1px solid var(--inp-bd);border-radius:10px;background:var(--inp);color:var(--txt);font-size:.84em}
+        .s-paid{color:#2a9d8f}
+        body.dark .s-paid{color:#4ecdc4}
+        .s-unpaid{color:#e94560}
+        .cur-tag{color:var(--txt3);font-size:.8em}
+        .actions{display:flex;gap:5px}
+        .filter-bar{display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap}
+        .filter-bar input,.filter-bar select{padding:9px 12px;border:1px solid var(--inp-bd);border-radius:10px;background:var(--inp);color:var(--txt);font-size:.85em}
         .filter-bar input:focus,.filter-bar select:focus{outline:none;border-color:#f5a623}
-        .toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-        .empty{text-align:center;padding:28px;color:var(--txt4)}
-        .empty span{font-size:2.4em;display:block;margin-bottom:8px}
-        .sec-title{color:#c97a14;margin-bottom:14px;font-size:1.1em}
+        .empty{text-align:center;padding:30px;color:var(--txt4)}
+        .empty span{font-size:2.5em;display:block;margin-bottom:8px}
+        .loading{text-align:center;padding:20px;color:#c97a14}
+        .sec-title{color:#c97a14;margin-bottom:15px;font-size:1.15em}
         body.dark .sec-title{color:#f5a623}
-        .sec-title2{color:#2a9d8f;margin-bottom:14px;font-size:1.1em}
+        .sec-title2{color:#2a9d8f;margin-bottom:15px;font-size:1.15em}
         body.dark .sec-title2{color:#4ecdc4}
-        .remind-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border-radius:10px;margin-bottom:8px;background:var(--tbtn)}
-        .remind-item .ri-info{flex:1}
-        .remind-item .ri-name{font-weight:bold;font-size:.9em}
-        .remind-item .ri-meta{color:var(--txt2);font-size:.78em}
-        .remind-item.overdue{border-right:3px solid #e94560}
-        body.ltr .remind-item.overdue{border-right:none;border-left:3px solid #e94560}
-        .remind-item.soon{border-right:3px solid #f5a623}
-        body.ltr .remind-item.soon{border-right:none;border-left:3px solid #f5a623}
+
         .profile-card{text-align:center}
-        .prof-photo-wrap{position:relative;width:110px;height:110px;margin:0 auto 16px}
-        .prof-photo{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid #f5a623}
-        .prof-placeholder{width:110px;height:110px;border-radius:50%;background:var(--ph-bg);display:flex;align-items:center;justify-content:center;font-size:2.8em;border:3px dashed var(--ph-bd)}
-        .prof-upload{position:absolute;bottom:0;right:0;background:linear-gradient(45deg,#e94560,#f5a623);width:36px;height:36px;border-radius:50%;border:3px solid var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1em}
+        .prof-photo-wrap{position:relative;width:120px;height:120px;margin:0 auto 18px}
+        .prof-photo{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #f5a623}
+        .prof-placeholder{width:120px;height:120px;border-radius:50%;background:var(--ph-bg);display:flex;align-items:center;justify-content:center;font-size:3em;border:3px dashed var(--ph-bd)}
+        .prof-upload{position:absolute;bottom:0;right:0;background:linear-gradient(45deg,#e94560,#f5a623);width:38px;height:38px;border-radius:50%;border:3px solid var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1em}
         .prof-upload input{display:none}
-        .prof-name{font-size:1.3em;font-weight:bold;margin-bottom:4px;color:var(--txt)}
-        .prof-email{color:var(--txt2);font-size:.85em;margin-bottom:16px;word-break:break-all}
-        .prof-info{background:var(--info-bg);border-radius:12px;padding:14px;text-align:right;margin-top:14px}
-        body.ltr .prof-info{text-align:left}
-        .prof-info .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--info-row);font-size:.88em}
+        .prof-name{font-size:1.4em;font-weight:bold;margin-bottom:4px;color:var(--txt)}
+        .prof-email{color:var(--txt2);font-size:.9em;margin-bottom:18px;word-break:break-all}
+        .prof-info{background:var(--info-bg);border-radius:12px;padding:15px;text-align:right;margin-top:15px}
+        .prof-info .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--info-row);font-size:.9em}
         .prof-info .row:last-child{border:none}
-        .prof-info .row .k{color:var(--txt2)}.prof-info .row .v{color:var(--txt);font-weight:bold}
-        .settings-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--info-row)}
-        .settings-row:last-child{border:none}
-        .settings-row .sk{font-weight:600;font-size:.9em}
-        .settings-row .sv{display:flex;gap:6px;align-items:center}
-        .lang-btns{display:flex;gap:6px}
-        .lang-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--card-bd);background:var(--tbtn);color:var(--txt);cursor:pointer;font-size:.82em;font-weight:bold}
-        .lang-btn.active{background:linear-gradient(45deg,#e94560,#f5a623);color:#fff;border-color:transparent}
-        .badge{padding:4px 12px;border-radius:20px;font-size:.78em;font-weight:bold}
-        .badge-on{background:rgba(78,205,196,.2);color:#2a9d8f}body.dark .badge-on{color:#4ecdc4}
+        .prof-info .row .k{color:var(--txt2)}
+        .prof-info .row .v{color:var(--txt);font-weight:bold}
+        .badge{padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:bold}
+        .badge-on{background:rgba(78,205,196,.2);color:#2a9d8f}
+        body.dark .badge-on{color:#4ecdc4}
         .badge-off{background:rgba(233,69,96,.15);color:#e94560}
-        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center;z-index:200;padding:15px}
-        .modal{background:var(--modal-bg);border-radius:20px;padding:25px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;border:1px solid var(--card-bd)}
-        .modal h3{margin-bottom:16px;color:#c97a14}body.dark .modal h3{color:#f5a623}
-        .modal-btns{display:flex;gap:10px;margin-top:16px}
-        .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--nav);border-top:1px solid var(--nav-bd);display:flex;justify-content:space-around;padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:100;box-shadow:var(--nav-sh)}
-        .nav-item{background:none;border:none;color:var(--nav-off);display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:7px 6px;border-radius:14px;transition:all .3s;flex:1;-webkit-tap-highlight-color:transparent}
+
+        .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--nav);border-top:1px solid var(--nav-bd);display:flex;justify-content:space-around;padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:100;box-shadow:var(--nav-sh);transition:background .3s}
+        .nav-item{background:none;border:none;color:var(--nav-off);display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:7px 8px;border-radius:14px;transition:all .3s;flex:1;-webkit-tap-highlight-color:transparent}
         .nav-item.active{color:#e94560}
         .nav-item.active .ni{transform:scale(1.15)}
-        .nav-item .ni{font-size:1.3em;transition:transform .3s}
-        .nav-item .nl{font-size:.64em;font-weight:bold}
+        .nav-item .ni{font-size:1.4em;transition:transform .3s}
+        .nav-item .nl{font-size:.68em;font-weight:bold}
+
         .install-btn{position:fixed;bottom:80px;left:15px;background:linear-gradient(45deg,#4ecdc4,#44bd63);color:#fff;padding:12px 20px;border-radius:50px;border:none;font-size:.9em;font-weight:bold;cursor:pointer;box-shadow:0 5px 25px rgba(78,205,196,.4);z-index:99;display:none}
-        .offline-bar{background:rgba(233,69,96,.15);border:1px solid #e94560;color:#e94560;text-align:center;padding:8px;border-radius:10px;margin-bottom:12px;font-size:.85em;font-weight:bold}
-        @media(max-width:600px){.form-grid{grid-template-columns:1fr}th,td{padding:7px 5px;font-size:.76em}.live-clock{font-size:1.5em}.summary-grid{grid-template-columns:1fr 1fr 1fr}}
+
+        @media(max-width:600px){.form-grid{grid-template-columns:1fr 1fr}th,td{padding:8px 6px;font-size:.78em}.live-clock{font-size:1.6em}.summary-grid{grid-template-columns:1fr 1fr}}
+
+        /* ===== PRINT (PDF) ===== */
+        @media print{
+            body{background:#fff!important;color:#000!important;padding:10px!important}
+            .no-print,.bottom-nav,.install-btn,.actions,.hdr-btns{display:none!important}
+            .card{box-shadow:none!important;border:1px solid #ccc!important;background:#fff!important;break-inside:avoid}
+            .hidden{display:none!important}
+            th{background:#eee!important;color:#000!important}
+            td,th{color:#000!important;border-color:#ccc!important}
+            .t-debt,.s-unpaid{color:#c00!important}
+            .t-credit,.s-paid{color:#080!important}
+            .cur-tag{color:#555!important}
+            .sec-title,.sec-title2{color:#000!important}
+            .print-title{display:block!important;text-align:center;font-size:1.4em;font-weight:bold;margin-bottom:5px;color:#000}
+            .print-sub{display:block!important;text-align:center;font-size:.9em;color:#555;margin-bottom:15px}
+        }
+        .print-title,.print-sub{display:none}
     </style>
 </head>
-<body class="rtl">
+<body>
 
-<!-- LOGIN -->
+<!-- ===== LOGIN ===== -->
 <div class="login-page" id="pageLogin">
     <div class="login-box">
-        <h1>📒 <span data-i18n="appTitle">دەفتەری قەرز</span></h1>
-        <p data-i18n="loginSub">ناو و ئیمەیل بنووسە بۆ چوونەژوورەوە</p>
-        <div class="form-group"><label data-i18n="name">👤 ناو</label><input type="text" id="uName"></div>
-        <div class="form-group"><label data-i18n="email">📧 ئیمەیل</label><input type="email" id="uEmail"></div>
-        <button class="btn btn-primary btn-full" onclick="doLogin()" data-i18n="loginBtn">🔓 چوونەژوورەوە</button>
+        <h1>📒 دەفتەری قەرز</h1>
+        <p>ناو و ئیمەیل بنووسە بۆ چوونەژوورەوە</p>
+        <div class="form-group">
+            <label>👤 ناو</label>
+            <input type="text" id="uName" placeholder="ناوی تەواو...">
+        </div>
+        <div class="form-group">
+            <label>📧 ئیمەیل</label>
+            <input type="email" id="uEmail" placeholder="example@email.com">
+        </div>
+        <button class="btn btn-primary btn-full" onclick="doLogin()">🔓 چوونەژوورەوە / تۆمارکردن</button>
         <p class="error-msg" id="uError"></p>
+        <p class="loading hidden" id="loginLoad">⏳ چاوەڕێ بکە...</p>
     </div>
 </div>
 
-<!-- PIN -->
-<div class="pin-screen hidden" id="pagePin">
-    <div class="pin-box">
-        <h1 style="font-size:2.2em">🔐</h1>
-        <p style="color:var(--txt2);margin:10px 0" data-i18n="enterPin">کۆدی PIN بنووسە</p>
-        <div class="pin-dots" id="pinDots"><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div></div>
-        <div class="pin-pad">
-            <button class="pin-key" onclick="pinKey('1')">1</button><button class="pin-key" onclick="pinKey('2')">2</button><button class="pin-key" onclick="pinKey('3')">3</button>
-            <button class="pin-key" onclick="pinKey('4')">4</button><button class="pin-key" onclick="pinKey('5')">5</button><button class="pin-key" onclick="pinKey('6')">6</button>
-            <button class="pin-key" onclick="pinKey('7')">7</button><button class="pin-key" onclick="pinKey('8')">8</button><button class="pin-key" onclick="pinKey('9')">9</button>
-            <button class="pin-key" onclick="pinClear()" style="font-size:1em" data-i18n="clear">سڕین</button><button class="pin-key" onclick="pinKey('0')">0</button><button class="pin-key" onclick="pinBack()" style="font-size:1em">⌫</button>
-        </div>
-        <p class="error-msg" id="pinError"></p>
-    </div>
-</div>
-
-<!-- APP -->
+<!-- ===== APP ===== -->
 <div class="container hidden" id="pageApp">
+
     <div class="app-header">
-        <div class="hdr-left"><img id="hdrPhoto" class="hdr-photo hidden" src="" alt=""><h1>📒 <span data-i18n="appTitle">دەفتەری قەرز</span></h1></div>
+        <div class="hdr-left">
+            <img id="hdrPhoto" class="hdr-photo hidden" src="" alt="">
+            <h1>📒 دەفتەری قەرز</h1>
+        </div>
         <div class="hdr-btns">
-            <button class="btn-theme" id="themeBtn" onclick="toggleTheme()">🌙</button>
-            <button class="btn btn-danger btn-small" onclick="doLogout()" data-i18n="logout">🚪 دەرچوون</button>
+            <button class="btn-theme" id="themeBtn" onclick="toggleTheme()" title="گۆڕینی ڕووناکی/تاریکی">🌙</button>
+            <button class="btn btn-danger btn-small" onclick="doLogout()">🚪 دەرچوون</button>
         </div>
     </div>
-    <div class="offline-bar hidden" id="offlineBar" data-i18n="offline">⚠️ ئینتەرنێت نییە - تۆمارەکان پاشەکەوت دەکرێن و دواتر دەنێردرێن</div>
+
     <div id="notifArea"></div>
 
-    <!-- HOME -->
+    <!-- ============ TAB: HOME ============ -->
     <div id="secHome">
         <div class="lock-view hidden"></div>
         <div class="active-view">
-            <div class="live-clock" id="liveClock">🕐 --:--:--<span class="date-part">---</span></div>
-            <div class="sub-status" id="subBox">
-                <div><h3 id="subTitle"></h3><p id="subText" style="color:var(--txt2);font-size:.86em;margin-top:5px"></p></div>
-                <div class="sub-timer"><div class="num" id="subDays">--</div><div class="lbl" data-i18n="daysLeft">ڕۆژی ماوە</div></div>
+            <div class="live-clock no-print" id="liveClock">🕐 --:--:--<span class="date-part">---</span></div>
+
+            <div class="sub-status no-print" id="subBox">
+                <div>
+                    <h3 id="subTitle"></h3>
+                    <p id="subText" style="color:var(--txt2);font-size:.88em;margin-top:5px"></p>
+                </div>
+                <div class="sub-timer">
+                    <div class="num" id="subDays">--</div>
+                    <div class="lbl">ڕۆژی ماوە</div>
+                </div>
             </div>
-            <div class="summary-grid">
-                <div class="sum-card debt"><h3 data-i18n="totalDebt">🔴 کۆی قەرزەکانم</h3><div class="val" id="sumDebt">0</div><div class="cnt" id="cntDebt">0</div></div>
-                <div class="sum-card credit"><h3 data-i18n="totalCredit">🟢 کۆی وەرگرتن</h3><div class="val" id="sumCredit">0</div><div class="cnt" id="cntCredit">0</div></div>
-                <div class="sum-card expense"><h3 data-i18n="monthExp">💸 خەرجی مانگ</h3><div class="val" id="sumExpTotal">0</div><div class="cnt" id="sumExpMonth">-</div></div>
+
+            <div class="summary-grid no-print">
+                <div class="sum-card debt">
+                    <h3>🔴 کۆی قەرزەکانم</h3>
+                    <div class="val" id="sumDebt">0</div>
+                    <div class="cnt" id="cntDebt">0 تۆمار</div>
+                </div>
+                <div class="sum-card credit">
+                    <h3>🟢 کۆی وەرگرتن</h3>
+                    <div class="val" id="sumCredit">0</div>
+                    <div class="cnt" id="cntCredit">0 تۆمار</div>
+                </div>
+                <div class="sum-card expense">
+                    <h3>💸 خەرجی ئەم مانگە</h3>
+                    <div class="val" id="sumExpTotal">0</div>
+                    <div class="cnt" id="sumExpMonth">-</div>
+                </div>
             </div>
-            <div class="card hidden" id="remindCard">
-                <h2 class="sec-title" data-i18n="reminders">🔔 بیرخەرەوەی قەرزە نزیکەکان</h2>
-                <div id="remindList"></div>
+
+            <div class="card no-print" style="text-align:center;color:var(--txt2);font-size:.9em">
+                💡 بۆ تۆمارکردنی قەرز یان خەرجی، لە خوارەوە تابەکە هەڵبژێرە
             </div>
         </div>
     </div>
 
-    <!-- DEBTS -->
+    <!-- ============ TAB: DEBTS ============ -->
     <div id="secDebts" class="hidden">
         <div class="lock-view hidden"></div>
         <div class="active-view">
-            <div class="card">
-                <h2 class="sec-title" data-i18n="newDebt">➕ تۆماری قەرزی نوێ</h2>
+            <div class="card no-print">
+                <h2 class="sec-title">➕ تۆماری قەرزی نوێ</h2>
                 <div class="form-grid">
-                    <div class="form-group"><label data-i18n="personName">ناوی کەس</label><input type="text" id="rName"></div>
-                    <div class="form-group"><label data-i18n="amount">بڕی پارە</label><input type="number" id="rAmount" min="0"></div>
-                    <div class="form-group"><label data-i18n="type">جۆر</label><select id="rType"><option value="debt" data-i18n="optDebt">🔴 من قەرزارم</option><option value="credit" data-i18n="optCredit">🟢 خەڵکی قەرزارمن</option></select></div>
-                    <div class="form-group"><label data-i18n="date">بەروار</label><input type="date" id="rDate"></div>
-                    <div class="form-group"><label data-i18n="dueDate">📅 بەرواری گەڕانەوە</label><input type="date" id="rDue"></div>
-                    <div class="form-group"><label data-i18n="note">تێبینی</label><input type="text" id="rNote"></div>
+                    <div class="form-group"><label>ناوی کەس</label><input type="text" id="rName" placeholder="ناو..."></div>
+                    <div class="form-group"><label>بڕی پارە</label><input type="number" id="rAmount" placeholder="0" min="0"></div>
+                    <div class="form-group"><label>یەکەی پارە</label><select id="rCurrency"><option value="IQD">🇮🇶 دینار</option><option value="USD">🇺🇸 دۆلار</option><option value="EUR">🇪🇺 یۆرۆ</option></select></div>
+                    <div class="form-group"><label>جۆر</label><select id="rType"><option value="debt">🔴 من قەرزارم</option><option value="credit">🟢 خەڵکی قەرزارمن</option></select></div>
+                    <div class="form-group"><label>بەروار</label><input type="date" id="rDate"></div>
+                    <div class="form-group"><label>کاتژمێر</label><input type="time" id="rTime"></div>
+                    <div class="form-group" style="grid-column:1/-1"><label>تێبینی</label><input type="text" id="rNote" placeholder="تێبینی..."></div>
                 </div>
-                <button class="btn btn-primary btn-full" onclick="addRec()" data-i18n="add">➕ زیادکردن</button>
+                <button class="btn btn-primary btn-full" onclick="addRec()">➕ زیادکردن</button>
             </div>
+
             <div class="card">
-                <h2 class="sec-title2" data-i18n="debtList">📋 لیستی قەرزەکان</h2>
-                <div class="toolbar">
-                    <button class="btn btn-ghost btn-small" onclick="exportCSV('debts')">📥 CSV</button>
-                    <button class="btn btn-ghost btn-small" onclick="exportPrint('debts')">🖨️ PDF</button>
-                    <button class="btn btn-ghost btn-small" onclick="shareData('debts')">📤 <span data-i18n="share">هاوبەش</span></button>
+                <div class="print-title">📒 ڕاپۆرتی قەرزەکان</div>
+                <div class="print-sub" id="printSubDebt"></div>
+                <h2 class="sec-title2">📋 لیستی قەرزەکان</h2>
+                <div class="export-row no-print">
+                    <button onclick="exportPDF()">📄 PDF</button>
+                    <button onclick="exportCSV('debt')">📊 Excel</button>
+                    <button onclick="shareWA('debt')">📱 واتساپ</button>
+                    <button onclick="shareTG('debt')">✈️ تێلیگرام</button>
                 </div>
-                <div class="filter-bar">
-                    <input type="text" id="srch" oninput="renderRecs()" data-i18n-ph="search">
-                    <select id="fT" onchange="renderRecs()"><option value="all" data-i18n="all">هەموو</option><option value="debt" data-i18n="optDebt">🔴 قەرز</option><option value="credit" data-i18n="optCredit">🟢 وەرگرتن</option></select>
-                    <select id="fS" onchange="renderRecs()"><option value="all" data-i18n="allStatus">هەموو دۆخ</option><option value="unpaid" data-i18n="unpaid">نەدراو</option><option value="paid" data-i18n="paid">دراو</option></select>
-                    <select id="fM" onchange="renderRecs()"></select>
+                <div class="filter-bar no-print">
+                    <input type="text" id="srch" placeholder="🔍 گەڕان..." oninput="renderRecs()">
+                    <select id="fT" onchange="renderRecs()"><option value="all">هەموو</option><option value="debt">🔴 قەرز</option><option value="credit">🟢 وەرگرتن</option></select>
+                    <select id="fS" onchange="renderRecs()"><option value="all">هەموو دۆخ</option><option value="unpaid">نەدراو</option><option value="paid">دراو</option></select>
                 </div>
-                <div class="table-wrap"><table><thead><tr><th>#</th><th data-i18n="name">ناو</th><th data-i18n="amount">بڕ</th><th data-i18n="type">جۆر</th><th data-i18n="date">بەروار</th><th data-i18n="status">دۆخ</th><th data-i18n="actions">کردار</th></tr></thead><tbody id="recBody"></tbody></table></div>
-                <div class="empty hidden" id="recEmpty"><span>📭</span><p data-i18n="noRec">هیچ تۆمارێک نییە</p></div>
+                <div class="table-wrap">
+                    <table><thead><tr><th>#</th><th>ناو</th><th>بڕ</th><th>جۆر</th><th>بەروار</th><th>دۆخ</th><th class="no-print">کردار</th></tr></thead><tbody id="recBody"></tbody></table>
+                </div>
+                <div class="empty hidden" id="recEmpty"><span>📭</span><p>هیچ تۆمارێک نییە</p></div>
             </div>
         </div>
     </div>
 
-    <!-- EXPENSES -->
+    <!-- ============ TAB: EXPENSES ============ -->
     <div id="secExpenses" class="hidden">
         <div class="lock-view hidden"></div>
         <div class="active-view">
-            <div class="exp-total">
-                <div class="lbl" data-i18n="monthExpTotal">💸 کۆی خەرجی ئەم مانگە</div>
+            <div class="exp-total no-print">
+                <div class="lbl">💸 کۆی خەرجی ئەم مانگە</div>
                 <div class="val" id="expMonthTotal">0</div>
                 <div class="mon" id="expMonthName">-</div>
-                <div class="budget-bar hidden" id="budgetBar"><div class="budget-fill" id="budgetFill"></div></div>
-                <div class="budget-info hidden" id="budgetInfo"><span id="budgetLeft"></span><span id="budgetSet"></span></div>
-                <button class="btn btn-ghost btn-small" style="margin-top:10px" onclick="openBudget()" data-i18n="setBudget">🎯 دانانی ئامانجی مانگانە</button>
             </div>
-            <div class="card">
-                <h2 class="sec-title" data-i18n="chartTitle">📊 نموداری خەرجی بەپێی پۆل</h2>
-                <div class="chart-wrap">
-                    <canvas id="pieChart" width="160" height="160"></canvas>
-                    <div class="chart-legend" id="chartLegend"></div>
-                </div>
-            </div>
-            <div class="card">
-                <h2 class="sec-title" data-i18n="newExp">🛒 تۆماری خەرجی ڕۆژانە</h2>
+
+            <div class="card no-print">
+                <h2 class="sec-title">🛒 تۆماری خەرجی ڕۆژانە</h2>
                 <div class="form-grid">
-                    <div class="form-group"><label data-i18n="expName">ناو</label><input type="text" id="eName"></div>
-                    <div class="form-group"><label data-i18n="amount">بڕی پارە</label><input type="number" id="eAmount" min="0"></div>
-                    <div class="form-group"><label data-i18n="category">پۆل</label><select id="eCat"></select></div>
-                    <div class="form-group"><label data-i18n="date">بەروار</label><input type="date" id="eDate"></div>
+                    <div class="form-group"><label>ناو (بازاڕ/نان...)</label><input type="text" id="eName" placeholder="بۆ نموونە: نانی ئێوارە"></div>
+                    <div class="form-group"><label>بڕی پارە</label><input type="number" id="eAmount" placeholder="0" min="0"></div>
+                    <div class="form-group"><label>یەکەی پارە</label><select id="eCurrency"><option value="IQD">🇮 دینار</option><option value="USD">🇺🇸 دۆلار</option><option value="EUR">🇪🇺 یۆرۆ</option></select></div>
+                    <div class="form-group"><label>پۆل</label><select id="eCat"></select></div>
+                    <div class="form-group"><label>بەروار</label><input type="date" id="eDate"></div>
                 </div>
-                <button class="btn btn-primary btn-full" onclick="addExp()" data-i18n="addExp">➕ زیادکردنی خەرجی</button>
+                <button class="btn btn-primary btn-full" onclick="addExp()">➕ زیادکردنی خەرجی</button>
             </div>
+
             <div class="card">
-                <h2 class="sec-title2" data-i18n="expList">📋 لیستی خەرجییەکان</h2>
-                <div class="toolbar">
-                    <button class="btn btn-ghost btn-small" onclick="exportCSV('expenses')">📥 CSV</button>
-                    <button class="btn btn-ghost btn-small" onclick="exportPrint('expenses')">🖨️ PDF</button>
-                    <button class="btn btn-ghost btn-small" onclick="shareData('expenses')">📤 <span data-i18n="share">هاوبەش</span></button>
+                <div class="print-title">🛒 ڕاپۆرتی خەرجییەکان</div>
+                <div class="print-sub" id="printSubExp"></div>
+                <h2 class="sec-title2">📋 لیستی خەرجییەکان</h2>
+                <div class="export-row no-print">
+                    <button onclick="exportPDF()">📄 PDF</button>
+                    <button onclick="exportCSV('expense')">📊 Excel</button>
+                    <button onclick="shareWA('expense')">📱 واتساپ</button>
+                    <button onclick="shareTG('expense')">✈️ تێلیگرام</button>
                 </div>
-                <div class="filter-bar"><select id="fEM" onchange="renderExpenses()"></select></div>
-                <div class="table-wrap"><table><thead><tr><th>#</th><th data-i18n="name">ناو</th><th data-i18n="amount">بڕ</th><th data-i18n="category">پۆل</th><th data-i18n="date">بەروار</th><th data-i18n="actions">کردار</th></tr></thead><tbody id="expBody"></tbody></table></div>
-                <div class="empty hidden" id="expEmpty"><span>🛍️</span><p data-i18n="noExp">هیچ خەرجییەک نییە</p></div>
+                <div class="table-wrap">
+                    <table><thead><tr><th>#</th><th>ناو</th><th>بڕ</th><th>پۆل</th><th>بەروار</th><th class="no-print">کردار</th></tr></thead><tbody id="expBody"></tbody></table>
+                </div>
+                <div class="empty hidden" id="expEmpty"><span>🛍️</span><p>هیچ خەرجییەک تۆمار نەکراوە</p></div>
             </div>
         </div>
     </div>
 
-    <!-- PROFILE -->
+    <!-- ============ TAB: PROFILE ============ -->
     <div id="secProfile" class="hidden">
         <div class="card profile-card">
             <div class="prof-photo-wrap">
@@ -318,363 +375,489 @@
             </div>
             <div class="prof-name" id="profName">-</div>
             <div class="prof-email" id="profEmail">-</div>
-            <button class="btn btn-primary btn-small" onclick="document.getElementById('photoInput').click()" data-i18n="changePhoto">📷 گۆڕینی وێنە</button>
+            <button class="btn btn-primary btn-small" onclick="document.getElementById('photoInput').click()">📷 گۆڕینی وێنە</button>
+
             <div class="prof-info">
-                <div class="row"><span class="k" data-i18n="joinDate">📅 بەرواری تۆمار</span><span class="v" id="profJoined">-</span></div>
-                <div class="row"><span class="k" data-i18n="subStatus">💳 دۆخی بەشداری</span><span class="v" id="profSub">-</span></div>
-                <div class="row"><span class="k" data-i18n="contact">📞 پەیوەندی</span><span class="v" style="color:#2a9d8f">07705353322</span></div>
+                <div class="row"><span class="k">📅 بەرواری تۆمار</span><span class="v" id="profJoined">-</span></div>
+                <div class="row"><span class="k">💳 دۆخی بەشداری</span><span class="v" id="profSub">-</span></div>
+                <div class="row"><span class="k">📞 پەیوەندی</span><span class="v" style="color:#2a9d8f">07705353322</span></div>
             </div>
-        </div>
-        <div class="card">
-            <h2 class="sec-title" data-i18n="settings">⚙️ ڕێکخستنەکان</h2>
-            <div class="settings-row"><span class="sk" data-i18n="language">🌍 زمان</span><div class="sv"><div class="lang-btns"><button class="lang-btn" onclick="setLang('ku')">کوردی</button><button class="lang-btn" onclick="setLang('ar')">عربی</button><button class="lang-btn" onclick="setLang('en')">EN</button></div></div></div>
-            <div class="settings-row"><span class="sk" data-i18n="currency">💱 یەکەی پارە</span><div class="sv"><select id="curSel" onchange="setCurrency(this.value)" style="padding:7px 10px;border-radius:8px;border:1px solid var(--inp-bd);background:var(--inp);color:var(--txt)"><option value="د.ع">دینار (د.ع)</option><option value="$">دۆلار ($)</option><option value="€">یۆرۆ (€)</option><option value="₺">لیرە (₺)</option><option value="ر.س">ریاڵ (ر.س)</option></select></div></div>
-            <div class="settings-row"><span class="sk" data-i18n="theme">🎨 دۆخی ڕووناکی</span><div class="sv"><button class="btn btn-ghost btn-small" onclick="toggleTheme()" id="themeBtn2">🌙</button></div></div>
-            <div class="settings-row"><span class="sk" data-i18n="pinLock">🔐 قوفڵی PIN</span><div class="sv"><button class="btn btn-ghost btn-small" id="pinBtn" onclick="openPinSetup()">—</button></div></div>
+            <p style="color:var(--txt4);font-size:.75em;margin-top:15px">✨ وێنەکەت لەسەر هەموو ئامێرەکان دەردەکەوێت</p>
         </div>
     </div>
+
 </div>
 
-<!-- BOTTOM NAV -->
+<!-- Bottom Navigation -->
 <div class="bottom-nav hidden" id="bottomNav">
-    <button class="nav-item active" onclick="switchTab('home')"><span class="ni">🏠</span><span class="nl" data-i18n="tabHome">سەرەتا</span></button>
-    <button class="nav-item" onclick="switchTab('debts')"><span class="ni">💰</span><span class="nl" data-i18n="tabDebts">قەرزەکان</span></button>
-    <button class="nav-item" onclick="switchTab('expenses')"><span class="ni">🛒</span><span class="nl" data-i18n="tabExp">خەرجی</span></button>
-    <button class="nav-item" onclick="switchTab('profile')"><span class="ni">👤</span><span class="nl" data-i18n="tabProf">پرۆفایل</span></button>
+    <button class="nav-item active" onclick="switchTab('home')"><span class="ni">🏠</span><span class="nl">سەرەتا</span></button>
+    <button class="nav-item" onclick="switchTab('debts')"><span class="ni">💰</span><span class="nl">قەرزەکان</span></button>
+    <button class="nav-item" onclick="switchTab('expenses')"><span class="ni">🛒</span><span class="nl">خەرجی</span></button>
+    <button class="nav-item" onclick="switchTab('profile')"><span class="ni">👤</span><span class="nl">پرۆفایل</span></button>
 </div>
 
-<!-- EDIT MODAL -->
-<div class="modal-overlay hidden" id="editModal">
-    <div class="modal">
-        <h3 id="editTitle" data-i18n="editRec">✏️ دەستکاری تۆمار</h3>
-        <div id="editFields"></div>
-        <div class="modal-btns">
-            <button class="btn btn-primary" style="flex:1" onclick="saveEdit()" data-i18n="save">💾 پاشەکەوت</button>
-            <button class="btn btn-ghost" style="flex:1" onclick="closeEdit()" data-i18n="cancel">❌ پاشگەز</button>
-        </div>
-    </div>
-</div>
-
-<!-- BUDGET MODAL -->
-<div class="modal-overlay hidden" id="budgetModal">
-    <div class="modal">
-        <h3 data-i18n="setBudget">🎯 ئامانجی مانگانە</h3>
-        <div class="form-group"><label data-i18n="budgetAmount">بڕی ئامانج بۆ ئەم مانگە</label><input type="number" id="budgetIn" min="0"></div>
-        <div class="modal-btns">
-            <button class="btn btn-primary" style="flex:1" onclick="saveBudget()" data-i18n="save">💾 پاشەکەوت</button>
-            <button class="btn btn-ghost" style="flex:1" onclick="closeBudget()" data-i18n="cancel">❌ پاشگەز</button>
-        </div>
-    </div>
-</div>
-
-<!-- PIN SETUP MODAL -->
-<div class="modal-overlay hidden" id="pinSetupModal">
-    <div class="modal">
-        <h3 data-i18n="setPin">🔐 دانانی PIN</h3>
-        <p style="color:var(--txt2);font-size:.85em;margin-bottom:14px" data-i18n="pinHint">٤ ژمارە بنووسە بۆ پاراستنی ئەپەکە</p>
-        <div class="form-group"><input type="password" id="pinSetupIn" maxlength="4" placeholder="••••" style="text-align:center;font-size:1.5em;letter-spacing:8px"></div>
-        <div class="modal-btns">
-            <button class="btn btn-primary" style="flex:1" onclick="savePinSetup()" data-i18n="save">💾 پاشەکەوت</button>
-            <button class="btn btn-ghost" style="flex:1" onclick="closePinSetup()" data-i18n="cancel">❌ پاشگەز</button>
-        </div>
-        <button class="btn btn-danger btn-full hidden" id="removePinBtn" onclick="removePin()" style="margin-top:10px" data-i18n="removePin">🗑️ سڕینەوەی PIN</button>
-    </div>
-</div>
-
-<button class="install-btn" id="installBtn" onclick="installApp()">📲 <span data-i18n="install">دامەزراندن</span></button>
+<button class="install-btn" id="installBtn" onclick="installApp()">📲 دامەزراندن</button>
 
 <script>
-// ============ i18n ============
-const LANG={
-ku:{appTitle:'دەفتەری قەرز',loginSub:'ناو و ئیمەیل بنووسە بۆ چوونەژوورەوە',name:'👤 ناو',email:'📧 ئیمەیل',loginBtn:'🔓 چوونەژوورەوە',logout:'🚪 دەرچوون',tabHome:'سەرەتا',tabDebts:'قەرزەکان',tabExp:'خەرجی',tabProf:'پرۆفایل',totalDebt:'🔴 کۆی قەرزەکانم',totalCredit:'🟢 کۆی وەرگرتن',monthExp:'💸 خەرجی مانگ',daysLeft:'ڕۆژی ماوە',newDebt:'➕ تۆماری قەرزی نوێ',personName:'ناوی کەس',amount:'بڕی پارە',type:'جۆر',optDebt:'🔴 من قەرزارم',optCredit:'🟢 خەڵکی قەرزارمن',date:'بەروار',dueDate:'📅 بەرواری گەڕانەوە',note:'تێبینی',add:'➕ زیادکردن',debtList:'📋 لیستی قەرزەکان',search:'🔍 گەڕان...',all:'هەموو',allStatus:'هەموو دۆخ',unpaid:'نەدراو',paid:'دراو',status:'دۆخ',actions:'کردار',noRec:'هیچ تۆمارێک نییە',monthExpTotal:'💸 کۆی خەرجی ئەم مانگە',setBudget:'🎯 دانانی ئامانجی مانگانە',chartTitle:'📊 نموداری خەرجی بەپێی پۆل',newExp:'🛒 تۆماری خەرجی ڕۆژانە',expName:'ناو',category:'پۆل',addExp:'➕ زیادکردنی خەرجی',expList:'📋 لیستی خەرجییەکان',noExp:'هیچ خەرجییەک نییە',changePhoto:'📷 گۆڕینی وێنە',joinDate:'📅 بەرواری تۆمار',subStatus:'💳 دۆخی بەشداری',contact:'📞 پەیوەندی',settings:'⚙️ ڕێکخستنەکان',language:'🌍 زمان',currency:'💱 یەکەی پارە',theme:'🎨 دۆخی ڕووناکی',pinLock:'🔐 قوفڵی PIN',editRec:'✏️ دەستکاری تۆمار',save:'💾 پاشەکەوت',cancel:'❌ پاشگەز',share:'هاوبەش',reminders:'🔔 بیرخەرەوەی قەرزە نزیکەکان',offline:'⚠️ ئینتەرنێت نییە - تۆمارەکان پاشەکەوت دەکرێن و دواتر دەنێردرێن',enterPin:'کۆدی PIN بنووسە',clear:'سڕین',setPin:'🔐 دانانی PIN',pinHint:'٤ ژمارە بنووسە بۆ پاراستنی ئەپەکە',removePin:'🗑️ سڕینەوەی PIN',budgetAmount:'بڕی ئامانج بۆ ئەم مانگە',install:'دامەزراندن',allMonths:'هەموو مانگەکان',rec:'تۆمار',lockedTitle:'ئەم بەشە قوفڵە!',lockedText:'بەشداریکردنت چالاک نییە. پارەدان ئەنجام بدە بۆ چالاککردن (١٢ مانگ و ٥ ڕۆژ). پەیوەندی: 07705353322',subActive:'✅ بەشداری چالاکە',subInactive:'❌ بەشداری چالاک نییە',subExpired:'❌ بەشداری بەسەرچووە!',remain:'ماوە',months:'مانگ و',days:'ڕۆژ',payContact:'پارەدان ئەنجام بدە → پەیوەندی: 07705353322',renew:'نوێکردنەوە پێویستە → 07705353322',dueToday:'⏰ ئەمڕۆ',dueTomorrow:'📅 سبەینێ',overdue:'⚠️ بەسەرچووە',dueIn:'لە ماوەی',noRemind:'هیچ قەرزێکی نزیک نییە',budgetLeft:'ماوە',budgetOver:'تێپەڕی!',noBudget:'هیچ ئامانجێک نەدراوە',pinSet:'✅ PIN دانرا!',pinRemoved:'✅ PIN سڕایەوە!',pinWrong:'⚠️ PIN هەڵەیە!',pinNeed4:'⚠️ پێویستە ٤ ژمارە بێت!',photoSaved:'✅ وێنەکە پاشەکەوت کرا!',fillFields:'⚠️ خانەکان پڕ بکەرەوە!',confirmDel:'سڕینەوە؟',saved:'✅ پاشەکەوت کرا!',shared:'✅ هاوبەش کرا!',shareNotSup:'هاوبەشکردن پشتگیری ناکرێت لەم ئامێرەدا',errName:'⚠️ ناو بنووسە!',errEmail:'⚠️ ئیمەیل دروست بنووسە!',errAmount:'⚠️ بڕ بنووسە!',errDate:'⚠️ بەروار هەڵبژێرە!',err:'⚠️ هەڵە',waiting:'⏳ چاوەڕێ بکە...'},
-ar:{appTitle:'دفتر الديون',loginSub:'اكتب الاسم والإيميل للدخول',name:'👤 الاسم',email:'📧 الإيميل',loginBtn:'🔓 دخول',logout:'🚪 خروج',tabHome:'الرئيسية',tabDebts:'الديون',tabExp:'المصروف',tabProf:'الملف',totalDebt:'🔴 إجمالي ديوني',totalCredit:'🟢 إجمالي المستحق',monthExp:'💸 مصروف الشهر',daysLeft:'يوم متبقي',newDebt:'➕ دين جديد',personName:'اسم الشخص',amount:'المبلغ',type:'النوع',optDebt:'🔴 أنا مدين',optCredit:'🟢 لي عند آخرين',date:'التاريخ',dueDate:'📅 تاريخ السداد',note:'ملاحظة',add:'➕ إضافة',debtList:'📋 قائمة الديون',search:'🔍 بحث...',all:'الكل',allStatus:'كل الحالات',unpaid:'غير مدفوع',paid:'مدفوع',status:'الحالة',actions:'إجراء',noRec:'لا توجد سجلات',monthExpTotal:'💸 إجمالي مصروف الشهر',setBudget:'🎯 تحديد ميزانية شهرية',chartTitle:'📊 رسم المصروف حسب الفئة',newExp:'🛒 مصروف يومي جديد',expName:'الاسم',category:'الفئة',addExp:'➕ إضافة مصروف',expList:'📋 قائمة المصروفات',noExp:'لا توجد مصروفات',changePhoto:'📷 تغيير الصورة',joinDate:'📅 تاريخ التسجيل',subStatus:'💳 حالة الاشتراك',contact:'📞 التواصل',settings:'⚙️ الإعدادات',language:'🌍 اللغة',currency:'💱 عملة',theme:'🎨 وضع الإضاءة',pinLock:'🔐 قفل PIN',editRec:'✏️ تعديل السجل',save:'💾 حفظ',cancel:'❌ إلغاء',share:'مشاركة',reminders:'🔔 تذكير بالديون القريبة',offline:'⚠️ لا يوجد إنترنت - سيتم الحفظ والإرسال لاحقاً',enterPin:'أدخل رمز PIN',clear:'مسح',setPin:'🔐 تعيين PIN',pinHint:'اكتب 4 أرقام لحماية التطبيق',removePin:'🗑️ حذف PIN',budgetAmount:'مبلغ الميزانية لهذا الشهر',install:'تثبيت',allMonths:'كل الأشهر',rec:'سجل',lockedTitle:'هذا القسم مقفل!',lockedText:'اشتراكك غير فعال. ادفع للتفعيل (١٢ شهر و٥ أيام). تواصل: 07705353322',subActive:'✅ الاشتراك فعال',subInactive:'❌ الاشتراك غير فعال',subExpired:'❌ انتهى الاشتراك!',remain:'المتبقي',months:'شهر و',days:'يوم',payContact:'ادفع → تواصل: 07705353322',renew:'يلزم التجديد → 07705353322',dueToday:'⏰ اليوم',dueTomorrow:'📅 غداً',overdue:'⚠️ متأخر',dueIn:'خلال',noRemind:'لا ديون قريبة',budgetLeft:'المتبقي',budgetOver:'تجاوز!',noBudget:'لا توجد ميزانية',pinSet:'✅ تم تعيين PIN!',pinRemoved:'✅ تم حذف PIN!',pinWrong:'⚠️ PIN خاطئ!',pinNeed4:'⚠️ يجب 4 أرقام!',photoSaved:'✅ تم حفظ الصورة!',fillFields:'⚠️ املأ الحقول!',confirmDel:'حذف؟',saved:'✅ تم الحفظ!',shared:'✅ تمت المشاركة!',shareNotSup:'المشاركة غير مدعومة',errName:'⚠️ اكتب الاسم!',errEmail:'⚠️ إيميل صحيح!',errAmount:'⚠️ اكتب المبلغ!',errDate:'⚠️ اختر التاريخ!',err:'⚠️ خطأ',waiting:'⏳ انتظر...'},
-en:{appTitle:'Debt Book',loginSub:'Enter name and email to login',name:'👤 Name',email:'📧 Email',loginBtn:'🔓 Login',logout:'🚪 Logout',tabHome:'Home',tabDebts:'Debts',tabExp:'Expenses',tabProf:'Profile',totalDebt:'🔴 My Debts',totalCredit:'🟢 Receivables',monthExp:'💸 Month Exp.',daysLeft:'days left',newDebt:'➕ New Debt',personName:'Person name',amount:'Amount',type:'Type',optDebt:'🔴 I owe',optCredit:'🟢 Owed to me',date:'Date',dueDate:'📅 Due date',note:'Note',add:'➕ Add',debtList:'📋 Debt List',search:'🔍 Search...',all:'All',allStatus:'All status',unpaid:'Unpaid',paid:'Paid',status:'Status',actions:'Actions',noRec:'No records',monthExpTotal:'💸 This month total',setBudget:'🎯 Set monthly budget',chartTitle:'📊 Expense chart by category',newExp:'🛒 New daily expense',expName:'Name',category:'Category',addExp:'➕ Add expense',expList:'📋 Expense List',noExp:'No expenses',changePhoto:'📷 Change photo',joinDate:'📅 Joined',subStatus:'💳 Subscription',contact:'📞 Contact',settings:'⚙️ Settings',language:'🌍 Language',currency:'💱 Currency',theme:'🎨 Theme',pinLock:'🔐 PIN lock',editRec:'✏️ Edit record',save:'💾 Save',cancel:'❌ Cancel',share:'Share',reminders:'🔔 Upcoming debt reminders',offline:'⚠️ Offline - records saved & sent later',enterPin:'Enter PIN',clear:'Clear',setPin:'🔐 Set PIN',pinHint:'Enter 4 digits to protect the app',removePin:'🗑️ Remove PIN',budgetAmount:'Budget amount for this month',install:'Install',allMonths:'All months',rec:'records',lockedTitle:'This section is locked!',lockedText:'Subscription inactive. Pay to activate (12 months & 5 days). Contact: 07705353322',subActive:'✅ Active',subInactive:'❌ Inactive',subExpired:'❌ Expired!',remain:'Remaining',months:'months &',days:'days',payContact:'Pay → Contact: 07705353322',renew:'Renewal needed → 07705353322',dueToday:'⏰ Today',dueTomorrow:'📅 Tomorrow',overdue:'⚠️ Overdue',dueIn:'in',noRemind:'No upcoming debts',budgetLeft:'Left',budgetOver:'Exceeded!',noBudget:'No budget set',pinSet:'✅ PIN set!',pinRemoved:'✅ PIN removed!',pinWrong:'⚠️ Wrong PIN!',pinNeed4:'⚠️ Must be 4 digits!',photoSaved:'✅ Photo saved!',fillFields:'⚠️ Fill all fields!',confirmDel:'Delete?',saved:'✅ Saved!',shared:'✅ Shared!',shareNotSup:'Sharing not supported',errName:'⚠️ Enter name!',errEmail:'⚠️ Valid email!',errAmount:'⚠️ Enter amount!',errDate:'⚠️ Pick date!',err:'⚠️ Error',waiting:'⏳ Wait...'}
-};
-let curLang=localStorage.getItem('dq_lang')||'ku';
-function t(k){return (LANG[curLang]&&LANG[curLang][k])||LANG.ku[k]||k;}
-function applyLang(){
-    document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.getAttribute('data-i18n'));});
-    document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.getAttribute('data-i18n-ph'));});
-    document.documentElement.lang=curLang;
-    const rtl=curLang!=='en';
-    document.body.classList.toggle('rtl',rtl);document.body.classList.toggle('ltr',!rtl);
-    document.documentElement.dir=rtl?'rtl':'ltr';
-    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()==={ku:'کوردی',ar:'عربی',en:'EN'}[curLang]));
-    buildMonthFilters();renderRecs();renderExpenses();updateExpMonth();updateSum();renderReminders();
+// ===== THEME =====
+function applyTheme(t){
+    document.body.classList.toggle('dark', t==='dark');
+    var b=document.getElementById('themeBtn');
+    if(b) b.textContent = t==='dark' ? '☀️' : '🌙';
+    localStorage.setItem('dq_theme', t);
 }
-function setLang(l){curLang=l;localStorage.setItem('dq_lang',l);applyLang();}
+function toggleTheme(){
+    var cur = localStorage.getItem('dq_theme')==='dark' ? 'dark' : 'light';
+    applyTheme(cur==='dark' ? 'light' : 'dark');
+}
+applyTheme(localStorage.getItem('dq_theme')==='dark' ? 'dark' : 'light');
 
-// ============ THEME ============
-function applyTheme(th){document.body.classList.toggle('dark',th==='dark');const ic=th==='dark'?'☀️':'🌙';const b1=document.getElementById('themeBtn'),b2=document.getElementById('themeBtn2');if(b1)b1.textContent=ic;if(b2)b2.textContent=ic;localStorage.setItem('dq_theme',th);}
-function toggleTheme(){applyTheme(localStorage.getItem('dq_theme')==='dark'?'light':'dark');}
-applyTheme(localStorage.getItem('dq_theme')==='dark'?'dark':'light');
+// ===== FIREBASE =====
+const firebaseConfig = {
+    apiKey: "AIzaSyCriV6DFNt94PcYXufA2cugLxTZ3wc5Do0",
+    authDomain: "deftar-qarz.firebaseapp.com",
+    projectId: "deftar-qarz",
+    storageBucket: "deftar-qarz.firebasestorage.app",
+    messagingSenderId: "1039619406125",
+    appId: "1:1039619406125:web:cc615248fa048a2208bba4"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-// ============ CURRENCY ============
-let curCur=localStorage.getItem('dq_cur')||'د.ع';
-function setCurrency(c){curCur=c;localStorage.setItem('dq_cur',c);const s=document.getElementById('curSel');if(s)s.value=c;updateSum();updateExpMonth();renderRecs();renderExpenses();}
-function fmt(n){return Number(n).toLocaleString()+' '+curCur;}
+// ===== یەکەکانی پارە =====
+const CUR_SYM = {IQD:'د.ع', USD:'$', EUR:'€'};
+function curOf(r){ return r.currency || 'IQD'; }
+function curSym(r){ return CUR_SYM[curOf(r)] || 'د.ع'; }
 
-// ============ FIREBASE ============
-const firebaseConfig={apiKey:"AIzaSyCriV6DFNt94PcYXufA2cugLxTZ3wc5Do0",authDomain:"deftar-qarz.firebaseapp.com",projectId:"deftar-qarz",storageBucket:"deftar-qarz.firebasestorage.app",messagingSenderId:"1039619406125",appId:"1:1039619406125:web:cc615248fa048a2208bba4"};
-firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
-const DEFAULT_CATS=[{v:'bazar',name:'بازاڕ',emoji:'🛒'},{v:'market',name:'مارکێت',emoji:'🏪'},{v:'nan',name:'نان',emoji:'🍞'},{v:'transport',name:'گواستنەوە',emoji:'🚗'},{v:'health',name:'تەندروستی',emoji:'💊'},{v:'other',name:'تر',emoji:'📦'}];
-const CAT_COLORS=['#e94560','#f5a623','#4ecdc4','#9b59b6','#3498db','#e67e22','#1abc9c','#e84393','#00b894','#fdcb6e'];
-function catsToFallback(){return DEFAULT_CATS.map(c=>({v:c.v,n:c.emoji+' '+c.name}));}
-let EXP_CATS=catsToFallback(),catMap={},catColor={};
-function rebuildCatMap(){catMap={};catColor={};EXP_CATS.forEach((c,i)=>{catMap[c.v]=c.n;catColor[c.v]=CAT_COLORS[i%CAT_COLORS.length];});}
+const DEFAULT_CATS = [
+    {v:'bazar', name:'بازاڕ', emoji:'🛒'},
+    {v:'market', name:'مارکێت', emoji:'🏪'},
+    {v:'nan', name:'نان', emoji:'🍞'},
+    {v:'transport', name:'گواستنەوە', emoji:'🚗'},
+    {v:'health', name:'تەندروستی', emoji:'💊'},
+    {v:'other', name:'تر', emoji:'📦'}
+];
+function catsToFallback(){ return DEFAULT_CATS.map(c=>({v:c.v, n:c.emoji+' '+c.name})); }
+let EXP_CATS = catsToFallback();
+let catMap = {};
+function rebuildCatMap(){ catMap={}; EXP_CATS.forEach(c=>catMap[c.v]=c.n); }
 rebuildCatMap();
 
-let me=null,allRecords=[],allExpenses=[],currentTab='home';
-let unsubUser=null,unsubRecs=null,unsubMsgs=null,unsubExp=null,unsubCats=null;
+let me = null;
+let allRecords = [];
+let allExpenses = [];
+let unsubUser=null, unsubRecs=null, unsubMsgs=null, unsubExp=null, unsubCats=null;
+let currentTab = 'home';
 
-// ============ OFFLINE QUEUE ============
-let online=navigator.onLine;
-function getQueue(){return JSON.parse(localStorage.getItem('dq_queue')||'[]');}
-function saveQueue(q){localStorage.setItem('dq_queue',JSON.stringify(q));}
-function updateOnlineBar(){document.getElementById('offlineBar').classList.toggle('hidden',online);}
-window.addEventListener('online',()=>{online=true;updateOnlineBar();flushQueue();});
-window.addEventListener('offline',()=>{online=false;updateOnlineBar();});
-async function flushQueue(){
-    if(!online||!me)return;let q=getQueue();if(!q.length)return;
-    const remain=[];
-    for(const item of q){try{await db.collection(item.col).add(item.data);}catch(e){remain.push(item);}}
-    saveQueue(remain);
-}
-function queueOrSend(col,data){
-    if(online){return db.collection(col).add(data);}
-    else{const q=getQueue();q.push({col,data});saveQueue(q);return Promise.resolve();}
-}
+// ===== نۆتفیکەیشن =====
+let lastMsgId = localStorage.getItem('dq_lastMsgId') || null;
+let msgsFirstLoad = true;
+function requestNotifPermission(){ if('Notification' in window && Notification.permission==='default') Notification.requestPermission(); }
+function showNotif(text){ if('Notification' in window && Notification.permission==='granted'){ try{ new Notification('📢 دەفتەری قەرز',{body:text,icon:'/Matalll/icons/icon-192.png'}); }catch(e){} } }
 
-// ============ NOTIF ============
-let lastMsgId=localStorage.getItem('dq_lastMsgId')||null,msgsFirstLoad=true;
-function requestNotifPermission(){if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}
-function showNotif(text){if('Notification' in window&&Notification.permission==='granted'){try{new Notification('📢 '+t('appTitle'),{body:text,icon:'/Matalll/icons/icon-192.png'});}catch(e){}}}
-
-// ============ CLOCK ============
+// ===== کاتژمێر =====
 let clockTimer=null;
-function updateClock(){const now=new Date();const p=n=>String(n).padStart(2,'0');const days=curLang==='en'?['Sun','Mon','Tue','Wed','Thu','Fri','Sat']:curLang==='ar'?['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']:['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];document.getElementById('liveClock').innerHTML='🕐 '+p(now.getHours())+':'+p(now.getMinutes())+':'+p(now.getSeconds())+'<span class="date-part">'+days[now.getDay()]+' - '+now.toLocaleDateString()+' | '+now.getFullYear()+'</span>';}
-function startClock(){updateClock();if(clockTimer)clearInterval(clockTimer);clockTimer=setInterval(updateClock,1000);}
+function updateClock(){
+    const now=new Date();
+    const h=String(now.getHours()).padStart(2,'0'), m=String(now.getMinutes()).padStart(2,'0'), s=String(now.getSeconds()).padStart(2,'0');
+    const days=['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];
+    document.getElementById('liveClock').innerHTML='🕐 '+h+':'+m+':'+s+'<span class="date-part">'+days[now.getDay()]+' - '+now.toLocaleDateString('ku-IQ')+' | ساڵی '+now.getFullYear()+'</span>';
+}
+function startClock(){ updateClock(); if(clockTimer) clearInterval(clockTimer); clockTimer=setInterval(updateClock,1000); }
 
-// ============ TABS ============
-function switchTab(tab){currentTab=tab;['Home','Debts','Expenses','Profile'].forEach(x=>document.getElementById('sec'+x).classList.toggle('hidden',x.toLowerCase()!==tab));document.querySelectorAll('.nav-item').forEach((b,i)=>b.classList.toggle('active',['home','debts','expenses','profile'][i]===tab));if(tab==='expenses'){renderExpenses();drawChart();}if(tab==='profile')renderProfile();if(tab==='home'){updateSum();updateExpMonth();renderReminders();}}
+// ===== تابەکان =====
+function switchTab(t){
+    currentTab=t;
+    ['Home','Debts','Expenses','Profile'].forEach(x=>{
+        document.getElementById('sec'+x).classList.toggle('hidden', x.toLowerCase()!==t);
+    });
+    document.querySelectorAll('.nav-item').forEach((b,i)=>{
+        b.classList.toggle('active', ['home','debts','expenses','profile'][i]===t);
+    });
+    if(t==='expenses') renderExpenses();
+    if(t==='profile') renderProfile();
+    if(t==='home'){ updateSum(); updateExpMonth(); }
+}
 
-// ============ PWA ============
+// ===== PWA =====
 let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBtn').style.display='block';});
-function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')document.getElementById('installBtn').style.display='none';deferredPrompt=null;});}}
-window.addEventListener('appinstalled',()=>document.getElementById('installBtn').style.display='none');
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/Matalll/sw.js').catch(()=>{}));
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferredPrompt=e; document.getElementById('installBtn').style.display='block'; });
+function installApp(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(r=>{ if(r.outcome==='accepted') document.getElementById('installBtn').style.display='none'; deferredPrompt=null; }); } }
+window.addEventListener('appinstalled',()=>{ document.getElementById('installBtn').style.display='none'; });
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('/Matalll/sw.js').catch(()=>{}); }); }
 
-// ============ PIN ============
-let pinEntry='',pinMode='unlock';
-function getPin(){return localStorage.getItem('dq_pin')||null;}
-function pinKey(d){if(pinEntry.length<4){pinEntry+=d;updatePinDots();if(pinEntry.length===4)setTimeout(checkPin,150);}}
-function pinBack(){pinEntry=pinEntry.slice(0,-1);updatePinDots();}
-function pinClear(){pinEntry='';updatePinDots();}
-function updatePinDots(){document.querySelectorAll('#pinDots .pin-dot').forEach((d,i)=>d.classList.toggle('filled',i<pinEntry.length));}
-function checkPin(){
-    const err=document.getElementById('pinError');
-    if(pinEntry===getPin()){pinEntry='';updatePinDots();err.style.display='none';enterAppAfterPin();}
-    else{err.textContent=t('pinWrong');err.style.display='block';pinEntry='';updatePinDots();document.querySelectorAll('#pinDots .pin-dot').forEach(d=>{d.style.borderColor='#e94560';setTimeout(()=>d.style.borderColor='',400);});}
-}
-function enterAppAfterPin(){document.getElementById('pagePin').classList.add('hidden');document.getElementById('pageApp').classList.remove('hidden');document.getElementById('bottomNav').classList.remove('hidden');switchTab('home');}
-function openPinSetup(){const has=getPin();document.getElementById('pinSetupIn').value='';document.getElementById('removePinBtn').classList.toggle('hidden',!has);document.getElementById('pinSetupModal').classList.remove('hidden');}
-function closePinSetup(){document.getElementById('pinSetupModal').classList.add('hidden');}
-function savePinSetup(){const v=document.getElementById('pinSetupIn').value.trim();if(v.length!==4){alert(t('pinNeed4'));return;}localStorage.setItem('dq_pin',v);closePinSetup();updatePinBtn();alert(t('pinSet'));}
-function removePin(){localStorage.removeItem('dq_pin');closePinSetup();updatePinBtn();alert(t('pinRemoved'));}
-function updatePinBtn(){const b=document.getElementById('pinBtn');if(b)b.textContent=getPin()?'✅ '+t('pinLock').split(' ').slice(1).join(' '):'➕ '+t('setPin');}
-
-// ============ LOGIN ============
+// ===== AUTO LOGIN =====
 const savedEmail=localStorage.getItem('dq_email');
-if(savedEmail)autoLogin(savedEmail);
-async function autoLogin(email){try{const doc=await db.collection('users').doc(email).get();if(doc.exists){me=doc.data();setupListeners();afterLogin();}else localStorage.removeItem('dq_email');}catch(e){console.log(e);}}
+if(savedEmail) autoLogin(savedEmail);
+async function autoLogin(email){
+    try{
+        const doc=await db.collection('users').doc(email).get();
+        if(doc.exists){ me=doc.data(); setupListeners(); showApp(); }
+        else localStorage.removeItem('dq_email');
+    }catch(e){ console.log('autoLogin error:',e); }
+}
+
+// ===== LOGIN =====
 async function doLogin(){
-    const n=document.getElementById('uName').value.trim(),e=document.getElementById('uEmail').value.trim().toLowerCase(),err=document.getElementById('uError');
-    if(!n){err.textContent=t('errName');err.style.display='block';return;}
-    if(!e||!e.includes('@')||!e.includes('.')){err.textContent=t('errEmail');err.style.display='block';return;}
-    err.style.display='none';
-    try{const ref=db.collection('users').doc(e),doc=await ref.get();if(!doc.exists)await ref.set({name:n,email:e,active:false,subStart:null,subEnd:null,photo:null,joined:new Date().toISOString()});localStorage.setItem('dq_email',e);me={name:n,email:e};setupListeners();afterLogin();}
-    catch(e2){err.textContent=t('err')+': '+(e2.message||e2);err.style.display='block';}
+    const n=document.getElementById('uName').value.trim();
+    const e=document.getElementById('uEmail').value.trim().toLowerCase();
+    const err=document.getElementById('uError');
+    const load=document.getElementById('loginLoad');
+    if(!n){ err.textContent='⚠️ ناو بنووسە!'; err.style.display='block'; return; }
+    if(!e||!e.includes('@')||!e.includes('.')){ err.textContent='⚠️ ئیمەیل دروست بنووسە!'; err.style.display='block'; return; }
+    err.style.display='none'; load.classList.remove('hidden');
+    try{
+        const userRef=db.collection('users').doc(e);
+        const doc=await userRef.get();
+        if(!doc.exists){ await userRef.set({name:n,email:e,active:false,subStart:null,subEnd:null,photo:null,joined:new Date().toISOString()}); }
+        localStorage.setItem('dq_email',e);
+        me={name:n,email:e};
+        setupListeners(); showApp();
+    }catch(err2){
+        console.error('Firebase Error:',err2);
+        let msg=(err2&&err2.message)?err2.message:String(err2);
+        if(typeof firebase==='undefined') msg='Firebase SDK بار نەبووە!';
+        err.textContent='⚠️ '+msg; err.style.display='block';
+    }
+    load.classList.add('hidden');
 }
-function afterLogin(){
+
+function doLogout(){
+    if(unsubUser) unsubUser(); if(unsubRecs) unsubRecs(); if(unsubMsgs) unsubMsgs(); if(unsubExp) unsubExp(); if(unsubCats) unsubCats();
+    if(clockTimer) clearInterval(clockTimer);
+    localStorage.removeItem('dq_email');
+    me=null; allRecords=[]; allExpenses=[];
+    document.getElementById('pageApp').classList.add('hidden');
+    document.getElementById('bottomNav').classList.add('hidden');
+    document.getElementById('pageLogin').classList.remove('hidden');
+    document.getElementById('uName').value=''; document.getElementById('uEmail').value='';
+}
+
+function lockedHTML(){
+    return '<div class="card"><div class="locked-screen"><div class="lock-icon">🔒</div><h2>ئەم بەشە قوفڵە!</h2><p>بەشداریکردنت چالاک نییە.<br>💰 پارەدان ئەنجام بدە بۆ چالاککردن (١٢ مانگ و ٥ ڕۆژ)<br><br>📞 پەیوەندی بکە بە:<br><span class="contact">07705353322</span><br><br>دوای پارەدان، ئەدمین چالاکت دەکات ✅</p></div></div>';
+}
+
+function showApp(){
     document.getElementById('pageLogin').classList.add('hidden');
+    document.getElementById('pageApp').classList.remove('hidden');
+    document.getElementById('bottomNav').classList.remove('hidden');
     document.querySelectorAll('.lock-view').forEach(el=>el.innerHTML=lockedHTML());
-    renderHeader();startClock();requestNotifPermission();populateCatSelect();
-    document.getElementById('curSel').value=curCur;updatePinBtn();
-    checkSub();setDT();setExpDate();
-    if(getPin()){document.getElementById('pagePin').classList.remove('hidden');pinEntry='';updatePinDots();}
-    else{document.getElementById('pageApp').classList.remove('hidden');document.getElementById('bottomNav').classList.remove('hidden');switchTab('home');}
-    applyLang();
+    renderHeader();
+    startClock();
+    requestNotifPermission();
+    populateCatSelect();
+    checkSub(); setDT(); setExpDate();
+    switchTab('home');
 }
-function doLogout(){[unsubUser,unsubRecs,unsubMsgs,unsubExp,unsubCats].forEach(u=>{if(u)u();});if(clockTimer)clearInterval(clockTimer);localStorage.removeItem('dq_email');me=null;allRecords=[];allExpenses=[];document.getElementById('pageApp').classList.add('hidden');document.getElementById('pagePin').classList.add('hidden');document.getElementById('bottomNav').classList.add('hidden');document.getElementById('pageLogin').classList.remove('hidden');document.getElementById('uName').value='';document.getElementById('uEmail').value='';}
-function lockedHTML(){return '<div class="card"><div class="locked-screen"><div class="lock-icon">🔒</div><h2>'+t('lockedTitle')+'</h2><p>'+t('lockedText')+'</p></div></div>';}
 
-function showApp(){}
-function renderHeader(){const p=me&&me.photo,hp=document.getElementById('hdrPhoto');if(p){hp.src=p;hp.classList.remove('hidden');}else hp.classList.add('hidden');}
+function renderHeader(){
+    const photo=me&&me.photo;
+    const hp=document.getElementById('hdrPhoto');
+    if(photo){ hp.src=photo; hp.classList.remove('hidden'); } else hp.classList.add('hidden');
+}
 
-// ============ LISTENERS ============
+// ===== LISTENERS =====
 function setupListeners(){
-    unsubUser=db.collection('users').doc(me.email).onSnapshot(s=>{if(s.exists){me=s.data();checkSub();renderHeader();if(currentTab==='profile')renderProfile();}});
-    unsubRecs=db.collection('records').where('userEmail','==',me.email).onSnapshot(s=>{allRecords=s.docs.map(d=>({...d.data(),id:d.id}));allRecords.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));renderRecs();updateSum();renderReminders();});
-    unsubExp=db.collection('expenses').where('userEmail','==',me.email).onSnapshot(s=>{allExpenses=s.docs.map(d=>({...d.data(),id:d.id}));updateExpMonth();if(currentTab==='expenses'){renderExpenses();drawChart();}updateSum();});
-    unsubCats=db.collection('expense_cats').orderBy('order','asc').onSnapshot(s=>{const c=s.docs.map(d=>({v:d.id,n:(d.data().emoji||'📦')+' '+(d.data().name||'')}));if(c.length)EXP_CATS=c;else EXP_CATS=catsToFallback();rebuildCatMap();populateCatSelect();if(currentTab==='expenses'){renderExpenses();drawChart();}});
-    unsubMsgs=db.collection('messages').orderBy('createdAt','desc').onSnapshot(s=>{const m=s.docs.map(d=>({...d.data(),id:d.id}));renderNotifs(m);if(m.length){const nid=m[0].id;if(msgsFirstLoad){lastMsgId=nid;localStorage.setItem('dq_lastMsgId',lastMsgId);msgsFirstLoad=false;}else if(nid!==lastMsgId){lastMsgId=nid;localStorage.setItem('dq_lastMsgId',lastMsgId);showNotif(m[0].text);}}else msgsFirstLoad=false;});
-}
-function populateCatSelect(){const s=document.getElementById('eCat');if(!s)return;const c=s.value;s.innerHTML=EXP_CATS.map(x=>'<option value="'+x.v+'">'+x.n+'</option>').join('');if(c&&catMap[c])s.value=c;}
+    unsubUser=db.collection('users').doc(me.email).onSnapshot(snap=>{
+        if(snap.exists){ me=snap.data(); checkSub(); renderHeader(); if(currentTab==='profile') renderProfile(); }
+    },err=>console.log('user listener error:',err));
 
-// ============ SUB ============
+    unsubRecs=db.collection('records').where('userEmail','==',me.email).onSnapshot(snap=>{
+        allRecords=snap.docs.map(d=>({...d.data(),id:d.id}));
+        allRecords.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        renderRecs(); updateSum();
+    },err=>console.log('records listener error:',err));
+
+    unsubExp=db.collection('expenses').where('userEmail','==',me.email).onSnapshot(snap=>{
+        allExpenses=snap.docs.map(d=>({...d.data(),id:d.id}));
+        updateExpMonth();
+        if(currentTab==='expenses') renderExpenses();
+        updateSum();
+    },err=>console.log('expenses listener error:',err));
+
+    unsubCats=db.collection('expense_cats').orderBy('order','asc').onSnapshot(snap=>{
+        const cats=snap.docs.map(d=>({v:d.id, n:(d.data().emoji||'📦')+' '+(d.data().name||'')}));
+        if(cats.length>0) EXP_CATS=cats; else EXP_CATS=catsToFallback();
+        rebuildCatMap();
+        populateCatSelect();
+        if(currentTab==='expenses') renderExpenses();
+    },err=>console.log('cats listener error:',err));
+
+    unsubMsgs=db.collection('messages').orderBy('createdAt','desc').onSnapshot(snap=>{
+        const msgs=snap.docs.map(d=>({...d.data(),id:d.id}));
+        renderNotifs(msgs);
+        if(msgs.length>0){
+            const newId=msgs[0].id;
+            if(msgsFirstLoad){ lastMsgId=newId; localStorage.setItem('dq_lastMsgId',lastMsgId); msgsFirstLoad=false; }
+            else if(newId!==lastMsgId){ lastMsgId=newId; localStorage.setItem('dq_lastMsgId',lastMsgId); showNotif(msgs[0].text); }
+        } else msgsFirstLoad=false;
+    },err=>console.log('messages listener error:',err));
+}
+
+function populateCatSelect(){
+    const sel=document.getElementById('eCat');
+    if(!sel) return;
+    const cur=sel.value;
+    sel.innerHTML=EXP_CATS.map(c=>'<option value="'+c.v+'">'+c.n+'</option>').join('');
+    if(cur && catMap[cur]) sel.value=cur;
+}
+
+// ===== SUBSCRIPTION =====
 function checkSub(){
-    const box=document.getElementById('subBox'),title=document.getElementById('subTitle'),text=document.getElementById('subText'),days=document.getElementById('subDays');let locked=true;
-    if(me&&me.active&&me.subEnd){const end=new Date(me.subEnd),diff=Math.ceil((end-new Date())/864e5);if(diff>0){locked=false;const mo=Math.floor(diff/30),da=diff%30;box.className='sub-status sub-active';title.textContent=t('subActive');text.textContent=t('remain')+': '+mo+' '+t('months')+' '+da+' '+t('days');days.textContent=diff;}else{db.collection('users').doc(me.email).update({active:false});box.className='sub-status sub-inactive';title.textContent=t('subExpired');text.textContent=t('renew');days.textContent='0';}}
-    else{box.className='sub-status sub-inactive';title.textContent=t('subInactive');text.textContent=t('payContact');days.textContent='--';}
+    const box=document.getElementById('subBox');
+    const title=document.getElementById('subTitle');
+    const text=document.getElementById('subText');
+    const days=document.getElementById('subDays');
+    let locked=true;
+    if(me&&me.active&&me.subEnd){
+        const end=new Date(me.subEnd);
+        const diff=Math.ceil((end-new Date())/(1000*60*60*24));
+        if(diff>0){
+            locked=false;
+            const mo=Math.floor(diff/30), da=diff%30;
+            box.className='sub-status sub-active';
+            title.textContent='✅ بەشداری چالاکە';
+            text.textContent='ماوە: '+mo+' مانگ و '+da+' ڕۆژ';
+            days.textContent=diff;
+        } else {
+            db.collection('users').doc(me.email).update({active:false});
+            box.className='sub-status sub-inactive';
+            title.textContent='❌ بەشداری بەسەرچووە!';
+            text.textContent='نوێکردنەوە پێویستە → 07705353322';
+            days.textContent='0';
+        }
+    } else {
+        box.className='sub-status sub-inactive';
+        title.textContent='❌ بەشداری چالاک نییە';
+        text.textContent='پارەدان ئەنجام بدە → پەیوەندی: 07705353322';
+        days.textContent='--';
+    }
     document.querySelectorAll('.lock-view').forEach(el=>el.classList.toggle('hidden',!locked));
     document.querySelectorAll('.active-view').forEach(el=>el.classList.toggle('hidden',locked));
 }
 
-// ============ NOTIFS ============
-function renderNotifs(m){const a=document.getElementById('notifArea');if(!m.length){a.innerHTML='';return;}a.innerHTML=m.map(x=>'<div class="notif-bar"><p>📢 '+x.text+'</p><span class="nd">'+new Date(x.date).toLocaleString()+'</span></div>').join('');}
-
-// ============ MONTH FILTERS ============
-function buildMonthFilters(){
-    const months=new Set();
-    [...allRecords,...allExpenses].forEach(r=>{if(r.date)months.add(r.date.slice(0,7));});
-    const arr=[...months].sort().reverse();
-    const opt='<option value="all">'+t('allMonths')+'</option>'+arr.map(m=>'<option value="'+m+'">'+m+'</option>').join('');
-    const fM=document.getElementById('fM'),fEM=document.getElementById('fEM');
-    if(fM){const v=fM.value;fM.innerHTML=opt;if(v)fM.value=v;}
-    if(fEM){const v=fEM.value;fEM.innerHTML=opt;if(v)fEM.value=v;}
+// ===== NOTIFS =====
+function renderNotifs(msgs){
+    const area=document.getElementById('notifArea');
+    if(!msgs.length){ area.innerHTML=''; return; }
+    area.innerHTML=msgs.map(m=>'<div class="notif-bar"><p>📢 '+m.text+'</p><span class="nd">'+new Date(m.date).toLocaleString('ku')+'</span></div>').join('');
 }
-function matchMonth(date,val){return val==='all'||!val||(date&&date.slice(0,7)===val);}
 
-// ============ RECORDS ============
-function setDT(){const n=new Date();document.getElementById('rDate').value=n.toISOString().split('T')[0];}
+// ===== یاریدەدەری یەکە =====
+function sumByCurrency(arr){
+    const o={};
+    arr.forEach(r=>{ const c=curOf(r); o[c]=(o[c]||0)+r.amount; });
+    return o;
+}
+function fmtCurHTML(o){
+    const keys=Object.keys(o);
+    if(!keys.length) return '0';
+    return keys.map(k=>'<div>'+o[k].toLocaleString()+' '+CUR_SYM[k]+'</div>').join('');
+}
+function fmtCurLines(o){
+    const keys=Object.keys(o);
+    if(!keys.length) return '0';
+    return keys.map(k=>o[k].toLocaleString()+' '+CUR_SYM[k]).join('\n');
+}
+
+// ===== RECORDS =====
+function setDT(){
+    const now=new Date();
+    document.getElementById('rDate').value=now.toISOString().split('T')[0];
+    document.getElementById('rTime').value=now.toTimeString().slice(0,5);
+}
 async function addRec(){
-    const n=document.getElementById('rName').value.trim(),a=parseFloat(document.getElementById('rAmount').value),ty=document.getElementById('rType').value,d=document.getElementById('rDate').value,due=document.getElementById('rDue').value,nt=document.getElementById('rNote').value.trim();
-    if(!n){alert(t('errName'));return;}if(!a||a<=0){alert(t('errAmount'));return;}if(!d){alert(t('errDate'));return;}
-    try{await queueOrSend('records',{userEmail:me.email,name:n,amount:a,type:ty,date:d,dueDate:due||null,note:nt||'-',paid:false,createdAt:Date.now()});document.getElementById('rName').value='';document.getElementById('rAmount').value='';document.getElementById('rNote').value='';document.getElementById('rDue').value='';setDT();}catch(e){alert(t('err')+': '+e.message);}
+    const n=document.getElementById('rName').value.trim();
+    const a=parseFloat(document.getElementById('rAmount').value);
+    const cur=document.getElementById('rCurrency').value;
+    const t=document.getElementById('rType').value;
+    const d=document.getElementById('rDate').value;
+    const tm=document.getElementById('rTime').value;
+    const nt=document.getElementById('rNote').value.trim();
+    if(!n){alert('⚠️ ناو بنووسە!');return}
+    if(!a||a<=0){alert('⚠️ بڕ بنووسە!');return}
+    if(!d){alert('⚠️ بەروار هەڵبژێرە!');return}
+    try{
+        await db.collection('records').add({userEmail:me.email,name:n,amount:a,currency:cur,type:t,date:d,time:tm||'--:--',note:nt||'-',paid:false,createdAt:Date.now()});
+        document.getElementById('rName').value=''; document.getElementById('rAmount').value=''; document.getElementById('rNote').value=''; setDT();
+    }catch(e){ alert('هەڵە: '+e.message); }
 }
-async function delRec(id){if(!confirm(t('confirmDel')))return;await db.collection('records').doc(id).delete();}
-async function togPaid(id){const r=allRecords.find(x=>x.id===id);if(r)await db.collection('records').doc(id).update({paid:!r.paid});}
+async function delRec(id){ if(!confirm('سڕینەوە؟'))return; await db.collection('records').doc(id).delete(); }
+async function togPaid(id){ const r=allRecords.find(x=>x.id===id); if(r) await db.collection('records').doc(id).update({paid:!r.paid}); }
 function renderRecs(){
-    const s=(document.getElementById('srch').value||'').trim().toLowerCase(),ft=document.getElementById('fT').value,fs=document.getElementById('fS').value,fm=document.getElementById('fM').value;
-    let recs=allRecords.filter(r=>r.name.toLowerCase().includes(s)&&(ft==='all'||r.type===ft)&&(fs==='all'||(fs==='paid'&&r.paid)||(fs==='unpaid'&&!r.paid))&&matchMonth(r.date,fm));
-    const body=document.getElementById('recBody'),empty=document.getElementById('recEmpty');
-    if(!recs.length){body.innerHTML='';empty.classList.remove('hidden');return;}
+    const s=document.getElementById('srch').value.trim().toLowerCase();
+    const ft=document.getElementById('fT').value;
+    const fs=document.getElementById('fS').value;
+    let recs=allRecords.filter(r=> r.name.toLowerCase().includes(s)&&(ft==='all'||r.type===ft)&&(fs==='all'||(fs==='paid'&&r.paid)||(fs==='unpaid'&&!r.paid)));
+    const body=document.getElementById('recBody');
+    const empty=document.getElementById('recEmpty');
+    if(!recs.length){body.innerHTML='';empty.classList.remove('hidden');return}
     empty.classList.add('hidden');
-    body.innerHTML=recs.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td><strong>'+fmt(r.amount)+'</strong></td><td class="'+(r.type==='debt'?'t-debt':'t-credit')+'">'+(r.type==='debt'?t('optDebt'):t('optCredit'))+'</td><td>'+r.date+'</td><td class="'+(r.paid?'s-paid':'s-unpaid')+'">'+(r.paid?'✅ '+t('paid'):'⏳ '+t('unpaid'))+'</td><td><div class="actions"><button class="btn btn-success btn-small" onclick="togPaid(\''+r.id+'\')">'+(r.paid?'↩️':'✅')+'</button><button class="btn btn-ghost btn-small" onclick="openEdit(\'debt\',\''+r.id+'\')">✏️</button><button class="btn btn-danger btn-small" onclick="delRec(\''+r.id+'\')">🗑️</button></div></td></tr>').join('');
+    body.innerHTML=recs.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td><strong>'+r.amount.toLocaleString()+'</strong> <span class="cur-tag">'+curSym(r)+'</span></td><td class="'+(r.type==='debt'?'t-debt':'t-credit')+'">'+(r.type==='debt'?'🔴 قەرز':'🟢 وەرگرتن')+'</td><td>'+r.date+'</td><td class="'+(r.paid?'s-paid':'s-unpaid')+'">'+(r.paid?'✅ دراو':'⏳ نەدراو')+'</td><td class="no-print"><div class="actions"><button class="btn btn-success btn-small" onclick="togPaid(\''+r.id+'\')">'+(r.paid?'↩️':'✅')+'</button><button class="btn btn-danger btn-small" onclick="delRec(\''+r.id+'\')">🗑️</button></div></td></tr>').join('');
 }
 function updateSum(){
-    const recs=allRecords.filter(r=>!r.paid),d=recs.filter(r=>r.type==='debt'),c=recs.filter(r=>r.type==='credit');
-    document.getElementById('sumDebt').textContent=fmt(d.reduce((s,r)=>s+r.amount,0));
-    document.getElementById('sumCredit').textContent=fmt(c.reduce((s,r)=>s+r.amount,0));
-    document.getElementById('cntDebt').textContent=d.length+' '+t('rec');
-    document.getElementById('cntCredit').textContent=c.length+' '+t('rec');
+    const recs=allRecords.filter(r=>!r.paid);
+    const d=sumByCurrency(recs.filter(r=>r.type==='debt'));
+    const c=sumByCurrency(recs.filter(r=>r.type==='credit'));
+    document.getElementById('sumDebt').innerHTML=fmtCurHTML(d);
+    document.getElementById('sumCredit').innerHTML=fmtCurHTML(c);
+    document.getElementById('cntDebt').textContent=recs.filter(r=>r.type==='debt').length+' تۆمار';
+    document.getElementById('cntCredit').textContent=recs.filter(r=>r.type==='credit').length+' تۆمار';
 }
 
-// ============ REMINDERS ============
-function renderReminders(){
-    const card=document.getElementById('remindCard'),list=document.getElementById('remindList');
-    if(!card||!list)return;
-    const today=new Date();today.setHours(0,0,0,0);
-    const upcoming=allRecords.filter(r=>!r.paid&&r.dueDate).map(r=>{const d=new Date(r.dueDate);d.setHours(0,0,0,0);const diff=Math.round((d-today)/864e5);return{...r,diff};}).filter(r=>r.diff<=3).sort((a,b)=>a.diff-b.diff);
-    if(!upcoming.length){card.classList.add('hidden');return;}
-    card.classList.remove('hidden');
-    list.innerHTML=upcoming.map(r=>{let cls='soon',meta='';if(r.diff<0){cls='overdue';meta=t('overdue')+' ('+Math.abs(r.diff)+' '+t('days')+')';}else if(r.diff===0){cls='overdue';meta=t('dueToday');}else if(r.diff===1){meta=t('dueTomorrow');}else{meta=t('dueIn')+' '+r.diff+' '+t('days');}return '<div class="remind-item '+cls+'"><div class="ri-info"><div class="ri-name">'+r.name+'</div><div class="ri-meta">'+fmt(r.amount)+' • '+r.dueDate+' • '+meta+'</div></div></div>';}).join('');
-}
-
-// ============ EXPENSES ============
-function setExpDate(){document.getElementById('eDate').value=new Date().toISOString().split('T')[0];}
-async function addExp(){
-    const n=document.getElementById('eName').value.trim(),a=parseFloat(document.getElementById('eAmount').value),c=document.getElementById('eCat').value,d=document.getElementById('eDate').value;
-    if(!n){alert(t('errName'));return;}if(!a||a<=0){alert(t('errAmount'));return;}if(!d){alert(t('errDate'));return;}
-    try{await queueOrSend('expenses',{userEmail:me.email,name:n,amount:a,category:c,date:d,createdAt:Date.now()});document.getElementById('eName').value='';document.getElementById('eAmount').value='';setExpDate();}catch(e){alert(t('err')+': '+e.message);}
-}
-async function delExp(id){if(!confirm(t('confirmDel')))return;await db.collection('expenses').doc(id).delete();}
-function getMonthExpenses(){const now=new Date(),y=now.getFullYear(),m=now.getMonth();return allExpenses.filter(e=>{const d=new Date(e.date);return d.getFullYear()===y&&d.getMonth()===m;});}
+// ===== EXPENSES =====
+function setExpDate(){ document.getElementById('eDate').value=new Date().toISOString().split('T')[0]; }
 function updateExpMonth(){
-    const now=new Date(),me2=getMonthExpenses(),total=me2.reduce((s,e)=>s+e.amount,0);
-    const monStr=(curLang==='en'?now.toLocaleDateString('en',{month:'long'}):now.toLocaleDateString('ku-IQ',{month:'long'}))+' - '+now.getFullYear();
-    const t1=document.getElementById('expMonthTotal'),t2=document.getElementById('expMonthName');
-    if(t1)t1.textContent=fmt(total);if(t2)t2.textContent=monStr;
-    const s1=document.getElementById('sumExpTotal'),s2=document.getElementById('sumExpMonth');
-    if(s1)s1.textContent=fmt(total);if(s2)s2.textContent=monStr;
-    updateBudgetBar(total);
+    const now=new Date(), y=now.getFullYear(), m=now.getMonth();
+    const monthExp=allExpenses.filter(e=>{const d=new Date(e.date);return d.getFullYear()===y&&d.getMonth()===m;});
+    const s=sumByCurrency(monthExp);
+    const html=fmtCurHTML(s);
+    const monStr='مانگی '+now.toLocaleDateString('ku-IQ',{month:'long'})+' - '+y;
+    const t1=document.getElementById('expMonthTotal'), t2=document.getElementById('expMonthName');
+    if(t1) t1.innerHTML=html;
+    if(t2) t2.textContent=monStr;
+    const s1=document.getElementById('sumExpTotal'), s2=document.getElementById('sumExpMonth');
+    if(s1) s1.innerHTML=html;
+    if(s2) s2.textContent=monStr;
 }
-function updateBudgetBar(total){
-    const budgets=JSON.parse(localStorage.getItem('dq_budgets')||'{}');const now=new Date();const key=now.getFullYear()+'-'+now.getMonth();const budget=budgets[key]||0;
-    const bar=document.getElementById('budgetBar'),info=document.getElementById('budgetInfo'),fill=document.getElementById('budgetFill'),left=document.getElementById('budgetLeft'),set=document.getElementById('budgetSet');
-    if(!budget){bar.classList.add('hidden');info.classList.add('hidden');return;}
-    bar.classList.remove('hidden');info.classList.remove('hidden');
-    const pct=Math.min(100,(total/budget)*100);fill.style.width=pct+'%';fill.className='budget-fill'+(pct>=100?' over':pct>=80?' warn':'');
-    if(total>budget){left.textContent='⚠️ '+t('budgetOver')+' '+fmt(total-budget);left.style.color='#e94560';}
-    else{left.textContent=t('budgetLeft')+': '+fmt(budget-total);left.style.color='#2a9d8f';}
-    set.textContent=fmt(budget);
-}
-function renderExpenses(){
-    buildMonthFilters();
-    const fm=document.getElementById('fEM').value;
-    let list=[...allExpenses].filter(e=>matchMonth(e.date,fm)).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-    const body=document.getElementById('expBody'),empty=document.getElementById('expEmpty');
-    if(!list.length){body.innerHTML='';empty.classList.remove('hidden');return;}
-    empty.classList.add('hidden');
-    body.innerHTML=list.map((e,i)=>'<tr><td>'+(i+1)+'</td><td>'+e.name+'</td><td><strong>'+fmt(e.amount)+'</strong></td><td>'+(catMap[e.category]||e.category||'📦')+'</td><td>'+e.date+'</td><td><div class="actions"><button class="btn btn-ghost btn-small" onclick="openEdit(\'expense\',\''+e.id+'\')">✏️</button><button class="btn btn-danger btn-small" onclick="delExp(\''+e.id+'\')">🗑️</button></div></td></tr>').join('');
-}
-
-// ============ CHART ============
-function drawChart(){
-    const canvas=document.getElementById('pieChart');if(!canvas)return;const ctx=canvas.getContext('2d');const W=canvas.width,H=canvas.height;ctx.clearRect(0,0,W,H);
-    const me2=getMonthExpenses();const byCat={};me2.forEach(e=>{byCat[e.category]=(byCat[e.category]||0)+e.amount;});
-    const data=Object.keys(byCat).map(k=>({label:catMap[k]||k,value:byCat[k],color:catColor[k]||'#999'})).sort((a,b)=>b.value-a.value);
-    const total=data.reduce((s,d)=>s+d.value,0);const cx=W/2,cy=H/2,r=Math.min(W,H)/2-8;
-    const hole=getComputedStyle(document.body).getPropertyValue('--chart-hole').trim()||'#fffdf7';
-    if(total===0){ctx.fillStyle='#aaa';ctx.font='14px sans-serif';ctx.textAlign='center';ctx.fillText('—',cx,cy);document.getElementById('chartLegend').innerHTML='';return;}
-    let start=-Math.PI/2;data.forEach(d=>{const ang=(d.value/total)*2*Math.PI;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+ang);ctx.closePath();ctx.fillStyle=d.color;ctx.fill();start+=ang;});
-    ctx.beginPath();ctx.arc(cx,cy,r*0.55,0,2*Math.PI);ctx.fillStyle=hole;ctx.fill();
-    document.getElementById('chartLegend').innerHTML=data.map(d=>'<div class="lg"><span class="dot" style="background:'+d.color+'"></span>'+d.label+' ('+Math.round(d.value/total*100)+'%)</div>').join('');
-}
-
-// ============ BUDGET ============
-function openBudget(){const budgets=JSON.parse(localStorage.getItem('dq_budgets')||'{}');const now=new Date();const key=now.getFullYear()+'-'+now.getMonth();document.getElementById('budgetIn').value=budgets[key]||'';document.getElementById('budgetModal').classList.remove('hidden');}
-function closeBudget(){document.getElementById('budgetModal').classList.add('hidden');}
-function saveBudget(){const v=parseFloat(document.getElementById('budgetIn').value)||0;const budgets=JSON.parse(localStorage.getItem('dq_budgets')||'{}');const now=new Date();const key=now.getFullYear()+'-'+now.getMonth();if(v>0)budgets[key]=v;else delete budgets[key];localStorage.setItem('dq_budgets',JSON.stringify(budgets));closeBudget();updateExpMonth();alert(t('saved'));}
-
-// ============ EDIT MODAL ============
-let editMode=null,editId=null;
-function openEdit(mode,id){
-    editMode=mode;editId=id;const fields=document.getElementById('editFields');
-    if(mode==='debt'){const r=allRecords.find(x=>x.id===id);if(!r)return;
-        fields.innerHTML='<div class="form-group"><label>'+t('personName')+'</label><input type="text" id="ed_name" value="'+(r.name||'').replace(/"/g,'&quot;')+'"></div><div class="form-group"><label>'+t('amount')+'</label><input type="number" id="ed_amount" value="'+r.amount+'"></div><div class="form-group"><label>'+t('type')+'</label><select id="ed_type"><option value="debt"'+(r.type==='debt'?' selected':'')+'>'+t('optDebt')+'</option><option value="credit"'+(r.type==='credit'?' selected':'')+'>'+t('optCredit')+'</option></select></div><div class="form-group"><label>'+t('date')+'</label><input type="date" id="ed_date" value="'+(r.date||'')+'"></div><div class="form-group"><label>'+t('dueDate')+'</label><input type="date" id="ed_due" value="'+(r.dueDate||'')+'"></div><div class="form-group"><label>'+t('note')+'</label><input type="text" id="ed_note" value="'+(r.note||'').replace(/"/g,'&quot;')+'"></div>';}
-    else{const e=allExpenses.find(x=>x.id===id);if(!e)return;
-        fields.innerHTML='<div class="form-group"><label>'+t('expName')+'</label><input type="text" id="ed_name" value="'+(e.name||'').replace(/"/g,'&quot;')+'"></div><div class="form-group"><label>'+t('amount')+'</label><input type="number" id="ed_amount" value="'+e.amount+'"></div><div class="form-group"><label>'+t('category')+'</label><select id="ed_cat">'+EXP_CATS.map(c=>'<option value="'+c.v+'"'+(c.v===e.category?' selected':'')+'>'+c.n+'</option>').join('')+'</select></div><div class="form-group"><label>'+t('date')+'</label><input type="date" id="ed_date" value="'+(e.date||'')+'"></div>';}
-    document.getElementById('editModal').classList.remove('hidden');
-}
-function closeEdit(){document.getElementById('editModal').classList.add('hidden');editMode=null;editId=null;}
-async function saveEdit(){
-    const name=document.getElementById('ed_name').value.trim(),amount=parseFloat(document.getElementById('ed_amount').value),date=document.getElementById('ed_date').value;
-    if(!name||!amount||!date){alert(t('fillFields'));return;}
+async function addExp(){
+    const n=document.getElementById('eName').value.trim();
+    const a=parseFloat(document.getElementById('eAmount').value);
+    const cur=document.getElementById('eCurrency').value;
+    const c=document.getElementById('eCat').value;
+    const d=document.getElementById('eDate').value;
+    if(!n){alert('⚠️ ناو بنووسە!');return}
+    if(!a||a<=0){alert('⚠️ بڕ بنووسە!');return}
+    if(!d){alert('⚠️ بەروار هەڵبژێرە!');return}
     try{
-        if(editMode==='debt'){const type=document.getElementById('ed_type').value,due=document.getElementById('ed_due').value,note=document.getElementById('ed_note').value.trim();await db.collection('records').doc(editId).update({name,amount,type,date,dueDate:due||null,note:note||'-'});}
-        else{const category=document.getElementById('ed_cat').value;await db.collection('expenses').doc(editId).update({name,amount,category,date});}
-        closeEdit();alert(t('saved'));
-    }catch(e){alert(t('err')+': '+e.message);}
+        await db.collection('expenses').add({userEmail:me.email,name:n,amount:a,currency:cur,category:c,date:d,createdAt:Date.now()});
+        document.getElementById('eName').value=''; document.getElementById('eAmount').value=''; setExpDate();
+    }catch(e){ alert('هەڵە: '+e.message); }
+}
+async function delExp(id){ if(!confirm('سڕینەوە؟'))return; await db.collection('expenses').doc(id).delete(); }
+function renderExpenses(){
+    const body=document.getElementById('expBody');
+    const empty=document.getElementById('expEmpty');
+    const sorted=[...allExpenses].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    if(!sorted.length){body.innerHTML='';empty.classList.remove('hidden');return}
+    empty.classList.add('hidden');
+    body.innerHTML=sorted.map((e,i)=>{
+        const catName=catMap[e.category]||e.category||'📦 تر';
+        return '<tr><td>'+(i+1)+'</td><td>'+e.name+'</td><td><strong>'+e.amount.toLocaleString()+'</strong> <span class="cur-tag">'+curSym(e)+'</span></td><td>'+catName+'</td><td>'+e.date+'</td><td class="no-print"><button class="btn btn-danger btn-small" onclick="delExp(\''+e.id+'\')">🗑️</button></td></tr>';
+    }).join('');
 }
 
-// ============ EXPORT / SHARE ============
-function getExportData(kind){
-    if(kind==='debts')return{title:t('debtList'),headers:['#',t('personName'),t('amount'),t('type'),t('date'),t('dueDate'),t('status'),t('note')],rows:allRecords.map((r,i)=>[i+1,r.name,r.amount+(curCur),r.type==='debt'?t('optDebt'):t('optCredit'),r.date,r.dueDate||'-',r.paid?t('paid'):t('unpaid'),r.note||'-'])};
-    else return{title:t('expList'),headers:['#',t('expName'),t('amount'),t('category'),t('date')],rows:allExpenses.map((e,i)=>[i+1,e.name,e.amount+curCur,catMap[e.category]||e.category,e.date])};
+// ===== هەناردن و هاوبەشکردن =====
+function csvCell(v){ v=String(v==null?'':v); if(/[",\n]/.test(v)) v='"'+v.replace(/"/g,'""')+'"'; return v; }
+
+function exportPDF(){
+    // سەردێڕی چاپ پڕ بکەرەوە
+    const nowStr=new Date().toLocaleString('ku-IQ');
+    const subD=document.getElementById('printSubDebt');
+    const subE=document.getElementById('printSubExp');
+    if(subD) subD.textContent='👤 '+(me?me.name:'')+'   |   📅 '+nowStr;
+    if(subE) subE.textContent='👤 '+(me?me.name:'')+'   |   📅 '+nowStr;
+    window.print();
 }
-function exportCSV(kind){const d=getExportData(kind);const csv='\uFEFF'+[d.headers.join(','),...d.rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(','))].join('\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(kind==='debts'?'debts':'expenses')+'_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
-function exportPrint(kind){const d=getExportData(kind);const w=window.open('','_blank');w.document.write('<html dir="'+(curLang==='en'?'ltr':'rtl')+'"><head><meta charset="utf-8"><title>'+d.title+'</title><style>body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px;text-align:'+(curLang==='en'?'left':'right')+'}th{background:#f5a623;color:#fff}h1{color:#e94560}</style></head><body><h1>'+d.title+'</h1><table><thead><tr>'+d.headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+d.rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table><script>window.onload=function(){window.print();}<\/script></body></html>');w.document.close();}
-function shareData(kind){const d=getExportData(kind);const text=d.title+'\n\n'+d.rows.map(r=>r.join(' | ')).join('\n');if(navigator.share){navigator.share({title:d.title,text}).then(()=>alert(t('shared'))).catch(()=>{});}else if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>alert(t('shared')));}else alert(t('shareNotSup'));}
 
-// ============ PROFILE ============
-function handlePhoto(input){const file=input.files[0];if(!file)return;if(file.size>5*1024*1024){alert('⚠️ >5MB');return;}const reader=new FileReader();reader.onload=ev=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas'),sz=250;c.width=sz;c.height=sz;const ctx=c.getContext('2d'),mn=Math.min(img.width,img.height);ctx.drawImage(img,(img.width-mn)/2,(img.height-mn)/2,mn,mn,0,0,sz,sz);const url=c.toDataURL('image/jpeg',0.75);db.collection('users').doc(me.email).update({photo:url}).then(()=>{me.photo=url;renderProfile();renderHeader();alert(t('photoSaved'));});};img.src=ev.target.result;};reader.readAsDataURL(file);input.value='';}
-function renderProfile(){const p=me&&me.photo,pp=document.getElementById('profPhoto'),ph=document.getElementById('profPhotoPlaceholder');if(p){pp.src=p;pp.classList.remove('hidden');ph.classList.add('hidden');}else{pp.classList.add('hidden');ph.classList.remove('hidden');}document.getElementById('profName').textContent=me?me.name:'-';document.getElementById('profEmail').textContent=me?me.email:'-';document.getElementById('profJoined').textContent=me&&me.joined?new Date(me.joined).toLocaleDateString():'-';const sub=document.getElementById('profSub');if(me&&me.active&&me.subEnd){const diff=Math.ceil((new Date(me.subEnd)-new Date())/864e5),mo=Math.floor(diff/30),da=diff%30;sub.innerHTML='<span class="badge badge-on">✅</span> '+mo+' '+t('months')+' '+da+' '+t('days');}else sub.innerHTML='<span class="badge badge-off">❌</span>';updatePinBtn();}
+function exportCSV(type){
+    const rows = type==='debt' ? allRecords : allExpenses;
+    if(!rows.length){ alert('⚠️ هیچ تۆمارێک نییە بۆ هەناردن!'); return; }
+    let csv='\uFEFF';
+    if(type==='debt'){
+        csv+=[ '#','ناو','بڕ','یەکە','جۆر','بەروار','کات','دۆخ','تێبینی' ].map(csvCell).join(',')+'\n';
+        rows.forEach((r,i)=>{
+            csv+=[ i+1, r.name, r.amount, curSym(r), r.type==='debt'?'قەرز':'وەرگرتن', r.date, r.time||'', r.paid?'دراو':'نەدراو', r.note||'' ].map(csvCell).join(',')+'\n';
+        });
+    } else {
+        csv+=[ '#','ناو','بڕ','یەکە','پۆل','بەروار' ].map(csvCell).join(',')+'\n';
+        rows.forEach((e,i)=>{
+            csv+=[ i+1, e.name, e.amount, curSym(e), (catMap[e.category]||e.category||'').replace(/[🛒🍞🍔☕🥗🚗⛽💊🏥👕👟💡💧🎁📚✈️🐾🔧📦]/g,'').trim(), e.date ].map(csvCell).join(',')+'\n';
+        });
+    }
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='report_'+type+'_'+new Date().toISOString().split('T')[0]+'.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
 
-// ============ INIT ============
-updateOnlineBar();
-applyLang();
+function buildReportText(type){
+    const rows = type==='debt' ? allRecords : allExpenses;
+    let txt = type==='debt' ? '📒 ڕاپۆرتی قەرزەکان\n' : '🛒 ڕاپۆرتی خەرجییەکان\n';
+    txt += '👤 '+(me?me.name:'')+'\n';
+    txt += '📅 '+new Date().toLocaleString('ku-IQ')+'\n\n';
+    if(type==='debt'){
+        const unpaid=rows.filter(r=>!r.paid);
+        txt += '🔴 کۆی قەرزەکانم:\n'+fmtCurLines(sumByCurrency(unpaid.filter(r=>r.type==='debt')))+'\n';
+        txt += '🟢 کۆی وەرگرتن:\n'+fmtCurLines(sumByCurrency(unpaid.filter(r=>r.type==='credit')))+'\n\n';
+        txt += '📋 لیست:\n';
+        rows.forEach((r,i)=>{ txt+=(i+1)+'. '+r.name+' - '+r.amount.toLocaleString()+' '+curSym(r)+' - '+(r.type==='debt'?'قەرز':'وەرگرتن')+' - '+(r.paid?'دراو':'نەدراو')+'\n'; });
+    } else {
+        txt += '💸 کۆی خەرجی:\n'+fmtCurLines(sumByCurrency(rows))+'\n\n';
+        txt += '📋 لیست:\n';
+        rows.forEach((e,i)=>{ txt+=(i+1)+'. '+e.name+' - '+e.amount.toLocaleString()+' '+curSym(e)+' - '+(catMap[e.category]||e.category||'')+' - '+e.date+'\n'; });
+    }
+    return txt;
+}
+
+function shareWA(type){
+    const rows = type==='debt' ? allRecords : allExpenses;
+    if(!rows.length){ alert('⚠️ هیچ تۆمارێک نییە بۆ هاوبەشکردن!'); return; }
+    window.open('https://wa.me/?text='+encodeURIComponent(buildReportText(type)),'_blank');
+}
+function shareTG(type){
+    const rows = type==='debt' ? allRecords : allExpenses;
+    if(!rows.length){ alert('⚠️ هیچ تۆمارێک نییە بۆ هاوبەشکردن!'); return; }
+    window.open('https://t.me/share/url?url='+encodeURIComponent(location.href)+'&text='+encodeURIComponent(buildReportText(type)),'_blank');
+}
+
+// ===== PROFILE =====
+function handlePhoto(input){
+    const file=input.files[0];
+    if(!file) return;
+    if(file.size>5*1024*1024){ alert('⚠️ وێنەکە زۆر گەورەیە! لە ٥MB کەمتر بێت.'); return; }
+    const reader=new FileReader();
+    reader.onload=function(ev){
+        const img=new Image();
+        img.onload=function(){
+            const canvas=document.createElement('canvas');
+            const size=250; canvas.width=size; canvas.height=size;
+            const ctx=canvas.getContext('2d');
+            const min=Math.min(img.width,img.height);
+            const sx=(img.width-min)/2, sy=(img.height-min)/2;
+            ctx.drawImage(img,sx,sy,min,min,0,0,size,size);
+            const dataUrl=canvas.toDataURL('image/jpeg',0.75);
+            db.collection('users').doc(me.email).update({photo:dataUrl}).then(()=>{
+                me.photo=dataUrl; renderProfile(); renderHeader();
+                alert('✅ وێنەکە پاشەکەوت کرا!');
+            }).catch(e=>alert('هەڵە: '+e.message));
+        };
+        img.src=ev.target.result;
+    };
+    reader.readAsDataURL(file);
+    input.value='';
+}
+function renderProfile(){
+    const photo=me&&me.photo;
+    const pp=document.getElementById('profPhoto');
+    const ph=document.getElementById('profPhotoPlaceholder');
+    if(photo){ pp.src=photo; pp.classList.remove('hidden'); ph.classList.add('hidden'); }
+    else { pp.classList.add('hidden'); ph.classList.remove('hidden'); }
+    document.getElementById('profName').textContent=me?me.name:'-';
+    document.getElementById('profEmail').textContent=me?me.email:'-';
+    document.getElementById('profJoined').textContent=me&&me.joined?new Date(me.joined).toLocaleDateString('ku'):'-';
+    const subEl=document.getElementById('profSub');
+    if(me&&me.active&&me.subEnd){
+        const diff=Math.ceil((new Date(me.subEnd)-new Date())/(1000*60*60*24));
+        const mo=Math.floor(diff/30), da=diff%30;
+        subEl.innerHTML='<span class="badge badge-on">✅ چالاک</span> <span style="color:#2a9d8f;font-size:.85em">'+mo+' مانگ و '+da+' ڕۆژ</span>';
+    } else {
+        subEl.innerHTML='<span class="badge badge-off">❌ ناچالاک</span>';
+    }
+}
 </script>
 </body>
 </html>
