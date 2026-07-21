@@ -100,6 +100,7 @@
     <div id="secMsgs" class="hidden">
         <div class="card">
             <h2 style="color:#4ecdc4;margin-bottom:20px">📢 ناردنی نامە بۆ هەمووان</h2>
+            <p style="color:#aaa;font-size:.85em;margin-bottom:15px">✨ نامەکە هەم لەناو ئەپەکەدا دەردەکەوێت، هەم وەک ئاگاداری (notification) دەگاتە مۆبایلەکەیان!</p>
             <div class="form-group">
                 <label>دەقی نامە</label>
                 <textarea id="msgIn" rows="4" placeholder="نامەکەت بنووسە..."></textarea>
@@ -182,7 +183,8 @@ function renderUsers(){
     list.innerHTML=allUsers.map(u=>{
         const isOn=u.active&&u.subEnd&&new Date(u.subEnd)>now;
         const days=isOn?Math.ceil((new Date(u.subEnd)-now)/(1000*60*60*24)):0;
-        return '<div class="user-row"><div class="info"><h4>👤 '+u.name+'</h4><p>📧 '+u.email+'</p><p>📅 تۆمار: '+(u.joined?new Date(u.joined).toLocaleDateString('ku'):'-')+'</p>'+(isOn?'<p style="color:#4ecdc4">⏰ '+days+' ڕۆژی ماوە</p>':'')+'</div><span class="badge '+(isOn?'badge-on':'badge-off')+'">'+(isOn?'✅ چالاک':'❌ ناچالاک')+'</span><div class="u-actions"><button class="btn btn-success btn-small" onclick="activate(\''+u.email+'\')">✅ چالاک ٣٦٥</button><button class="btn btn-danger btn-small" onclick="deactivate(\''+u.email+'\')">🚫 ناچالاک</button><button class="btn btn-danger btn-small" onclick="delUser(\''+u.email+'\')">🗑️ سڕینەوە</button></div></div>';
+        const m=Math.floor(days/30), d=days%30;
+        return '<div class="user-row"><div class="info"><h4>👤 '+u.name+'</h4><p>📧 '+u.email+'</p><p>📅 تۆمار: '+(u.joined?new Date(u.joined).toLocaleDateString('ku'):'-')+'</p>'+(isOn?'<p style="color:#4ecdc4">⏰ ماوە: '+m+' مانگ و '+d+' ڕۆژ</p>':'')+'</div><span class="badge '+(isOn?'badge-on':'badge-off')+'">'+(isOn?'✅ چالاک':'❌ ناچالاک')+'</span><div class="u-actions"><button class="btn btn-success btn-small" onclick="activate(\''+u.email+'\')">✅ چالاک (١٢ مانگ و ٥ ڕۆژ)</button><button class="btn btn-danger btn-small" onclick="deactivate(\''+u.email+'\')">🚫 ناچالاک</button><button class="btn btn-danger btn-small" onclick="delUser(\''+u.email+'\')">🗑️ سڕینەوە</button></div></div>';
     }).join('');
 }
 
@@ -191,7 +193,7 @@ async function activate(email){
     const end=new Date();
     end.setDate(end.getDate()+365);
     await db.collection('users').doc(email).update({active:true, subStart:now.toISOString(), subEnd:end.toISOString()});
-    alert('✅ چالاککرا بۆ ٣٦٥ ڕۆژ!');
+    alert('✅ چالاککرا بۆ ١٢ مانگ و ٥ ڕۆژ!');
 }
 
 async function deactivate(email){
@@ -213,7 +215,7 @@ async function sendMsg(){
     if(!t){alert('⚠️ نامە بنووسە!');return}
     await db.collection('messages').add({text:t, date:new Date().toISOString(), createdAt:Date.now()});
     document.getElementById('msgIn').value='';
-    alert('✅ نامە نێردرا بۆ هەموو بەکارهێنەران!');
+    alert('✅ نامە نێردرا!\n📱 وەک ئاگاداری گەیشتە مۆبایلەکەیان\n📋 لەناو ئەپەکەشیاندا دەردەکەوێت');
 }
 
 function renderMsgs(msgs){
