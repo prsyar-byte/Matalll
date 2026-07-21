@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>دەفتەری قەرز</title>
     <link rel="manifest" href="/Matalll/manifest.json">
     <meta name="theme-color" content="#e94560">
@@ -12,7 +15,6 @@
     <link rel="apple-touch-icon" href="/Matalll/icons/icon-192.png">
     <link rel="icon" type="image/png" href="/Matalll/icons/icon-192.png">
 
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
@@ -40,7 +42,7 @@
         .login-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:25px;padding:50px 40px;width:100%;max-width:420px;text-align:center}
         .login-box h1{font-size:2em;margin-bottom:10px;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
         .login-box p{color:#aaa;margin-bottom:25px}
-        .error-msg{color:#e94560;font-size:.85em;margin-top:10px;display:none}
+        .error-msg{color:#e94560;font-size:.85em;margin-top:10px;display:none;word-break:break-word}
         .app-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:20px 0}
         .app-header h1{font-size:1.8em;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
         .user-badge{background:rgba(255,255,255,.05);padding:10px 20px;border-radius:10px;font-size:.9em;color:#ccc}
@@ -221,7 +223,7 @@ async function autoLogin(email){
         const doc = await db.collection('users').doc(email).get();
         if(doc.exists){ me = doc.data(); setupListeners(); showApp(); }
         else localStorage.removeItem('dq_email');
-    } catch(e){ console.log(e); }
+    } catch(e){ console.log('autoLogin error:', e); }
 }
 
 // ===== LOGIN =====
@@ -245,8 +247,12 @@ async function doLogin(){
         setupListeners();
         showApp();
     } catch(err2){
-        err.textContent='⚠️ هەڵەیەک ڕوویدا! ئینتەرنێت پشکنە.';
+        console.error('Firebase Error:', err2);
+        let msg = (err2 && err2.message) ? err2.message : String(err2);
+        if(typeof firebase === 'undefined') msg = 'Firebase SDK بار نەبووە!';
+        err.textContent = '⚠️ ' + msg;
         err.style.display='block';
+        alert('هەڵەی ورد:\n' + msg);
     }
     load.classList.add('hidden');
 }
@@ -272,20 +278,17 @@ function showApp(){
 
 // ===== REAL-TIME LISTENERS =====
 function setupListeners(){
-    // User status (real-time activation!)
     unsubUser = db.collection('users').doc(me.email).onSnapshot(snap => {
         if(snap.exists){ me = snap.data(); checkSub(); }
-    });
-    // Records
+    }, err => console.log('user listener error:', err));
     unsubRecs = db.collection('records').where('userEmail','==',me.email).onSnapshot(snap => {
         allRecords = snap.docs.map(d => ({...d.data(), id:d.id}));
         allRecords.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         renderRecs(); updateSum();
-    });
-    // Messages
+    }, err => console.log('records listener error:', err));
     unsubMsgs = db.collection('messages').orderBy('createdAt','desc').onSnapshot(snap => {
         renderNotifs(snap.docs.map(d=>d.data()));
-    });
+    }, err => console.log('messages listener error:', err));
 }
 
 // ===== SUBSCRIPTION =====
@@ -348,14 +351,16 @@ async function addRec(){
     if(!n){alert('⚠️ ناو بنووسە!');return}
     if(!a||a<=0){alert('⚠️ بڕ بنووسە!');return}
     if(!d){alert('⚠️ بەروار هەڵبژێرە!');return}
-    await db.collection('records').add({
-        userEmail:me.email, name:n, amount:a, type:t, date:d,
-        time:tm||'--:--', note:nt||'-', paid:false, createdAt:Date.now()
-    });
-    document.getElementById('rName').value='';
-    document.getElementById('rAmount').value='';
-    document.getElementById('rNote').value='';
-    setDT();
+    try {
+        await db.collection('records').add({
+            userEmail:me.email, name:n, amount:a, type:t, date:d,
+            time:tm||'--:--', note:nt||'-', paid:false, createdAt:Date.now()
+        });
+        document.getElementById('rName').value='';
+        document.getElementById('rAmount').value='';
+        document.getElementById('rNote').value='';
+        setDT();
+    } catch(e){ alert('هەڵە: '+e.message); }
 }
 
 async function delRec(id){
@@ -379,4 +384,4 @@ function renderRecs(){
     const empty=document.getElementById('recEmpty');
     if(!recs.length){body.innerHTML='';empty.classList.remove('hidden');return}
     empty.classList.add('hidden');
-    body.innerHTML=recs.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td><strong>'+r.amount.toLocaleString()+'</strong></td><td class="'+(r.type==='debt'?'t-debt':'t-credit')+'">'+(r.type==='debt'?'🔴 قەرز':'🟢 وەرگرتن')+'</td><td>'+r.date+'</td><td>'+r.time+'</td><td class="'+(r.paid?'s-paid':'s-unpaid')+'">'+(r.paid?'✅ دراو':'⏳ نەدراو')+'</td><td>'+r.note+'</td><td><div class="actions"><button class="btn btn-success btn-small" onclick="togPaid(\''+r.id+'\')">'+(r.paid?'↩️':'✅')+'</button><button class="btn btn-danger btn-small" onclick="delRec(\''+r.id+'\')">🗑️</butto
+    body.
