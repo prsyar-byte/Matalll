@@ -105,7 +105,6 @@
         .sec-title{color:#f5a623;margin-bottom:15px;font-size:1.15em}
         .sec-title2{color:#4ecdc4;margin-bottom:15px;font-size:1.15em}
 
-        /* Profile */
         .profile-card{text-align:center}
         .prof-photo-wrap{position:relative;width:120px;height:120px;margin:0 auto 18px}
         .prof-photo{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #f5a623}
@@ -123,7 +122,6 @@
         .badge-on{background:rgba(78,205,196,.2);color:#4ecdc4}
         .badge-off{background:rgba(233,69,96,.2);color:#e94560}
 
-        /* Bottom Nav */
         .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,12,41,.97);backdrop-filter:blur(15px);border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-around;padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:100;box-shadow:0 -5px 25px rgba(0,0,0,.4)}
         .nav-item{background:none;border:none;color:#777;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:7px 8px;border-radius:14px;transition:all .3s;flex:1;-webkit-tap-highlight-color:transparent}
         .nav-item.active{color:#f5a623}
@@ -160,7 +158,6 @@
 <!-- ===== APP ===== -->
 <div class="container hidden" id="pageApp">
 
-    <!-- Header -->
     <div class="app-header">
         <div class="hdr-left">
             <img id="hdrPhoto" class="hdr-photo hidden" src="" alt="">
@@ -169,7 +166,6 @@
         <button class="btn btn-danger btn-small" onclick="doLogout()">🚪 دەرچوون</button>
     </div>
 
-    <!-- Notifications -->
     <div id="notifArea"></div>
 
     <!-- ============ TAB: HOME ============ -->
@@ -212,7 +208,6 @@
     <div id="secDebts" class="hidden">
         <div class="lock-view hidden"></div>
         <div class="active-view">
-            <!-- تۆماری نوێ لە سەرەوە -->
             <div class="card">
                 <h2 class="sec-title">➕ تۆماری قەرزی نوێ</h2>
                 <div class="form-grid">
@@ -226,7 +221,6 @@
                 <button class="btn btn-primary btn-full" onclick="addRec()">➕ زیادکردن</button>
             </div>
 
-            <!-- لیست لە خوارەوە -->
             <div class="card">
                 <h2 class="sec-title2">📋 لیستی قەرزەکان</h2>
                 <div class="filter-bar">
@@ -246,33 +240,23 @@
     <div id="secExpenses" class="hidden">
         <div class="lock-view hidden"></div>
         <div class="active-view">
-            <!-- کۆی مانگانە -->
             <div class="exp-total">
                 <div class="lbl">💸 کۆی خەرجی ئەم مانگە</div>
                 <div class="val" id="expMonthTotal">0</div>
                 <div class="mon" id="expMonthName">-</div>
             </div>
 
-            <!-- تۆماری خەرجی نوێ -->
             <div class="card">
                 <h2 class="sec-title">🛒 تۆماری خەرجی ڕۆژانە</h2>
                 <div class="form-grid">
                     <div class="form-group"><label>ناو (بازاڕ/نان...)</label><input type="text" id="eName" placeholder="بۆ نموونە: نانی ئێوارە"></div>
                     <div class="form-group"><label>بڕی پارە</label><input type="number" id="eAmount" placeholder="0" min="0"></div>
-                    <div class="form-group"><label>پۆل</label><select id="eCat">
-                        <option value="bazar">🛒 بازاڕ</option>
-                        <option value="market">🏪 مارکێت</option>
-                        <option value="nan">🍞 نان</option>
-                        <option value="transport">🚗 گواستنەوە</option>
-                        <option value="health">💊 تەندروستی</option>
-                        <option value="other">📦 تر</option>
-                    </select></div>
+                    <div class="form-group"><label>پۆل</label><select id="eCat"></select></div>
                     <div class="form-group"><label>بەروار</label><input type="date" id="eDate"></div>
                 </div>
                 <button class="btn btn-primary btn-full" onclick="addExp()">➕ زیادکردنی خەرجی</button>
             </div>
 
-            <!-- لیستی خەرجی -->
             <div class="card">
                 <h2 class="sec-title2">📋 لیستی خەرجییەکان</h2>
                 <div class="table-wrap">
@@ -329,15 +313,25 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const EXP_CATS = [
-    {v:'bazar', n:'🛒 بازاڕ'},{v:'market', n:'🏪 مارکێت'},{v:'nan', n:'🍞 نان'},
-    {v:'transport', n:'🚗 گواستنەوە'},{v:'health', n:'💊 تەندروستی'},{v:'other', n:'📦 تر'}
+// پۆلە بنەڕەتییەکان (fallback ئەگەر Firebase بەتاڵ بوو)
+const DEFAULT_CATS = [
+    {v:'bazar', name:'بازاڕ', emoji:'🛒'},
+    {v:'market', name:'مارکێت', emoji:'🏪'},
+    {v:'nan', name:'نان', emoji:'🍞'},
+    {v:'transport', name:'گواستنەوە', emoji:'🚗'},
+    {v:'health', name:'تەندروستی', emoji:'💊'},
+    {v:'other', name:'تر', emoji:'📦'}
 ];
+function catsToFallback(){ return DEFAULT_CATS.map(c=>({v:c.v, n:c.emoji+' '+c.name})); }
+let EXP_CATS = catsToFallback();
+let catMap = {};
+function rebuildCatMap(){ catMap={}; EXP_CATS.forEach(c=>catMap[c.v]=c.n); }
+rebuildCatMap();
 
 let me = null;
 let allRecords = [];
 let allExpenses = [];
-let unsubUser=null, unsubRecs=null, unsubMsgs=null, unsubExp=null;
+let unsubUser=null, unsubRecs=null, unsubMsgs=null, unsubExp=null, unsubCats=null;
 let currentTab = 'home';
 
 // ===== نۆتفیکەیشن =====
@@ -414,7 +408,7 @@ async function doLogin(){
 }
 
 function doLogout(){
-    if(unsubUser) unsubUser(); if(unsubRecs) unsubRecs(); if(unsubMsgs) unsubMsgs(); if(unsubExp) unsubExp();
+    if(unsubUser) unsubUser(); if(unsubRecs) unsubRecs(); if(unsubMsgs) unsubMsgs(); if(unsubExp) unsubExp(); if(unsubCats) unsubCats();
     if(clockTimer) clearInterval(clockTimer);
     localStorage.removeItem('dq_email');
     me=null; allRecords=[]; allExpenses=[];
@@ -436,6 +430,7 @@ function showApp(){
     renderHeader();
     startClock();
     requestNotifPermission();
+    populateCatSelect();
     checkSub(); setDT(); setExpDate();
     switchTab('home');
 }
@@ -464,6 +459,15 @@ function setupListeners(){
         updateSum();
     },err=>console.log('expenses listener error:',err));
 
+    // پۆلەکانی خەرجی (لە ئەدمینەوە دێن)
+    unsubCats=db.collection('expense_cats').orderBy('order','asc').onSnapshot(snap=>{
+        const cats=snap.docs.map(d=>({v:d.id, n:(d.data().emoji||'📦')+' '+(d.data().name||'')}));
+        if(cats.length>0) EXP_CATS=cats; else EXP_CATS=catsToFallback();
+        rebuildCatMap();
+        populateCatSelect();
+        if(currentTab==='expenses') renderExpenses();
+    },err=>console.log('cats listener error:',err));
+
     unsubMsgs=db.collection('messages').orderBy('createdAt','desc').onSnapshot(snap=>{
         const msgs=snap.docs.map(d=>({...d.data(),id:d.id}));
         renderNotifs(msgs);
@@ -473,6 +477,15 @@ function setupListeners(){
             else if(newId!==lastMsgId){ lastMsgId=newId; localStorage.setItem('dq_lastMsgId',lastMsgId); showNotif(msgs[0].text); }
         } else msgsFirstLoad=false;
     },err=>console.log('messages listener error:',err));
+}
+
+// ===== پۆلەکانی خەرجی (select پڕکردن) =====
+function populateCatSelect(){
+    const sel=document.getElementById('eCat');
+    if(!sel) return;
+    const cur=sel.value;
+    sel.innerHTML=EXP_CATS.map(c=>'<option value="'+c.v+'">'+c.n+'</option>').join('');
+    if(cur && catMap[cur]) sel.value=cur;
 }
 
 // ===== SUBSCRIPTION =====
@@ -505,7 +518,6 @@ function checkSub(){
         text.textContent='پارەدان ئەنجام بدە → پەیوەندی: 07705353322';
         days.textContent='--';
     }
-    // toggle lock views (home, debts, expenses). profile هەمیشە کراوەیە
     document.querySelectorAll('.lock-view').forEach(el=>el.classList.toggle('hidden',!locked));
     document.querySelectorAll('.active-view').forEach(el=>el.classList.toggle('hidden',locked));
 }
@@ -589,8 +601,8 @@ function renderExpenses(){
     if(!sorted.length){body.innerHTML='';empty.classList.remove('hidden');return}
     empty.classList.add('hidden');
     body.innerHTML=sorted.map((e,i)=>{
-        const cat=EXP_CATS.find(c=>c.v===e.category)||{n:'📦 تر'};
-        return '<tr><td>'+(i+1)+'</td><td>'+e.name+'</td><td><strong>'+e.amount.toLocaleString()+'</strong></td><td>'+cat.n+'</td><td>'+e.date+'</td><td><button class="btn btn-danger btn-small" onclick="delExp(\''+e.id+'\')">🗑️</button></td></tr>';
+        const catName=catMap[e.category]||e.category||'📦 تر';
+        return '<tr><td>'+(i+1)+'</td><td>'+e.name+'</td><td><strong>'+e.amount.toLocaleString()+'</strong></td><td>'+catName+'</td><td>'+e.date+'</td><td><button class="btn btn-danger btn-small" onclick="delExp(\''+e.id+'\')">🗑️</button></td></tr>';
     }).join('');
 }
 
