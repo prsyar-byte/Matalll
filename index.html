@@ -10,7 +10,7 @@
     <link rel="manifest" href="/Matalll/manifest.json">
     <meta name="theme-color" content="#e94560">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="قەرز">
     <link rel="apple-touch-icon" href="/Matalll/icons/icon-192.png">
     <link rel="icon" type="image/png" href="/Matalll/icons/icon-192.png">
@@ -20,29 +20,31 @@
 
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);min-height:100vh;padding:15px 15px 90px;color:#fff}
+        body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;min-height:100vh;padding:15px 15px 90px;color:#3a3530;
+            background-color:#efe7d6;
+            background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(150,110,70,.08) 31px,rgba(150,110,70,.08) 32px)}
         .container{max-width:900px;margin:0 auto}
         .hidden{display:none!important}
-        .card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:25px;backdrop-filter:blur(10px);margin-bottom:18px}
+        .card{background:#fffdf7;border:1px solid rgba(120,90,50,.12);border-radius:20px;padding:25px;box-shadow:0 4px 18px rgba(120,90,50,.10);margin-bottom:18px}
         .btn{padding:12px 25px;border:none;border-radius:10px;font-size:1em;cursor:pointer;font-weight:bold;transition:all .3s}
         .btn:hover{transform:scale(1.03)}
         .btn-primary{background:linear-gradient(45deg,#e94560,#f5a623);color:#fff}
         .btn-success{background:linear-gradient(45deg,#4ecdc4,#44bd63);color:#fff}
-        .btn-danger{background:rgba(233,69,96,.2);color:#e94560;border:1px solid #e94560}
+        .btn-danger{background:rgba(233,69,96,.12);color:#e94560;border:1px solid #e94560}
         .btn-danger:hover{background:#e94560;color:#fff}
         .btn-small{padding:8px 15px;font-size:.85em}
         .btn-full{width:100%}
         .form-group{margin-bottom:15px;text-align:right}
-        .form-group label{display:block;margin-bottom:8px;color:#ccc;font-size:.9em}
-        .form-group input,.form-group select{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1em;transition:border-color .3s}
+        .form-group label{display:block;margin-bottom:8px;color:#7a7064;font-size:.9em;font-weight:600}
+        .form-group input,.form-group select{width:100%;padding:13px 16px;border:1px solid #ddd2bd;border-radius:12px;background:#fff;color:#3a3530;font-size:1em;transition:border-color .3s}
         .form-group input:focus,.form-group select:focus{outline:none;border-color:#f5a623}
-        .form-group select option{background:#1a1a2e}
+        .form-group select option{background:#fff;color:#3a3530}
         .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
 
         .login-page{display:flex;justify-content:center;align-items:center;min-height:90vh}
-        .login-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:25px;padding:50px 40px;width:100%;max-width:420px;text-align:center}
+        .login-box{background:#fffdf7;border:1px solid rgba(120,90,50,.15);border-radius:25px;padding:50px 40px;width:100%;max-width:420px;text-align:center;box-shadow:0 10px 40px rgba(120,90,50,.15)}
         .login-box h1{font-size:2em;margin-bottom:10px;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .login-box p{color:#aaa;margin-bottom:25px}
+        .login-box p{color:#8a8178;margin-bottom:25px}
         .error-msg{color:#e94560;font-size:.85em;margin-top:10px;display:none;word-break:break-word}
 
         .app-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;padding:10px 0}
@@ -50,81 +52,83 @@
         .app-header h1{font-size:1.5em;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
         .hdr-photo{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #f5a623}
 
-        .live-clock{background:linear-gradient(135deg,rgba(245,166,35,.15),rgba(233,69,96,.15));border:1px solid rgba(245,166,35,.3);border-radius:18px;padding:18px;text-align:center;margin-bottom:18px;font-size:2em;color:#f5a623;font-weight:bold;letter-spacing:2px;direction:ltr}
-        .live-clock .date-part{display:block;color:#aaa;font-size:.4em;font-weight:normal;margin-top:6px;letter-spacing:0;direction:rtl}
+        .live-clock{background:#fffdf7;border:1px solid rgba(245,166,35,.45);border-radius:18px;padding:18px;text-align:center;margin-bottom:18px;font-size:2em;color:#e08a1e;font-weight:bold;letter-spacing:2px;direction:ltr;box-shadow:0 4px 15px rgba(245,166,35,.12)}
+        .live-clock .date-part{display:block;color:#8a8178;font-size:.4em;font-weight:normal;margin-top:6px;letter-spacing:0;direction:rtl}
 
         .sub-status{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;padding:18px;border-radius:15px;margin-bottom:18px}
-        .sub-active{background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.3)}
-        .sub-inactive{background:rgba(233,69,96,.1);border:1px solid rgba(233,69,96,.3)}
+        .sub-active{background:rgba(78,205,196,.12);border:1px solid rgba(78,205,196,.45)}
+        .sub-inactive{background:rgba(233,69,96,.08);border:1px solid rgba(233,69,96,.4)}
         .sub-timer{text-align:center}
-        .sub-timer .num{font-size:1.8em;font-weight:bold;color:#4ecdc4}
-        .sub-timer .lbl{font-size:.8em;color:#aaa}
+        .sub-timer .num{font-size:1.8em;font-weight:bold;color:#2a9d8f}
+        .sub-timer .lbl{font-size:.8em;color:#8a8178}
 
         .locked-screen{text-align:center;padding:40px 20px}
         .locked-screen .lock-icon{font-size:3.5em;margin-bottom:15px}
         .locked-screen h2{color:#e94560;margin-bottom:12px}
-        .locked-screen p{color:#aaa;line-height:1.8}
-        .locked-screen .contact{color:#4ecdc4;font-weight:bold;font-size:1.2em}
+        .locked-screen p{color:#6b6258;line-height:1.8}
+        .locked-screen .contact{color:#2a9d8f;font-weight:bold;font-size:1.2em}
 
-        .notif-bar{background:linear-gradient(135deg,rgba(245,166,35,.2),rgba(233,69,96,.2));border:1px solid rgba(245,166,35,.4);border-radius:12px;padding:14px 18px;margin-bottom:12px;animation:pop .4s ease}
+        .notif-bar{background:rgba(245,166,35,.14);border:1px solid rgba(245,166,35,.45);border-radius:12px;padding:14px 18px;margin-bottom:12px;animation:pop .4s ease}
         @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-        .notif-bar p{color:#f5a623;font-size:.92em}
-        .notif-bar .nd{color:#888;font-size:.78em}
+        .notif-bar p{color:#c97a14;font-size:.92em;font-weight:600}
+        .notif-bar .nd{color:#8a8178;font-size:.78em}
 
-        .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
-        .sum-card{background:rgba(255,255,255,.05);border-radius:15px;padding:20px;text-align:center;border:2px solid transparent}
+        .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+        .sum-card{background:#fffdf7;border-radius:15px;padding:20px;text-align:center;border:2px solid transparent;box-shadow:0 4px 15px rgba(120,90,50,.08)}
         .sum-card.debt{border-color:#e94560}
         .sum-card.credit{border-color:#4ecdc4}
-        .sum-card h3{color:#aaa;font-size:.8em;margin-bottom:8px}
+        .sum-card.expense{border-color:#f5a623}
+        .sum-card h3{color:#8a8178;font-size:.8em;margin-bottom:8px}
         .sum-card .val{font-size:1.6em;font-weight:bold}
         .sum-card.debt .val{color:#e94560}
-        .sum-card.credit .val{color:#4ecdc4}
-        .sum-card .cnt{color:#666;font-size:.75em;margin-top:4px}
+        .sum-card.credit .val{color:#2a9d8f}
+        .sum-card.expense .val{color:#e08a1e}
+        .sum-card .cnt{color:#a89f94;font-size:.75em;margin-top:4px}
 
-        .exp-total{background:linear-gradient(135deg,rgba(233,69,96,.2),rgba(245,166,35,.2));border:1px solid rgba(245,166,35,.3);border-radius:18px;padding:22px;text-align:center;margin-bottom:18px}
-        .exp-total .lbl{color:#ccc;font-size:.9em;margin-bottom:6px}
-        .exp-total .val{font-size:2.2em;font-weight:bold;color:#f5a623}
-        .exp-total .mon{color:#888;font-size:.8em;margin-top:4px}
+        .exp-total{background:#fffdf7;border:1px solid rgba(245,166,35,.45);border-radius:18px;padding:22px;text-align:center;margin-bottom:18px;box-shadow:0 4px 15px rgba(245,166,35,.12)}
+        .exp-total .lbl{color:#7a7064;font-size:.9em;margin-bottom:6px;font-weight:600}
+        .exp-total .val{font-size:2.2em;font-weight:bold;color:#e08a1e}
+        .exp-total .mon{color:#8a8178;font-size:.8em;margin-top:4px}
 
         .table-wrap{overflow-x:auto}
         table{width:100%;border-collapse:collapse}
-        th,td{padding:10px;text-align:right;border-bottom:1px solid rgba(255,255,255,.05);font-size:.88em}
-        th{background:rgba(255,255,255,.05);color:#f5a623;font-size:.8em}
-        tr:hover{background:rgba(255,255,255,.03)}
+        th,td{padding:10px;text-align:right;border-bottom:1px solid rgba(120,90,50,.10);font-size:.88em}
+        th{background:rgba(120,90,50,.06);color:#c97a14;font-size:.8em}
+        tr:hover{background:rgba(120,90,50,.04)}
         .t-debt{color:#e94560;font-weight:bold}
-        .t-credit{color:#4ecdc4;font-weight:bold}
-        .s-paid{color:#4ecdc4}
+        .t-credit{color:#2a9d8f;font-weight:bold}
+        .s-paid{color:#2a9d8f}
         .s-unpaid{color:#e94560}
         .actions{display:flex;gap:5px}
         .filter-bar{display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap}
-        .filter-bar input,.filter-bar select{padding:9px 12px;border:1px solid rgba(255,255,255,.2);border-radius:10px;background:rgba(255,255,255,.05);color:#fff;font-size:.85em}
-        .filter-bar input:focus,.filter-bar select:focus{outline:none;border-color:#4ecdc4}
-        .empty{text-align:center;padding:30px;color:#666}
+        .filter-bar input,.filter-bar select{padding:9px 12px;border:1px solid #ddd2bd;border-radius:10px;background:#fff;color:#3a3530;font-size:.85em}
+        .filter-bar input:focus,.filter-bar select:focus{outline:none;border-color:#f5a623}
+        .empty{text-align:center;padding:30px;color:#a89f94}
         .empty span{font-size:2.5em;display:block;margin-bottom:8px}
-        .loading{text-align:center;padding:20px;color:#f5a623}
-        .sec-title{color:#f5a623;margin-bottom:15px;font-size:1.15em}
-        .sec-title2{color:#4ecdc4;margin-bottom:15px;font-size:1.15em}
+        .loading{text-align:center;padding:20px;color:#c97a14}
+        .sec-title{color:#c97a14;margin-bottom:15px;font-size:1.15em}
+        .sec-title2{color:#2a9d8f;margin-bottom:15px;font-size:1.15em}
 
         .profile-card{text-align:center}
         .prof-photo-wrap{position:relative;width:120px;height:120px;margin:0 auto 18px}
         .prof-photo{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #f5a623}
-        .prof-placeholder{width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:3em;border:3px dashed rgba(255,255,255,.2)}
-        .prof-upload{position:absolute;bottom:0;right:0;background:linear-gradient(45deg,#e94560,#f5a623);width:38px;height:38px;border-radius:50%;border:3px solid #0f0c29;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1em}
+        .prof-placeholder{width:120px;height:120px;border-radius:50%;background:rgba(120,90,50,.06);display:flex;align-items:center;justify-content:center;font-size:3em;border:3px dashed #ddd2bd}
+        .prof-upload{position:absolute;bottom:0;right:0;background:linear-gradient(45deg,#e94560,#f5a623);width:38px;height:38px;border-radius:50%;border:3px solid #fffdf7;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1em}
         .prof-upload input{display:none}
-        .prof-name{font-size:1.4em;font-weight:bold;margin-bottom:4px}
-        .prof-email{color:#aaa;font-size:.9em;margin-bottom:18px;word-break:break-all}
-        .prof-info{background:rgba(255,255,255,.04);border-radius:12px;padding:15px;text-align:right;margin-top:15px}
-        .prof-info .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.9em}
+        .prof-name{font-size:1.4em;font-weight:bold;margin-bottom:4px;color:#3a3530}
+        .prof-email{color:#8a8178;font-size:.9em;margin-bottom:18px;word-break:break-all}
+        .prof-info{background:rgba(120,90,50,.04);border-radius:12px;padding:15px;text-align:right;margin-top:15px}
+        .prof-info .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(120,90,50,.08);font-size:.9em}
         .prof-info .row:last-child{border:none}
-        .prof-info .row .k{color:#aaa}
-        .prof-info .row .v{color:#fff;font-weight:bold}
+        .prof-info .row .k{color:#8a8178}
+        .prof-info .row .v{color:#3a3530;font-weight:bold}
         .badge{padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:bold}
-        .badge-on{background:rgba(78,205,196,.2);color:#4ecdc4}
-        .badge-off{background:rgba(233,69,96,.2);color:#e94560}
+        .badge-on{background:rgba(78,205,196,.2);color:#2a9d8f}
+        .badge-off{background:rgba(233,69,96,.15);color:#e94560}
 
-        .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,12,41,.97);backdrop-filter:blur(15px);border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-around;padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:100;box-shadow:0 -5px 25px rgba(0,0,0,.4)}
-        .nav-item{background:none;border:none;color:#777;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:7px 8px;border-radius:14px;transition:all .3s;flex:1;-webkit-tap-highlight-color:transparent}
-        .nav-item.active{color:#f5a623}
+        .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fffdf7;border-top:1px solid rgba(120,90,50,.12);display:flex;justify-content:space-around;padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:100;box-shadow:0 -4px 20px rgba(120,90,50,.12)}
+        .nav-item{background:none;border:none;color:#a89f94;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:7px 8px;border-radius:14px;transition:all .3s;flex:1;-webkit-tap-highlight-color:transparent}
+        .nav-item.active{color:#e94560}
         .nav-item.active .ni{transform:scale(1.15)}
         .nav-item .ni{font-size:1.4em;transition:transform .3s}
         .nav-item .nl{font-size:.68em;font-weight:bold}
@@ -177,7 +181,7 @@
             <div class="sub-status" id="subBox">
                 <div>
                     <h3 id="subTitle"></h3>
-                    <p id="subText" style="color:#aaa;font-size:.88em;margin-top:5px"></p>
+                    <p id="subText" style="color:#8a8178;font-size:.88em;margin-top:5px"></p>
                 </div>
                 <div class="sub-timer">
                     <div class="num" id="subDays">--</div>
@@ -196,9 +200,14 @@
                     <div class="val" id="sumCredit">0</div>
                     <div class="cnt" id="cntCredit">0 تۆمار</div>
                 </div>
+                <div class="sum-card expense">
+                    <h3>💸 خەرجی ئەم مانگە</h3>
+                    <div class="val" id="sumExpTotal">0</div>
+                    <div class="cnt" id="sumExpMonth">-</div>
+                </div>
             </div>
 
-            <div class="card" style="text-align:center;color:#aaa;font-size:.9em">
+            <div class="card" style="text-align:center;color:#8a8178;font-size:.9em">
                 💡 بۆ تۆمارکردنی قەرز یان خەرجی، لە خوارەوە تابەکە هەڵبژێرە
             </div>
         </div>
@@ -282,9 +291,9 @@
             <div class="prof-info">
                 <div class="row"><span class="k">📅 بەرواری تۆمار</span><span class="v" id="profJoined">-</span></div>
                 <div class="row"><span class="k">💳 دۆخی بەشداری</span><span class="v" id="profSub">-</span></div>
-                <div class="row"><span class="k">📞 پەیوەندی</span><span class="v" style="color:#4ecdc4">07705353322</span></div>
+                <div class="row"><span class="k">📞 پەیوەندی</span><span class="v" style="color:#2a9d8f">07705353322</span></div>
             </div>
-            <p style="color:#666;font-size:.75em;margin-top:15px">✨ وێنەکەت لەسەر هەموو ئامێرەکان دەردەکەوێت</p>
+            <p style="color:#a89f94;font-size:.75em;margin-top:15px">✨ وێنەکەت لەسەر هەموو ئامێرەکان دەردەکەوێت</p>
         </div>
     </div>
 
@@ -313,7 +322,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// پۆلە بنەڕەتییەکان (fallback ئەگەر Firebase بەتاڵ بوو)
 const DEFAULT_CATS = [
     {v:'bazar', name:'بازاڕ', emoji:'🛒'},
     {v:'market', name:'مارکێت', emoji:'🏪'},
@@ -361,7 +369,7 @@ function switchTab(t){
     });
     if(t==='expenses') renderExpenses();
     if(t==='profile') renderProfile();
-    if(t==='home') updateSum();
+    if(t==='home'){ updateSum(); updateExpMonth(); }
 }
 
 // ===== PWA =====
@@ -455,11 +463,11 @@ function setupListeners(){
 
     unsubExp=db.collection('expenses').where('userEmail','==',me.email).onSnapshot(snap=>{
         allExpenses=snap.docs.map(d=>({...d.data(),id:d.id}));
+        updateExpMonth();
         if(currentTab==='expenses') renderExpenses();
         updateSum();
     },err=>console.log('expenses listener error:',err));
 
-    // پۆلەکانی خەرجی (لە ئەدمینەوە دێن)
     unsubCats=db.collection('expense_cats').orderBy('order','asc').onSnapshot(snap=>{
         const cats=snap.docs.map(d=>({v:d.id, n:(d.data().emoji||'📦')+' '+(d.data().name||'')}));
         if(cats.length>0) EXP_CATS=cats; else EXP_CATS=catsToFallback();
@@ -479,7 +487,7 @@ function setupListeners(){
     },err=>console.log('messages listener error:',err));
 }
 
-// ===== پۆلەکانی خەرجی (select پڕکردن) =====
+// ===== پۆلەکانی خەرجی =====
 function populateCatSelect(){
     const sel=document.getElementById('eCat');
     if(!sel) return;
@@ -575,6 +583,18 @@ function updateSum(){
 
 // ===== EXPENSES =====
 function setExpDate(){ document.getElementById('eDate').value=new Date().toISOString().split('T')[0]; }
+function updateExpMonth(){
+    const now=new Date(), y=now.getFullYear(), m=now.getMonth();
+    const monthExp=allExpenses.filter(e=>{const d=new Date(e.date);return d.getFullYear()===y&&d.getMonth()===m;});
+    const total=monthExp.reduce((s,e)=>s+e.amount,0);
+    const monStr='مانگی '+now.toLocaleDateString('ku-IQ',{month:'long'})+' - '+y;
+    const t1=document.getElementById('expMonthTotal'), t2=document.getElementById('expMonthName');
+    if(t1) t1.textContent=total.toLocaleString();
+    if(t2) t2.textContent=monStr;
+    const s1=document.getElementById('sumExpTotal'), s2=document.getElementById('sumExpMonth');
+    if(s1) s1.textContent=total.toLocaleString();
+    if(s2) s2.textContent=monStr;
+}
 async function addExp(){
     const n=document.getElementById('eName').value.trim();
     const a=parseFloat(document.getElementById('eAmount').value);
@@ -590,11 +610,6 @@ async function addExp(){
 }
 async function delExp(id){ if(!confirm('سڕینەوە؟'))return; await db.collection('expenses').doc(id).delete(); }
 function renderExpenses(){
-    const now=new Date(), y=now.getFullYear(), m=now.getMonth();
-    const monthExp=allExpenses.filter(e=>{const d=new Date(e.date);return d.getFullYear()===y&&d.getMonth()===m;});
-    const total=monthExp.reduce((s,e)=>s+e.amount,0);
-    document.getElementById('expMonthTotal').textContent=total.toLocaleString();
-    document.getElementById('expMonthName').textContent='مانگی '+now.toLocaleDateString('ku-IQ',{month:'long'})+' - '+y;
     const body=document.getElementById('expBody');
     const empty=document.getElementById('expEmpty');
     const sorted=[...allExpenses].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
@@ -645,7 +660,7 @@ function renderProfile(){
     if(me&&me.active&&me.subEnd){
         const diff=Math.ceil((new Date(me.subEnd)-new Date())/(1000*60*60*24));
         const mo=Math.floor(diff/30), da=diff%30;
-        subEl.innerHTML='<span class="badge badge-on">✅ چالاک</span> <span style="color:#4ecdc4;font-size:.85em">'+mo+' مانگ و '+da+' ڕۆژ</span>';
+        subEl.innerHTML='<span class="badge badge-on">✅ چالاک</span> <span style="color:#2a9d8f;font-size:.85em">'+mo+' مانگ و '+da+' ڕۆژ</span>';
     } else {
         subEl.innerHTML='<span class="badge badge-off">❌ ناچالاک</span>';
     }
