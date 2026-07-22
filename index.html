@@ -163,6 +163,7 @@ body.dark .badge-on{color:#4ecdc4}
 <p data-i="ld">ناو و ئیمەیل بنووسە</p>
 <div class="form-group"><label data-i="nm">👤 ناو</label><input type="text" id="uName"></div>
 <div class="form-group"><label data-i="em">📧 ئیمەیل</label><input type="email" id="uEmail"></div>
+<div class="form-group"><label>📱 ژمارە تەلەفۆن</label><input type="tel" id="uPhone" placeholder="07XXXXXXXXX"></div>
 <button class="btn btn-primary btn-full" onclick="doLogin()" data-i="lb">🔓 چوونەژوورەوە</button>
 <p class="error-msg" id="uError"></p>
 <p class="loading hidden" id="loginLoad" data-i="ld2">⏳ چاوەڕێ...</p>
@@ -214,7 +215,7 @@ body.dark .badge-on{color:#4ecdc4}
 <div class="form-grid">
 <div class="form-group"><label data-i="pn">ناوی کەس</label><input type="text" id="rName"></div>
 <div class="form-group"><label data-i="am">بڕی پارە</label><input type="number" id="rAmount" placeholder="0" min="0"></div>
-<div class="form-group"><label data-i="cu">یەکەی پارە</label><select id="rCurrency"><option value="IQD">🇮🇶 دینار</option><option value="USD">🇺🇸 دۆلار</option><option value="EUR">🇪🇺 یۆرۆ</option></select></div>
+<div class="form-group"><label data-i="cu">یەکەی پارە</label><select id="rCurrency"><option value="IQD">🇮🇶 دینار</option><option value="USD">🇺🇸 دۆلار</option><option value="EUR">🇪 یۆرۆ</option></select></div>
 <div class="form-group"><label data-i="ty">جۆر</label><select id="rType"><option value="debt" data-i="d1">🔴 من قەرزارم</option><option value="credit" data-i="c1">🟢 خەڵکی قەرزارمن</option></select></div>
 <div class="form-group"><label data-i="dt">بەروار</label><input type="date" id="rDate"></div>
 <div class="form-group"><label data-i="du">📅 بەرواری بەسەرچوون</label><input type="date" id="rDue"></div>
@@ -282,6 +283,7 @@ body.dark .badge-on{color:#4ecdc4}
 <div class="prof-email" id="profEmail">-</div>
 <button class="btn btn-primary btn-small" onclick="document.getElementById('photoInput').click()" data-i="cp">📷 گۆڕینی وێنە</button>
 <div class="prof-info">
+<div class="row"><span class="k">📱 ژمارە تەلەفۆن</span><span class="v" id="profPhone">-</span></div>
 <div class="row"><span class="k" data-i="la">🌐 زمان</span><span class="v"><select id="langSel" onchange="setLang(this.value)" style="padding:6px 10px;border-radius:8px;border:1px solid var(--i2);background:var(--i);color:var(--t)"><option value="ku">کوردی</option><option value="ar">العربية</option><option value="en">English</option></select></span></div>
 <div class="row"><span class="k" data-i="jo">📅 بەرواری تۆمار</span><span class="v" id="profJoined">-</span></div>
 <div class="row"><span class="k" data-i="su">💳 دۆخی بەشداری</span><span class="v" id="profSub">-</span></div>
@@ -318,7 +320,7 @@ function applyLang(){document.documentElement.lang=lang;document.documentElement
 function setLang(v){lang=v;localStorage.setItem('dq_lang',v);applyLang();}
 function refreshDynamic(){if(me){renderRecs();renderExpenses();renderProfile();checkSub();updateSum();updateExpMonth();renderBudget();}document.querySelectorAll('.lock-view').forEach(function(el){el.innerHTML=lockedHTML();});}
 
-function applyTheme(t2){document.body.classList.toggle('dark',t2==='dark');var b=document.getElementById('themeBtn');if(b)b.textContent=t2==='dark'?'☀️':'🌙';localStorage.setItem('dq_theme',t2);}
+function applyTheme(t2){document.body.classList.toggle('dark',t2==='dark');var b=document.getElementById('themeBtn');if(b)b.textContent=t2==='dark'?'☀️':'';localStorage.setItem('dq_theme',t2);}
 function toggleTheme(){var c=localStorage.getItem('dq_theme')==='dark'?'dark':'light';applyTheme(c==='dark'?'light':'dark');}
 applyTheme(localStorage.getItem('dq_theme')==='dark'?'dark':'light');
 
@@ -341,6 +343,9 @@ var unsubUser=null,unsubRecs=null,unsubMsgs=null,unsubExp=null,unsubCats=null;
 var currentTab='home';
 var lastMsgId=localStorage.getItem('dq_lastMsgId')||null,msgsFirstLoad=true;
 var lastDueCheck=localStorage.getItem('dq_dueCheck')||'';
+
+function requestNotifPermission(){if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}
+function showNotif(tx){if('Notification' in window&&Notification.permission==='granted'){try{new Notification('📢 '+t('lt'),{body:tx,icon:'/Matalll/icons/icon-192.png'});}catch(e){}}}
 
 function hashPin(p){try{return btoa(p.split('').reverse().join('')+'q9x');}catch(e){return p;}}
 function getPin(email){return localStorage.getItem('dq_pin_'+email)||null;}
@@ -367,8 +372,6 @@ function updateOffBadge(){var p=getPending();var b=document.getElementById('offB
 async function syncPending(){if(!navigator.onLine)return;var p=getPending();if(!p.length)return;var remain=[];for(var i=0;i<p.length;i++){try{await db.collection(p[i].coll).add(p[i].data);}catch(e){remain.push(p[i]);}}savePending(remain);updateOffBadge();if(remain.length<p.length)alert(t('ofy'));}
 window.addEventListener('online',function(){syncPending();});
 
-function requestNotifPermission(){if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}
-function showNotif(tx){if('Notification' in window&&Notification.permission==='granted'){try{new Notification('📢 '+t('lt'),{body:tx,icon:'/Matalll/icons/icon-192.png'});}catch(e){}}}
 function checkDueReminder(){var today=new Date().toISOString().split('T')[0];if(lastDueCheck===today)return;var soon=[],over=[];allRecords.forEach(function(r){if(r.paid||r.type!=='debt'||!r.dueDate)return;var diff=Math.ceil((new Date(r.dueDate)-new Date(today))/(1000*60*60*24));if(diff<0)over.push(r);else if(diff<=3)soon.push(r);});if(over.length)showNotif(t('duo'));else if(soon.length)showNotif(t('dus'));lastDueCheck=today;localStorage.setItem('dq_dueCheck',today);}
 
 var clockTimer=null;
@@ -387,9 +390,9 @@ var savedEmail=localStorage.getItem('dq_email');
 if(savedEmail){if(getPin(savedEmail)){showPinPage('login');}else{autoLoginReal();}}
 async function autoLoginReal(){var email=localStorage.getItem('dq_email');if(!email)return;try{var doc=await db.collection('users').doc(email).get();if(doc.exists){me=doc.data();setupListeners();showApp();}else{localStorage.removeItem('dq_email');document.getElementById('pageLogin').classList.remove('hidden');}}catch(e){document.getElementById('pageLogin').classList.remove('hidden');}}
 
-async function doLogin(){var n=document.getElementById('uName').value.trim();var e=document.getElementById('uEmail').value.trim().toLowerCase();var err=document.getElementById('uError');var load=document.getElementById('loginLoad');if(!n){err.textContent=t('eN');err.style.display='block';return;}if(!e||!e.includes('@')||!e.includes('.')){err.textContent=t('eE');err.style.display='block';return;}err.style.display='none';load.classList.remove('hidden');try{var ur=db.collection('users').doc(e);var doc=await ur.get();if(!doc.exists){await ur.set({name:n,email:e,active:false,subStart:null,subEnd:null,photo:null,joined:new Date().toISOString()});}localStorage.setItem('dq_email',e);me={name:n,email:e};setupListeners();showApp();}catch(err2){var msg=(err2&&err2.message)?err2.message:String(err2);if(typeof firebase==='undefined')msg='Firebase SDK!';err.textContent='⚠️ '+msg;err.style.display='block';}load.classList.add('hidden');}
+async function doLogin(){var n=document.getElementById('uName').value.trim();var e=document.getElementById('uEmail').value.trim().toLowerCase();var ph=document.getElementById('uPhone').value.trim();var err=document.getElementById('uError');var load=document.getElementById('loginLoad');if(!n){err.textContent=t('eN');err.style.display='block';return;}if(!e||!e.includes('@')||!e.includes('.')){err.textContent=t('eE');err.style.display='block';return;}err.style.display='none';load.classList.remove('hidden');try{var ur=db.collection('users').doc(e);var doc=await ur.get();if(!doc.exists){await ur.set({name:n,email:e,phone:ph||'-',active:false,subStart:null,subEnd:null,photo:null,joined:new Date().toISOString()});}else if(ph){await ur.update({phone:ph});}localStorage.setItem('dq_email',e);me={name:n,email:e,phone:ph||'-'};setupListeners();showApp();}catch(err2){var msg=(err2&&err2.message)?err2.message:String(err2);if(typeof firebase==='undefined')msg='Firebase SDK!';err.textContent='⚠️ '+msg;err.style.display='block';}load.classList.add('hidden');}
 
-function doLogout(){if(unsubUser)unsubUser();if(unsubRecs)unsubRecs();if(unsubMsgs)unsubMsgs();if(unsubExp)unsubExp();if(unsubCats)unsubCats();if(clockTimer)clearInterval(clockTimer);me=null;allRecords=[];allExpenses=[];document.getElementById('pageApp').classList.add('hidden');document.getElementById('bottomNav').classList.add('hidden');document.getElementById('pagePin').classList.add('hidden');document.getElementById('pageLogin').classList.remove('hidden');document.getElementById('uName').value='';document.getElementById('uEmail').value='';}
+function doLogout(){if(unsubUser)unsubUser();if(unsubRecs)unsubRecs();if(unsubMsgs)unsubMsgs();if(unsubExp)unsubExp();if(unsubCats)unsubCats();if(clockTimer)clearInterval(clockTimer);me=null;allRecords=[];allExpenses=[];document.getElementById('pageApp').classList.add('hidden');document.getElementById('bottomNav').classList.add('hidden');document.getElementById('pagePin').classList.add('hidden');document.getElementById('pageLogin').classList.remove('hidden');document.getElementById('uName').value='';document.getElementById('uEmail').value='';document.getElementById('uPhone').value='';}
 
 function lockedHTML(){return '<div class="card"><div class="locked-screen"><div class="lock-icon">🔒</div><h2>'+t('lkt')+'</h2><p>'+t('lkm')+'<br>'+t('py')+'<br><br>'+t('cl')+'<br><span class="contact">07705353322</span><br><br>'+t('ap')+'</p></div></div>';}
 
@@ -402,7 +405,7 @@ unsubUser=db.collection('users').doc(me.email).onSnapshot(function(snap){if(snap
 unsubRecs=db.collection('records').where('userEmail','==',me.email).onSnapshot(function(snap){allRecords=snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;});allRecords.sort(function(a,b){return(b.createdAt||0)-(a.createdAt||0);});renderRecs();updateSum();checkDueReminder();},function(){});
 unsubExp=db.collection('expenses').where('userEmail','==',me.email).onSnapshot(function(snap){allExpenses=snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;});updateExpMonth();if(currentTab==='expenses'){renderExpenses();renderBudget();}updateSum();},function(){});
 unsubCats=db.collection('expense_cats').orderBy('order','asc').onSnapshot(function(snap){var cats=snap.docs.map(function(d){return{v:d.id,n:(d.data().emoji||'📦')+' '+(d.data().name||'')};});if(cats.length>0)EXP_CATS=cats;else EXP_CATS=catsToFallback();rebuildCatMap();populateCatSelect();if(currentTab==='expenses')renderExpenses();},function(){});
-unsubMsgs=db.collection('messages').orderBy('createdAt','desc').onSnapshot(function(snap){var msgs=snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;});renderNotifs(msgs);if(msgs.length>0){var nid=msgs[0].id;if(msgsFirstLoad){lastMsgId=nid;localStorage.setItem('dq_lastMsgId',lastMsgId);msgsFirstLoad=false;}else if(nid!==lastMsgId){lastMsgId=nid;localStorage.setItem('dq_lastMsgId',lastMsgId);showNotif(msgs[0].text);}}else msgsFirstLoad=false;},function(){});
+unsubMsgs=db.collection('messages').orderBy('createdAt','desc').onSnapshot(function(snap){var msgs=snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;}).filter(function(m){if(m.targetEmail)return m.targetEmail===me.email;if(m.targetEmails)return m.targetEmails.indexOf(me.email)!==-1;return true;});renderNotifs(msgs);if(msgs.length>0){var nid=msgs[0].id;if(msgsFirstLoad){lastMsgId=nid;localStorage.setItem('dq_lastMsgId',lastMsgId);msgsFirstLoad=false;}else if(nid!==lastMsgId){lastMsgId=nid;localStorage.setItem('dq_lastMsgId',lastMsgId);showNotif(msgs[0].text);}}else msgsFirstLoad=false;},function(){});
 }
 
 function populateCatSelect(){var sel=document.getElementById('eCat');if(!sel)return;var cur=sel.value;sel.innerHTML=EXP_CATS.map(function(c){return '<option value="'+c.v+'">'+c.n+'</option>';}).join('');if(cur&&catMap[cur])sel.value=cur;}
@@ -434,7 +437,7 @@ async function saveBudget(){var a=parseFloat(document.getElementById('bgAmount')
 function renderBudget(){var view=document.getElementById('budgetView');if(!view)return;var b=me&&me.budget||0;var bc=(me&&me.budgetCurrency)||'IQD';if(!b||b<=0){view.classList.add('hidden');return;}view.classList.remove('hidden');var me2=monthExpenses().filter(function(e){return curOf(e)===bc;});var spent=me2.reduce(function(s,e){return s+e.amount;},0);var pct=Math.min(100,Math.round(spent/b*100));var bar=document.getElementById('budgetBar');bar.className='budget-bar'+(pct>=100?' over':(pct>=80?' warn':''));document.getElementById('budgetFill').style.width=pct+'%';document.getElementById('budgetSpent').textContent=spent.toLocaleString()+' '+CUR_SYM[bc]+' '+t('bgo')+' '+b.toLocaleString()+' '+CUR_SYM[bc];var left=b-spent;document.getElementById('budgetStatus').textContent=(left>=0)?(t('bgl')+': '+left.toLocaleString()+' '+CUR_SYM[bc]):(t('bgv')+' '+Math.abs(left).toLocaleString()+' '+CUR_SYM[bc]);}
 
 function handlePhoto(input){var file=input.files[0];if(!file)return;if(file.size>5*1024*1024){alert(t('pb'));return;}var reader=new FileReader();reader.onload=function(ev){var img=new Image();img.onload=function(){var canvas=document.createElement('canvas');var size=250;canvas.width=size;canvas.height=size;var ctx=canvas.getContext('2d');var min=Math.min(img.width,img.height);var sx=(img.width-min)/2,sy=(img.height-min)/2;ctx.drawImage(img,sx,sy,min,min,0,0,size,size);var dataUrl=canvas.toDataURL('image/jpeg',0.75);db.collection('users').doc(me.email).update({photo:dataUrl}).then(function(){me.photo=dataUrl;renderProfile();renderHeader();alert(t('ps'));}).catch(function(){alert('⚠️');});};img.src=ev.target.result;};reader.readAsDataURL(file);input.value='';}
-function renderProfile(){var photo=me&&me.photo;var pp=document.getElementById('profPhoto');var ph=document.getElementById('profPhotoPlaceholder');if(photo){pp.src=photo;pp.classList.remove('hidden');ph.classList.add('hidden');}else{pp.classList.add('hidden');ph.classList.remove('hidden');}document.getElementById('profName').textContent=me?me.name:'-';document.getElementById('profEmail').textContent=me?me.email:'-';document.getElementById('profJoined').textContent=me&&me.joined?new Date(me.joined).toLocaleDateString('ku'):'-';var subEl=document.getElementById('profSub');if(me&&me.active&&me.subEnd){var diff=Math.ceil((new Date(me.subEnd)-new Date())/(1000*60*60*24));subEl.innerHTML='<span class="badge badge-on">'+t('ac')+'</span> <span style="color:#2a9d8f;font-size:.85em">'+fmtDur(diff)+'</span>';}else{subEl.innerHTML='<span class="badge badge-off">'+t('ia')+'</span>';}}
+function renderProfile(){var photo=me&&me.photo;var pp=document.getElementById('profPhoto');var ph=document.getElementById('profPhotoPlaceholder');if(photo){pp.src=photo;pp.classList.remove('hidden');ph.classList.add('hidden');}else{pp.classList.add('hidden');ph.classList.remove('hidden');}document.getElementById('profName').textContent=me?me.name:'-';document.getElementById('profEmail').textContent=me?me.email:'-';document.getElementById('profPhone').textContent=me&&me.phone?me.phone:'-';document.getElementById('profJoined').textContent=me&&me.joined?new Date(me.joined).toLocaleDateString('ku'):'-';var subEl=document.getElementById('profSub');if(me&&me.active&&me.subEnd){var diff=Math.ceil((new Date(me.subEnd)-new Date())/(1000*60*60*24));subEl.innerHTML='<span class="badge badge-on">'+t('ac')+'</span> <span style="color:#2a9d8f;font-size:.85em">'+fmtDur(diff)+'</span>';}else{subEl.innerHTML='<span class="badge badge-off">'+t('ia')+'</span>';}}
 
 applyLang();
 </script>
