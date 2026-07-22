@@ -1,354 +1,204 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>پانێلی ئەدمین</title>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#1a0a0a,#2d1b1b,#1a0a0a);min-height:100vh;padding:15px;color:#fff}
-        .container{max-width:950px;margin:0 auto}
-        .hidden{display:none!important}
-        .card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:30px;backdrop-filter:blur(10px);margin-bottom:20px}
-        .btn{padding:12px 25px;border:none;border-radius:10px;font-size:1em;cursor:pointer;font-weight:bold;transition:all .3s}
-        .btn:hover{transform:scale(1.03)}
-        .btn-primary{background:linear-gradient(45deg,#e94560,#f5a623);color:#fff}
-        .btn-success{background:linear-gradient(45deg,#4ecdc4,#44bd63);color:#fff}
-        .btn-danger{background:rgba(233,69,96,.2);color:#e94560;border:1px solid #e94560}
-        .btn-danger:hover{background:#e94560;color:#fff}
-        .btn-small{padding:8px 15px;font-size:.85em}
-        .btn-full{width:100%}
-        .form-group{margin-bottom:18px;text-align:right}
-        .form-group label{display:block;margin-bottom:8px;color:#ccc;font-size:.9em}
-        .form-group input,.form-group textarea{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1em}
-        .form-group input:focus,.form-group textarea:focus{outline:none;border-color:#f5a623}
-        .login-page{display:flex;justify-content:center;align-items:center;min-height:90vh}
-        .login-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:25px;padding:50px 40px;width:100%;max-width:400px;text-align:center}
-        .login-box h1{font-size:1.8em;margin-bottom:10px;color:#e94560}
-        .login-box p{color:#aaa;margin-bottom:25px}
-        .error-msg{color:#e94560;font-size:.85em;margin-top:10px;display:none}
-        .app-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:20px 0}
-        .app-header h1{font-size:1.8em;color:#e94560}
-        .nav{display:flex;gap:10px;margin-bottom:25px;flex-wrap:wrap}
-        .nav button{padding:10px 20px;border:1px solid rgba(255,255,255,.2);border-radius:10px;background:transparent;color:#ccc;cursor:pointer;transition:all .3s}
-        .nav button.active{background:rgba(233,69,96,.2);color:#e94560;border-color:#e94560}
-        .user-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
-        .user-row .info{flex:1}
-        .user-row .info h4{color:#fff;margin-bottom:3px}
-        .user-row .info p{color:#888;font-size:.85em}
-        .badge{padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:bold}
-        .badge-on{background:rgba(78,205,196,.2);color:#4ecdc4}
-        .badge-off{background:rgba(233,69,96,.2);color:#e94560}
-        .u-actions{display:flex;gap:8px;flex-wrap:wrap}
-        .msg-item{padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
-        .msg-item .mt{color:#fff;margin-bottom:5px}
-        .msg-item .md{color:#888;font-size:.8em}
-        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:25px}
-        .stat{background:rgba(255,255,255,.05);border-radius:12px;padding:20px;text-align:center}
-        .stat .num{font-size:2em;font-weight:bold;color:#f5a623}
-        .stat .lbl{color:#aaa;font-size:.85em;margin-top:5px}
-        .empty{text-align:center;padding:40px;color:#666}
-        .empty span{font-size:3em;display:block;margin-bottom:10px}
-
-        .emoji-pick{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-        .emoji-pick span{font-size:1.5em;cursor:pointer;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,.05);transition:all .2s}
-        .emoji-pick span:hover{background:rgba(245,166,35,.2);transform:scale(1.2)}
-        .cat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.03)}
-        .cat-row .cat-info{font-size:1.15em;display:flex;align-items:center;gap:8px}
-        .cat-row .cat-emoji{font-size:1.6em}
-
-        @media(max-width:600px){.user-row{flex-direction:column;text-align:center}.u-actions{justify-content:center}.stats{grid-template-columns:1fr 1fr}}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>پانێلی ئەدمین</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#1a0a0a,#2d1b1b,#1a0a0a);min-height:100vh;padding:15px;color:#fff}
+.container{max-width:950px;margin:0 auto}
+.hidden{display:none!important}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:30px;backdrop-filter:blur(10px);margin-bottom:20px}
+.btn{padding:12px 25px;border:none;border-radius:10px;font-size:1em;cursor:pointer;font-weight:bold;transition:all .3s}
+.btn:hover{transform:scale(1.03)}
+.btn-primary{background:linear-gradient(45deg,#e94560,#f5a623);color:#fff}
+.btn-success{background:linear-gradient(45deg,#4ecdc4,#44bd63);color:#fff}
+.btn-danger{background:rgba(233,69,96,.2);color:#e94560;border:1px solid #e94560}
+.btn-danger:hover{background:#e94560;color:#fff}
+.btn-small{padding:8px 15px;font-size:.85em}
+.btn-full{width:100%}
+.form-group{margin-bottom:18px;text-align:right}
+.form-group label{display:block;margin-bottom:8px;color:#ccc;font-size:.9em}
+.form-group input,.form-group textarea{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1em}
+.form-group input:focus,.form-group textarea:focus{outline:none;border-color:#f5a623}
+.login-page{display:flex;justify-content:center;align-items:center;min-height:90vh}
+.login-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:25px;padding:50px 40px;width:100%;max-width:400px;text-align:center}
+.login-box h1{font-size:1.8em;margin-bottom:10px;color:#e94560}
+.login-box p{color:#aaa;margin-bottom:25px}
+.error-msg{color:#e94560;font-size:.85em;margin-top:10px;display:none}
+.admin-clock{background:rgba(255,255,255,.05);border:1px solid rgba(245,166,35,.3);border-radius:15px;padding:14px;text-align:center;margin-bottom:20px;font-size:1.6em;color:#f5a623;font-weight:bold;letter-spacing:2px;direction:ltr}
+.admin-clock .dp{display:block;color:#aaa;font-size:.45em;font-weight:normal;margin-top:4px;letter-spacing:0;direction:rtl}
+.app-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:20px;padding:20px 0}
+.app-header h1{font-size:1.8em;color:#e94560}
+.nav{display:flex;gap:10px;margin-bottom:25px;flex-wrap:wrap}
+.nav button{padding:10px 20px;border:1px solid rgba(255,255,255,.2);border-radius:10px;background:transparent;color:#ccc;cursor:pointer;transition:all .3s}
+.nav button.active{background:rgba(233,69,96,.2);color:#e94560;border-color:#e94560}
+.user-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
+.user-row .info{flex:1}
+.user-row .info h4{color:#fff;margin-bottom:3px}
+.user-row .info p{color:#888;font-size:.85em}
+.badge{padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:bold}
+.badge-on{background:rgba(78,205,196,.2);color:#4ecdc4}
+.badge-off{background:rgba(233,69,96,.2);color:#e94560}
+.u-actions{display:flex;gap:8px;flex-wrap:wrap}
+.msg-item{padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
+.msg-item .mt{color:#fff;margin-bottom:5px}
+.msg-item .md{color:#888;font-size:.8em}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:25px}
+.stat{background:rgba(255,255,255,.05);border-radius:12px;padding:20px;text-align:center}
+.stat .num{font-size:2em;font-weight:bold;color:#f5a623}
+.stat .lbl{color:#aaa;font-size:.85em;margin-top:5px}
+.empty{text-align:center;padding:40px;color:#666}
+.empty span{font-size:3em;display:block;margin-bottom:10px}
+.emoji-pick{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.emoji-pick span{font-size:1.5em;cursor:pointer;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,.05);transition:all .2s}
+.emoji-pick span:hover{background:rgba(245,166,35,.2);transform:scale(1.2)}
+.cat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.03)}
+.cat-row .cat-info{font-size:1.15em;display:flex;align-items:center;gap:8px}
+.cat-row .cat-emoji{font-size:1.6em}
+@media(max-width:600px){.user-row{flex-direction:column;text-align:center}.u-actions{justify-content:center}.stats{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
 
 <div class="login-page" id="aLogin">
-    <div class="login-box">
-        <h1>🔧 پانێلی ئەدمین</h1>
-        <p>تەنها بۆ بەڕێوەبەر</p>
-        <div class="form-group">
-            <label>🔑 وشەی نهێنی</label>
-            <input type="password" id="aPass" placeholder="وشەی نهێنی..." onkeypress="if(event.key==='Enter')aLogin()">
-        </div>
-        <button class="btn btn-primary btn-full" onclick="aLogin()">🔧 چوونەژوورەوە</button>
-        <p class="error-msg" id="aErr"></p>
-    </div>
+<div class="login-box">
+<h1>🔧 پانێلی ئەدمین</h1>
+<p>تەنها بۆ بەڕێوەبەر</p>
+<div class="form-group"><label>👤 ناوی بەکارهێنەر</label><input type="text" id="aUser" placeholder="username..." onkeypress="if(event.key==='Enter')document.getElementById('aPass').focus()"></div>
+<div class="form-group"><label>🔑 وشەی نهێنی</label><input type="password" id="aPass" placeholder="password..." onkeypress="if(event.key==='Enter')aLogin()"></div>
+<button class="btn btn-primary btn-full" onclick="aLogin()">🔧 چوونەژوورەوە</button>
+<p class="error-msg" id="aErr"></p>
+</div>
 </div>
 
 <div class="container hidden" id="aPanel">
-    <div class="app-header">
-        <h1>🔧 پانێلی ئەدمین</h1>
-        <button class="btn btn-danger btn-small" onclick="aLogout()">🚪 دەرچوون</button>
-    </div>
+<div class="app-header">
+<h1>🔧 پانێلی ئەدمین</h1>
+<button class="btn btn-danger btn-small" onclick="aLogout()">🚪 دەرچوون</button>
+</div>
 
-    <div class="stats">
-        <div class="stat"><div class="num" id="stTotal">0</div><div class="lbl">کۆی بەکارهێنەران</div></div>
-        <div class="stat"><div class="num" id="stActive">0</div><div class="lbl">چالاک</div></div>
-        <div class="stat"><div class="num" id="stInactive">0</div><div class="lbl">ناچالاک</div></div>
-    </div>
+<div class="admin-clock" id="adminClock">🕐 --:--:--<span class="dp">---</span></div>
 
-    <div class="nav">
-        <button class="active" onclick="aTab('users')">👥 بەکارهێنەران</button>
-        <button onclick="aTab('msgs')">📢 نامەکان</button>
-        <button onclick="aTab('cats')">🏷️ پۆلەکانی خەرجی</button>
-    </div>
+<div class="stats">
+<div class="stat"><div class="num" id="stTotal">0</div><div class="lbl">کۆی بەکارهێنەران</div></div>
+<div class="stat"><div class="num" id="stActive">0</div><div class="lbl">چالاک</div></div>
+<div class="stat"><div class="num" id="stInactive">0</div><div class="lbl">ناچالاک</div></div>
+</div>
 
-    <!-- USERS -->
-    <div id="secUsers">
-        <div class="card">
-            <h2 style="color:#f5a623;margin-bottom:20px">👥 بەڕێوەبردنی بەکارهێنەران</h2>
-            <div id="uList"></div>
-            <div class="empty hidden" id="noU"><span>👤</span><p>هیچ بەکارهێنەرێک نییە</p></div>
-        </div>
-    </div>
+<div class="nav">
+<button class="active" onclick="aTab('users')">👥 بەکارهێنەران</button>
+<button onclick="aTab('msgs')">📢 نامەکان</button>
+<button onclick="aTab('cats')">🏷️ پۆلەکانی خەرجی</button>
+</div>
 
-    <!-- MESSAGES -->
-    <div id="secMsgs" class="hidden">
-        <div class="card">
-            <h2 style="color:#4ecdc4;margin-bottom:20px">📢 ناردنی نامە بۆ هەمووان</h2>
-            <p style="color:#aaa;font-size:.85em;margin-bottom:15px">✨ نامەکە هەم لەناو ئەپەکەدا دەردەکەوێت، هەم وەک ئاگاداری (notification) دەگاتە مۆبایلەکەیان!</p>
-            <div class="form-group">
-                <label>دەقی نامە</label>
-                <textarea id="msgIn" rows="4" placeholder="نامەکەت بنووسە..."></textarea>
-            </div>
-            <button class="btn btn-success btn-full" onclick="sendMsg()">📤 ناردن</button>
-        </div>
-        <div class="card">
-            <h2 style="color:#f5a623;margin-bottom:20px">📋 نامە نێردراوەکان</h2>
-            <div id="mList"></div>
-            <div class="empty hidden" id="noM"><span>📭</span><p>هیچ نامەیەک نییە</p></div>
-        </div>
-    </div>
+<div id="secUsers">
+<div class="card">
+<h2 style="color:#f5a623;margin-bottom:20px">👥 بەڕێوەبردنی بەکارهێنەران</h2>
+<div id="uList"></div>
+<div class="empty hidden" id="noU"><span>👤</span><p>هیچ بەکارهێنەرێک نییە</p></div>
+</div>
+</div>
 
-    <!-- CATEGORIES -->
-    <div id="secCats" class="hidden">
-        <div class="card">
-            <h2 style="color:#f5a623;margin-bottom:8px" id="catFormTitle">➕ پۆلی نوێی خەرجی</h2>
-            <p style="color:#aaa;font-size:.85em;margin-bottom:18px">ئەم پۆلانە لە ئەپەکەی هەموو بەکارهێنەراندا دەردەکەون ✨</p>
-            <div class="form-group">
-                <label>ناوی پۆل</label>
-                <input type="text" id="catName" placeholder="بۆ نموونە: ئەڤارە">
-            </div>
-            <div class="form-group">
-                <label>ئیمۆجی (بنووسە یان لە خوارەوە هەڵبژێرە)</label>
-                <input type="text" id="catEmoji" placeholder="🛒">
-                <div class="emoji-pick">
-                    <span onclick="pickEmoji('🛒')"></span><span onclick="pickEmoji('🏪')"></span><span onclick="pickEmoji('🍞')"></span><span onclick="pickEmoji('🍔')"></span><span onclick="pickEmoji('☕')">☕</span><span onclick="pickEmoji('🥗')">🥗</span><span onclick="pickEmoji('🚗')">🚗</span><span onclick="pickEmoji('⛽')">⛽</span><span onclick="pickEmoji('💊')">💊</span><span onclick="pickEmoji('🏥')"></span><span onclick="pickEmoji('👕')"></span><span onclick="pickEmoji('👟')"></span><span onclick="pickEmoji('🏠')"></span><span onclick="pickEmoji('💡')">💡</span><span onclick="pickEmoji('💧')">💧</span><span onclick="pickEmoji('📱')"></span><span onclick="pickEmoji('🎁')"></span><span onclick="pickEmoji('📚')"></span><span onclick="pickEmoji('✈️')">✈️</span><span onclick="pickEmoji('🐾')"></span><span onclick="pickEmoji('⚽')"></span><span onclick="pickEmoji('🔧')"></span><span onclick="pickEmoji('💰')">💰</span><span onclick="pickEmoji('📦')">📦</span>
-                </div>
-            </div>
-            <button class="btn btn-primary btn-full" id="catSaveBtn" onclick="saveCat()">➕ زیادکردن</button>
-            <button class="btn btn-danger btn-full hidden" id="catCancelBtn" onclick="cancelEdit()" style="margin-top:10px">❌ پاشگەزبوونەوە</button>
-        </div>
-        <div class="card">
-            <h2 style="color:#4ecdc4;margin-bottom:20px">📋 پۆلەکانی ئێستا</h2>
-            <div id="catList"></div>
-            <div class="empty hidden" id="noC"><span>🏷️</span><p>هیچ پۆلێک نییە</p></div>
-        </div>
-    </div>
+<div id="secMsgs" class="hidden">
+<div class="card">
+<h2 style="color:#4ecdc4;margin-bottom:20px">📢 ناردنی نامە بۆ هەمووان</h2>
+<p style="color:#aaa;font-size:.85em;margin-bottom:15px">✨ نامەکە هەم لەناو ئەپەکەدا دەردەکەوێت، هەم وەک ئاگاداری دەگاتە مۆبایلەکەیان!</p>
+<div class="form-group"><label>دەقی نامە</label><textarea id="msgIn" rows="4" placeholder="نامەکەت بنووسە..."></textarea></div>
+<button class="btn btn-success btn-full" onclick="sendMsg()">📤 ناردن</button>
+</div>
+<div class="card">
+<h2 style="color:#f5a623;margin-bottom:20px">📋 نامە نێردراوەکان</h2>
+<div id="mList"></div>
+<div class="empty hidden" id="noM"><span>📭</span><p>هیچ نامەیەک نییە</p></div>
+</div>
+</div>
+
+<div id="secCats" class="hidden">
+<div class="card">
+<h2 style="color:#f5a623;margin-bottom:8px" id="catFormTitle">➕ پۆلی نوێی خەرجی</h2>
+<p style="color:#aaa;font-size:.85em;margin-bottom:18px">ئەم پۆلانە لە ئەپەکەی هەموو بەکارهێنەراندا دەردەکەون ✨</p>
+<div class="form-group"><label>ناوی پۆل</label><input type="text" id="catName" placeholder="بۆ نموونە: ئەڤارە"></div>
+<div class="form-group"><label>ئیمۆجی (بنووسە یان هەڵبژێرە)</label><input type="text" id="catEmoji" placeholder="🛒">
+<div class="emoji-pick">
+<span onclick="pickEmoji('🛒')">🛒</span><span onclick="pickEmoji('🏪')">🏪</span><span onclick="pickEmoji('🍞')">🍞</span><span onclick="pickEmoji('🍔')">🍔</span><span onclick="pickEmoji('☕')">☕</span><span onclick="pickEmoji('🥗')"></span><span onclick="pickEmoji('🚗')"></span><span onclick="pickEmoji('⛽')"></span><span onclick="pickEmoji('💊')">💊</span><span onclick="pickEmoji('🏥')">🏥</span><span onclick="pickEmoji('👕')">👕</span><span onclick="pickEmoji('👟')">👟</span><span onclick="pickEmoji('🏠')">🏠</span><span onclick="pickEmoji('💡')">💡</span><span onclick="pickEmoji('💧')">💧</span><span onclick="pickEmoji('📱')">📱</span><span onclick="pickEmoji('🎁')">🎁</span><span onclick="pickEmoji('📚')">📚</span><span onclick="pickEmoji('✈️')">✈️</span><span onclick="pickEmoji('🐾')">🐾</span><span onclick="pickEmoji('⚽')">⚽</span><span onclick="pickEmoji('🔧')">🔧</span><span onclick="pickEmoji('💰')">💰</span><span onclick="pickEmoji('📦')"></span>
+</div></div>
+<button class="btn btn-primary btn-full" id="catSaveBtn" onclick="saveCat()">➕ زیادکردن</button>
+<button class="btn btn-danger btn-full hidden" id="catCancelBtn" onclick="cancelEdit()" style="margin-top:10px">❌ پاشگەزبوونەوە</button>
+</div>
+<div class="card">
+<h2 style="color:#4ecdc4;margin-bottom:20px">📋 پۆلەکانی ئێستا</h2>
+<div id="catList"></div>
+<div class="empty hidden" id="noC"><span>🏷️</span><p>هیچ پۆلێک نییە</p></div>
+</div>
+</div>
 </div>
 
 <script>
-const PASS='admin2026';
-const firebaseConfig = {
-    apiKey: "AIzaSyCriV6DFNt94PcYXufA2cugLxTZ3wc5Do0",
-    authDomain: "deftar-qarz.firebaseapp.com",
-    projectId: "deftar-qarz",
-    storageBucket: "deftar-qarz.firebasestorage.app",
-    messagingSenderId: "1039619406125",
-    appId: "1:1039619406125:web:cc615248fa048a2208bba4"
-};
+var USER='Dzhwaredres';
+var PASS='Dzhwar1999$$$';
+var firebaseConfig={apiKey:"AIzaSyCriV6DFNt94PcYXufA2cugLxTZ3wc5Do0",authDomain:"deftar-qarz.firebaseapp.com",projectId:"deftar-qarz",storageBucket:"deftar-qarz.firebasestorage.app",messagingSenderId:"1039619406125",appId:"1:1039619406125:web:cc615248fa048a2208bba4"};
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+var db=firebase.firestore();
 
-const DEFAULT_CATS = [
-    {v:'bazar', name:'بازاڕ', emoji:'🛒'},
-    {v:'market', name:'مارکێت', emoji:'🏪'},
-    {v:'nan', name:'نان', emoji:'🍞'},
-    {v:'transport', name:'گواستنەوە', emoji:'🚗'},
-    {v:'health', name:'تەندروستی', emoji:'💊'},
-    {v:'other', name:'تر', emoji:'📦'}
-];
+var DEFAULT_CATS=[{v:'bazar',name:'بازاڕ',emoji:'🛒'},{v:'market',name:'مارکێت',emoji:'🏪'},{v:'nan',name:'نان',emoji:'🍞'},{v:'transport',name:'گواستنەوە',emoji:'🚗'},{v:'health',name:'تەندروستی',emoji:'💊'},{v:'other',name:'تر',emoji:'📦'}];
 
-let allUsers = [];
-let allCats = [];
-let editingCatId = null;
-let unsubUsers=null, unsubMsgs=null, unsubCats=null;
+var allUsers=[],allCats=[],editingCatId=null;
+var unsubUsers=null,unsubMsgs=null,unsubCats=null;
+var aClockTimer=null;
 
-function aLogin(){
-    const p=document.getElementById('aPass').value;
-    if(p!==PASS){document.getElementById('aErr').textContent='⚠️ وشەی نهێنی هەڵەیە!';document.getElementById('aErr').style.display='block';return}
-    document.getElementById('aLogin').classList.add('hidden');
-    document.getElementById('aPanel').classList.remove('hidden');
-    setupAdmin();
-}
+function fmtDur(diff){var y=Math.floor(diff/365),d=diff%365;var p=[];if(y>0)p.push(y+' ساڵ');p.push(d+' ڕۆژ');return p.join(' و ');}
 
-function aLogout(){
-    if(unsubUsers) unsubUsers(); if(unsubMsgs) unsubMsgs(); if(unsubCats) unsubCats();
-    document.getElementById('aPanel').classList.add('hidden');
-    document.getElementById('aLogin').classList.remove('hidden');
-    document.getElementById('aPass').value='';
-}
+function updateAdminClock(){var n=new Date();var h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');var d=['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];document.getElementById('adminClock').innerHTML='🕐 '+h+':'+m+':'+s+'<span class="dp">'+d[n.getDay()]+' - '+n.toLocaleDateString('ku-IQ')+'</span>';}
+function startAdminClock(){updateAdminClock();if(aClockTimer)clearInterval(aClockTimer);aClockTimer=setInterval(updateAdminClock,1000);}
+
+function aLogin(){var u=document.getElementById('aUser').value;var p=document.getElementById('aPass').value;if(u!==USER||p!==PASS){document.getElementById('aErr').textContent='⚠️ ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە!';document.getElementById('aErr').style.display='block';return;}document.getElementById('aLogin').classList.add('hidden');document.getElementById('aPanel').classList.remove('hidden');setupAdmin();}
+
+function aLogout(){if(unsubUsers)unsubUsers();if(unsubMsgs)unsubMsgs();if(unsubCats)unsubCats();if(aClockTimer)clearInterval(aClockTimer);document.getElementById('aPanel').classList.add('hidden');document.getElementById('aLogin').classList.remove('hidden');document.getElementById('aUser').value='';document.getElementById('aPass').value='';}
 
 function setupAdmin(){
-    ensureDefaultCats();
-    unsubUsers = db.collection('users').onSnapshot(snap => {
-        allUsers = snap.docs.map(d => d.data());
-        allUsers.sort((a,b)=>(b.joined||'').localeCompare(a.joined||''));
-        renderUsers(); updateStats();
-    }, err => console.log('users listener error:', err));
-    unsubMsgs = db.collection('messages').orderBy('createdAt','desc').onSnapshot(snap => {
-        renderMsgs(snap.docs.map(d=>({...d.data(), id:d.id})));
-    }, err => console.log('messages listener error:', err));
-    unsubCats = db.collection('expense_cats').orderBy('order','asc').onSnapshot(snap => {
-        allCats = snap.docs.map(d=>({id:d.id, ...d.data()}));
-        renderCats();
-    }, err => console.log('cats listener error:', err));
+ensureDefaultCats();
+startAdminClock();
+unsubUsers=db.collection('users').onSnapshot(function(snap){allUsers=snap.docs.map(function(d){return d.data();});allUsers.sort(function(a,b){return(b.joined||'').localeCompare(a.joined||'');});renderUsers();updateStats();},function(){});
+unsubMsgs=db.collection('messages').orderBy('createdAt','desc').onSnapshot(function(snap){renderMsgs(snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;}));},function(){});
+unsubCats=db.collection('expense_cats').orderBy('order','asc').onSnapshot(function(snap){allCats=snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;});renderCats();},function(){});
 }
 
-function ensureDefaultCats(){
-    db.collection('expense_cats').get().then(snap=>{
-        if(snap.empty){
-            const batch=db.batch();
-            DEFAULT_CATS.forEach((c,i)=>{
-                batch.set(db.collection('expense_cats').doc(c.v), {name:c.name, emoji:c.emoji, order:i});
-            });
-            batch.commit().then(()=>console.log('default cats created'));
-        }
-    }).catch(e=>console.log(e));
-}
+function ensureDefaultCats(){db.collection('expense_cats').get().then(function(snap){if(snap.empty){var batch=db.batch();DEFAULT_CATS.forEach(function(c,i){batch.set(db.collection('expense_cats').doc(c.v),{name:c.name,emoji:c.emoji,order:i});});batch.commit();}}).catch(function(){});}
 
-function aTab(t){
-    const tabs={users:0,msgs:1,cats:2};
-    document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active', i===tabs[t]));
-    document.getElementById('secUsers').classList.toggle('hidden',t!=='users');
-    document.getElementById('secMsgs').classList.toggle('hidden',t!=='msgs');
-    document.getElementById('secCats').classList.toggle('hidden',t!=='cats');
-}
+function aTab(t2){var tabs={users:0,msgs:1,cats:2};document.querySelectorAll('.nav button').forEach(function(b,i){b.classList.toggle('active',i===tabs[t2]);});document.getElementById('secUsers').classList.toggle('hidden',t2!=='users');document.getElementById('secMsgs').classList.toggle('hidden',t2!=='msgs');document.getElementById('secCats').classList.toggle('hidden',t2!=='cats');}
 
-function updateStats(){
-    const now=new Date();
-    const active=allUsers.filter(u=>u.active&&u.subEnd&&new Date(u.subEnd)>now).length;
-    document.getElementById('stTotal').textContent=allUsers.length;
-    document.getElementById('stActive').textContent=active;
-    document.getElementById('stInactive').textContent=allUsers.length-active;
-}
+function updateStats(){var now=new Date();var active=allUsers.filter(function(u){return u.active&&u.subEnd&&new Date(u.subEnd)>now;}).length;document.getElementById('stTotal').textContent=allUsers.length;document.getElementById('stActive').textContent=active;document.getElementById('stInactive').textContent=allUsers.length-active;}
 
-function renderUsers(){
-    const list=document.getElementById('uList');
-    const noU=document.getElementById('noU');
-    if(!allUsers.length){list.innerHTML='';noU.classList.remove('hidden');return}
-    noU.classList.add('hidden');
-    const now=new Date();
-    list.innerHTML=allUsers.map(u=>{
-        const isOn=u.active&&u.subEnd&&new Date(u.subEnd)>now;
-        const days=isOn?Math.ceil((new Date(u.subEnd)-now)/(1000*60*60*24)):0;
-        const m=Math.floor(days/30), d=days%30;
-        return '<div class="user-row"><div class="info"><h4>👤 '+u.name+'</h4><p>📧 '+u.email+'</p><p>📅 تۆمار: '+(u.joined?new Date(u.joined).toLocaleDateString('ku'):'-')+'</p>'+(isOn?'<p style="color:#4ecdc4">⏰ ماوە: '+m+' مانگ و '+d+' ڕۆژ</p>':'')+'</div><span class="badge '+(isOn?'badge-on':'badge-off')+'">'+(isOn?'✅ چالاک':'❌ ناچالاک')+'</span><div class="u-actions"><button class="btn btn-success btn-small" onclick="activate(\''+u.email+'\')">✅ چالاک (١٢ مانگ و ٥ ڕۆژ)</button><button class="btn btn-danger btn-small" onclick="deactivate(\''+u.email+'\')">🚫 ناچالاک</button><button class="btn btn-danger btn-small" onclick="delUser(\''+u.email+'\')">🗑️ سڕینەوە</button></div></div>';
-    }).join('');
-}
+function renderUsers(){var list=document.getElementById('uList');var noU=document.getElementById('noU');if(!allUsers.length){list.innerHTML='';noU.classList.remove('hidden');return;}noU.classList.add('hidden');var now=new Date();list.innerHTML=allUsers.map(function(u){var isOn=u.active&&u.subEnd&&new Date(u.subEnd)>now;var days=isOn?Math.ceil((new Date(u.subEnd)-now)/(1000*60*60*24)):0;return '<div class="user-row"><div class="info"><h4>👤 '+u.name+'</h4><p>📧 '+u.email+'</p><p>📅 تۆمار: '+(u.joined?new Date(u.joined).toLocaleDateString('ku'):'-')+'</p>'+(isOn?'<p style="color:#4ecdc4">⏰ ماوە: '+fmtDur(days)+'</p>':'')+'</div><span class="badge '+(isOn?'badge-on':'badge-off')+'">'+(isOn?'✅ چالاک':'❌ ناچالاک')+'</span><div class="u-actions"><button class="btn btn-success btn-small" onclick="activate(\''+u.email+'\')">✅ چالاک (١ ساڵ)</button><button class="btn btn-danger btn-small" onclick="deactivate(\''+u.email+'\')">🚫 ناچالاک</button><button class="btn btn-danger btn-small" onclick="delUser(\''+u.email+'\')">🗑️ سڕینەوە</button></div></div>';}).join('');}
 
-async function activate(email){
-    const now=new Date();
-    const end=new Date();
-    end.setDate(end.getDate()+365);
-    await db.collection('users').doc(email).update({active:true, subStart:now.toISOString(), subEnd:end.toISOString()});
-    alert('✅ چالاککرا بۆ ١٢ مانگ و ٥ ڕۆژ!');
-}
+async function activate(email){var now=new Date();var end=new Date();end.setDate(end.getDate()+365);await db.collection('users').doc(email).update({active:true,subStart:now.toISOString(),subEnd:end.toISOString()});alert('✅ چالاککرا بۆ ١ ساڵ!');}
 
-async function deactivate(email){
-    if(!confirm('ناچالاککردن؟'))return;
-    await db.collection('users').doc(email).update({active:false});
-}
+async function deactivate(email){if(!confirm('ناچالاککردن؟'))return;await db.collection('users').doc(email).update({active:false});}
 
-async function delUser(email){
-    if(!confirm('سڕینەوەی بەکارهێنەر و هەموو داتاکانی؟'))return;
-    await db.collection('users').doc(email).delete();
-    const recs=await db.collection('records').where('userEmail','==',email).get();
-    const batch=db.batch();
-    recs.docs.forEach(d=>batch.delete(d.ref));
-    await batch.commit();
-}
+async function delUser(email){if(!confirm('سڕینەوەی بەکارهێنەر و هەموو داتاکانی؟'))return;await db.collection('users').doc(email).delete();var recs=await db.collection('records').where('userEmail','==',email).get();var batch=db.batch();recs.docs.forEach(function(d){batch.delete(d.ref);});await batch.commit();}
 
-async function sendMsg(){
-    const t=document.getElementById('msgIn').value.trim();
-    if(!t){alert('⚠️ نامە بنووسە!');return}
-    await db.collection('messages').add({text:t, date:new Date().toISOString(), createdAt:Date.now()});
-    document.getElementById('msgIn').value='';
-    alert('✅ نامە نێردرا!\n📱 وەک ئاگاداری گەیشتە مۆبایلەکەیان\n📋 لەناو ئەپەکەشیاندا دەردەکەوێت');
-}
+async function sendMsg(){var t2=document.getElementById('msgIn').value.trim();if(!t2){alert('⚠️ نامە بنووسە!');return;}await db.collection('messages').add({text:t2,date:new Date().toISOString(),createdAt:Date.now()});document.getElementById('msgIn').value='';alert('✅ نامە نێردرا!\n📱 وەک ئاگاداری گەیشتە مۆبایلەکەیان\n📋 لەناو ئەپەکەشیاندا دەردەکەوێت');}
 
-function renderMsgs(msgs){
-    const list=document.getElementById('mList');
-    const noM=document.getElementById('noM');
-    if(!msgs.length){list.innerHTML='';noM.classList.remove('hidden');return}
-    noM.classList.add('hidden');
-    list.innerHTML=msgs.map(m=>'<div class="msg-item"><div class="mt">📢 '+m.text+'</div><div class="md">'+new Date(m.date).toLocaleString('ku')+' <button class="btn btn-danger btn-small" style="margin-right:10px" onclick="delMsg(\''+m.id+'\')">🗑️</button></div></div>').join('');
-}
+function renderMsgs(msgs){var list=document.getElementById('mList');var noM=document.getElementById('noM');if(!msgs.length){list.innerHTML='';noM.classList.remove('hidden');return;}noM.classList.add('hidden');list.innerHTML=msgs.map(function(m){return '<div class="msg-item"><div class="mt">📢 '+m.text+'</div><div class="md">'+new Date(m.date).toLocaleString('ku')+' <button class="btn btn-danger btn-small" style="margin-right:10px" onclick="delMsg(\''+m.id+'\')">🗑️</button></div></div>';}).join('');}
 
-async function delMsg(id){
-    await db.collection('messages').doc(id).delete();
-}
+async function delMsg(id){await db.collection('messages').doc(id).delete();}
 
-// ===== CATEGORIES =====
-function pickEmoji(e){ document.getElementById('catEmoji').value=e; }
+function pickEmoji(e){document.getElementById('catEmoji').value=e;}
 
-async function saveCat(){
-    const name=document.getElementById('catName').value.trim();
-    const emoji=document.getElementById('catEmoji').value.trim()||'📦';
-    if(!name){alert('⚠️ ناوی پۆل بنووسە!');return}
-    try{
-        if(editingCatId){
-            await db.collection('expense_cats').doc(editingCatId).update({name:name, emoji:emoji});
-            alert('✅ پۆلەکە گۆڕدرا!');
-        } else {
-            await db.collection('expense_cats').doc('cat_'+Date.now()).set({name:name, emoji:emoji, order:Date.now()});
-            alert('✅ پۆلی نوێ زیاد کرا!');
-        }
-        cancelEdit();
-    }catch(e){ alert('هەڵە: '+e.message); }
-}
+async function saveCat(){var name=document.getElementById('catName').value.trim();var emoji=document.getElementById('catEmoji').value.trim()||'📦';if(!name){alert('⚠️ ناوی پۆل بنووسە!');return;}try{if(editingCatId){await db.collection('expense_cats').doc(editingCatId).update({name:name,emoji:emoji});alert('✅ پۆلەکە گۆڕدرا!');}else{await db.collection('expense_cats').doc('cat_'+Date.now()).set({name:name,emoji:emoji,order:Date.now()});alert('✅ پۆلی نوێ زیاد کرا!');}cancelEdit();}catch(e){alert('هەڵە: '+e.message);}}
 
-function editCat(id){
-    const c=allCats.find(x=>x.id===id);
-    if(!c) return;
-    document.getElementById('catName').value=c.name||'';
-    document.getElementById('catEmoji').value=c.emoji||'';
-    editingCatId=id;
-    document.getElementById('catFormTitle').textContent='✏️ گۆڕینی پۆل';
-    document.getElementById('catSaveBtn').textContent='💾 پاشەکەوتکردنی گۆڕانکاری';
-    document.getElementById('catCancelBtn').classList.remove('hidden');
-    window.scrollTo({top:0,behavior:'smooth'});
-}
+function editCat(id){var c=allCats.find(function(x){return x.id===id;});if(!c)return;document.getElementById('catName').value=c.name||'';document.getElementById('catEmoji').value=c.emoji||'';editingCatId=id;document.getElementById('catFormTitle').textContent='✏️ گۆڕینی پۆل';document.getElementById('catSaveBtn').textContent='💾 پاشەکەوتکردنی گۆڕانکاری';document.getElementById('catCancelBtn').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}
 
-function cancelEdit(){
-    editingCatId=null;
-    document.getElementById('catName').value='';
-    document.getElementById('catEmoji').value='';
-    document.getElementById('catFormTitle').textContent='➕ پۆلی نوێی خەرجی';
-    document.getElementById('catSaveBtn').textContent='➕ زیادکردن';
-    document.getElementById('catCancelBtn').classList.add('hidden');
-}
+function cancelEdit(){editingCatId=null;document.getElementById('catName').value='';document.getElementById('catEmoji').value='';document.getElementById('catFormTitle').textContent='➕ پۆلی نوێی خەرجی';document.getElementById('catSaveBtn').textContent='➕ زیادکردن';document.getElementById('catCancelBtn').classList.add('hidden');}
 
-async function delCat(id){
-    if(!confirm('سڕینەوەی ئەم پۆلە؟\n(خەرجییە کۆنەکانی ئەم پۆلە نامسڕێنەوە، تەنها پۆلەکە لە لیستەکە دەچێت)'))return;
-    try{
-        await db.collection('expense_cats').doc(id).delete();
-        if(editingCatId===id) cancelEdit();
-    }catch(e){ alert('هەڵە: '+e.message); }
-}
+async function delCat(id){if(!confirm('سڕینەوەی ئەم پۆلە؟\n(خەرجییە کۆنەکان نامسڕێنەوە)'))return;try{await db.collection('expense_cats').doc(id).delete();if(editingCatId===id)cancelEdit();}catch(e){alert('هەڵە: '+e.message);}}
 
-function renderCats(){
-    const list=document.getElementById('catList');
-    const noC=document.getElementById('noC');
-    if(!allCats.length){list.innerHTML='';noC.classList.remove('hidden');return}
-    noC.classList.add('hidden');
-    list.innerHTML=allCats.map(c=>'<div class="cat-row"><div class="cat-info"><span class="cat-emoji">'+(c.emoji||'📦')+'</span> '+ (c.name||'') +'</div><div class="u-actions"><button class="btn btn-success btn-small" onclick="editCat(\''+c.id+'\')">✏️ گۆڕین</button><button class="btn btn-danger btn-small" onclick="delCat(\''+c.id+'\')">🗑️ سڕینەوە</button></div></div>').join('');
-}
+function renderCats(){var list=document.getElementById('catList');var noC=document.getElementById('noC');if(!allCats.length){list.innerHTML='';noC.classList.remove('hidden');return;}noC.classList.add('hidden');list.innerHTML=allCats.map(function(c){return '<div class="cat-row"><div class="cat-info"><span class="cat-emoji">'+(c.emoji||'📦')+'</span> '+(c.name||'')+'</div><div class="u-actions"><button class="btn btn-success btn-small" onclick="editCat(\''+c.id+'\')">✏️ گۆڕین</button><button class="btn btn-danger btn-small" onclick="delCat(\''+c.id+'\')">🗑️ سڕینەوە</button></div></div>';}).join('');}
 </script>
 </body>
 </html>
