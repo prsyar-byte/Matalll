@@ -23,8 +23,9 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 .btn-full{width:100%}
 .form-group{margin-bottom:18px;text-align:right}
 .form-group label{display:block;margin-bottom:8px;color:#ccc;font-size:.9em}
-.form-group input,.form-group textarea{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1em}
-.form-group input:focus,.form-group textarea:focus{outline:none;border-color:#f5a623}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1em}
+.form-group select option{background:#1a1a2e;color:#fff}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:#f5a623}
 .login-page{display:flex;justify-content:center;align-items:center;min-height:90vh}
 .login-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:25px;padding:50px 40px;width:100%;max-width:400px;text-align:center}
 .login-box h1{font-size:1.8em;margin-bottom:10px;color:#e94560}
@@ -47,6 +48,7 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 .u-actions{display:flex;gap:8px;flex-wrap:wrap}
 .msg-item{padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
 .msg-item .mt{color:#fff;margin-bottom:5px}
+.msg-item .ms{display:inline-block;background:rgba(245,166,35,.15);color:#f5a623;padding:2px 10px;border-radius:10px;font-size:.72em;margin-bottom:6px}
 .msg-item .md{color:#888;font-size:.8em}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:25px}
 .stat{background:rgba(255,255,255,.05);border-radius:12px;padding:20px;text-align:center}
@@ -106,8 +108,17 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 
 <div id="secMsgs" class="hidden">
 <div class="card">
-<h2 style="color:#4ecdc4;margin-bottom:20px">📢 ناردنی نامە بۆ هەمووان</h2>
-<p style="color:#aaa;font-size:.85em;margin-bottom:15px">✨ نامەکە هەم لەناو ئەپەکەدا دەردەکەوێت، هەم وەک ئاگاداری دەگاتە مۆبایلەکەیان!</p>
+<h2 style="color:#4ecdc4;margin-bottom:20px">📢 ناردنی نامە</h2>
+<p style="color:#aaa;font-size:.85em;margin-bottom:15px">✨ هەڵبژێرە نامەکە بۆ کێ بنێریت 👇</p>
+<div class="form-group"><label>🎯 بۆ کێ؟</label>
+<select id="msgTarget" onchange="onTargetChange()">
+<option value="all">📢 هەموو بەکارهێنەران</option>
+<option value="active">✅ تەنها چالاکەکان</option>
+<option value="inactive">❌ تەنها ناچالاکەکان (بیرخستنەوەی پارەدان)</option>
+<option value="specific">✉️ یەک کەسی تایبەت</option>
+</select></div>
+<div class="form-group hidden" id="specificWrap"><label>👤 هەڵبژاردنی بەکارهێنەر</label>
+<select id="msgSpecificUser"><option value="">-- بەکارهێنەرێک هەڵبژێرە --</option></select></div>
 <div class="form-group"><label>دەقی نامە</label><textarea id="msgIn" rows="4" placeholder="نامەکەت بنووسە..."></textarea></div>
 <button class="btn btn-success btn-full" onclick="sendMsg()">📤 ناردن</button>
 </div>
@@ -152,6 +163,7 @@ var unsubUsers=null,unsubMsgs=null,unsubCats=null;
 var aClockTimer=null;
 
 function fmtDur(diff){var y=Math.floor(diff/365),d=diff%365;var p=[];if(y>0)p.push(y+' ساڵ');p.push(d+' ڕۆژ');return p.join(' و ');}
+function isActive(u){return u.active&&u.subEnd&&new Date(u.subEnd)>new Date();}
 
 function updateAdminClock(){var n=new Date();var h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');var d=['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];document.getElementById('adminClock').innerHTML='🕐 '+h+':'+m+':'+s+'<span class="dp">'+d[n.getDay()]+' - '+n.toLocaleDateString('ku-IQ')+'</span>';}
 function startAdminClock(){updateAdminClock();if(aClockTimer)clearInterval(aClockTimer);aClockTimer=setInterval(updateAdminClock,1000);}
@@ -163,7 +175,7 @@ function aLogout(){if(unsubUsers)unsubUsers();if(unsubMsgs)unsubMsgs();if(unsubC
 function setupAdmin(){
 ensureDefaultCats();
 startAdminClock();
-unsubUsers=db.collection('users').onSnapshot(function(snap){allUsers=snap.docs.map(function(d){return d.data();});allUsers.sort(function(a,b){return(b.joined||'').localeCompare(a.joined||'');});renderUsers();updateStats();},function(){});
+unsubUsers=db.collection('users').onSnapshot(function(snap){allUsers=snap.docs.map(function(d){return d.data();});allUsers.sort(function(a,b){return(b.joined||'').localeCompare(a.joined||'');});renderUsers();updateStats();populateSpecificUsers();},function(){});
 unsubMsgs=db.collection('messages').orderBy('createdAt','desc').onSnapshot(function(snap){renderMsgs(snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;}));},function(){});
 unsubCats=db.collection('expense_cats').orderBy('order','asc').onSnapshot(function(snap){allCats=snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;});renderCats();},function(){});
 }
@@ -172,9 +184,13 @@ function ensureDefaultCats(){db.collection('expense_cats').get().then(function(s
 
 function aTab(t2){var tabs={users:0,msgs:1,cats:2};document.querySelectorAll('.nav button').forEach(function(b,i){b.classList.toggle('active',i===tabs[t2]);});document.getElementById('secUsers').classList.toggle('hidden',t2!=='users');document.getElementById('secMsgs').classList.toggle('hidden',t2!=='msgs');document.getElementById('secCats').classList.toggle('hidden',t2!=='cats');}
 
-function updateStats(){var now=new Date();var active=allUsers.filter(function(u){return u.active&&u.subEnd&&new Date(u.subEnd)>now;}).length;document.getElementById('stTotal').textContent=allUsers.length;document.getElementById('stActive').textContent=active;document.getElementById('stInactive').textContent=allUsers.length-active;}
+function updateStats(){var active=allUsers.filter(isActive).length;document.getElementById('stTotal').textContent=allUsers.length;document.getElementById('stActive').textContent=active;document.getElementById('stInactive').textContent=allUsers.length-active;}
 
-function renderUsers(){var list=document.getElementById('uList');var noU=document.getElementById('noU');if(!allUsers.length){list.innerHTML='';noU.classList.remove('hidden');return;}noU.classList.add('hidden');var now=new Date();list.innerHTML=allUsers.map(function(u){var isOn=u.active&&u.subEnd&&new Date(u.subEnd)>now;var days=isOn?Math.ceil((new Date(u.subEnd)-now)/(1000*60*60*24)):0;return '<div class="user-row"><div class="info"><h4>👤 '+u.name+'</h4><p>📧 '+u.email+'</p><p>📅 تۆمار: '+(u.joined?new Date(u.joined).toLocaleDateString('ku'):'-')+'</p>'+(isOn?'<p style="color:#4ecdc4">⏰ ماوە: '+fmtDur(days)+'</p>':'')+'</div><span class="badge '+(isOn?'badge-on':'badge-off')+'">'+(isOn?'✅ چالاک':'❌ ناچالاک')+'</span><div class="u-actions"><button class="btn btn-success btn-small" onclick="activate(\''+u.email+'\')">✅ چالاک (١ ساڵ)</button><button class="btn btn-danger btn-small" onclick="deactivate(\''+u.email+'\')">🚫 ناچالاک</button><button class="btn btn-danger btn-small" onclick="delUser(\''+u.email+'\')">🗑️ سڕینەوە</button></div></div>';}).join('');}
+function renderUsers(){var list=document.getElementById('uList');var noU=document.getElementById('noU');if(!allUsers.length){list.innerHTML='';noU.classList.remove('hidden');return;}noU.classList.add('hidden');var now=new Date();list.innerHTML=allUsers.map(function(u){var isOn=isActive(u);var days=isOn?Math.ceil((new Date(u.subEnd)-now)/(1000*60*60*24)):0;return '<div class="user-row"><div class="info"><h4>👤 '+u.name+'</h4><p>📧 '+u.email+'</p><p>📱 '+(u.phone||'-')+'</p><p>📅 تۆمار: '+(u.joined?new Date(u.joined).toLocaleDateString('ku'):'-')+'</p>'+(isOn?'<p style="color:#4ecdc4">⏰ ماوە: '+fmtDur(days)+'</p>':'')+'</div><span class="badge '+(isOn?'badge-on':'badge-off')+'">'+(isOn?'✅ چالاک':'❌ ناچالاک')+'</span><div class="u-actions"><button class="btn btn-success btn-small" onclick="activate(\''+u.email+'\')">✅ چالاک (١ ساڵ)</button><button class="btn btn-danger btn-small" onclick="deactivate(\''+u.email+'\')">🚫 ناچالاک</button><button class="btn btn-danger btn-small" onclick="delUser(\''+u.email+'\')">🗑️ سڕینەوە</button></div></div>';}).join('');}
+
+function populateSpecificUsers(){var sel=document.getElementById('msgSpecificUser');if(!sel)return;var cur=sel.value;sel.innerHTML='<option value="">-- بەکارهێنەرێک هەڵبژێرە --</option>'+allUsers.map(function(u){return '<option value="'+u.email+'">'+u.name+' ('+u.email+')</option>';}).join('');if(cur)sel.value=cur;}
+
+function onTargetChange(){var v=document.getElementById('msgTarget').value;document.getElementById('specificWrap').classList.toggle('hidden',v!=='specific');}
 
 async function activate(email){var now=new Date();var end=new Date();end.setDate(end.getDate()+365);await db.collection('users').doc(email).update({active:true,subStart:now.toISOString(),subEnd:end.toISOString()});alert('✅ چالاککرا بۆ ١ ساڵ!');}
 
@@ -182,9 +198,14 @@ async function deactivate(email){if(!confirm('ناچالاککردن؟'))return;
 
 async function delUser(email){if(!confirm('سڕینەوەی بەکارهێنەر و هەموو داتاکانی؟'))return;await db.collection('users').doc(email).delete();var recs=await db.collection('records').where('userEmail','==',email).get();var batch=db.batch();recs.docs.forEach(function(d){batch.delete(d.ref);});await batch.commit();}
 
-async function sendMsg(){var t2=document.getElementById('msgIn').value.trim();if(!t2){alert('⚠️ نامە بنووسە!');return;}await db.collection('messages').add({text:t2,date:new Date().toISOString(),createdAt:Date.now()});document.getElementById('msgIn').value='';alert('✅ نامە نێردرا!\n📱 وەک ئاگاداری گەیشتە مۆبایلەکەیان\n📋 لەناو ئەپەکەشیاندا دەردەکەوێت');}
+async function sendMsg(){var txt=document.getElementById('msgIn').value.trim();if(!txt){alert('⚠️ نامە بنووسە!');return;}var target=document.getElementById('msgTarget').value;var data={text:txt,date:new Date().toISOString(),createdAt:Date.now()};var count=0;
+if(target==='active'){var list=allUsers.filter(isActive).map(function(u){return u.email;});if(!list.length){alert('⚠️ هیچ بەکارهێنەرێکی چالاک نییە!');return;}data.targetEmails=list;data.scopeLabel='✅ چالاکەکان';count=list.length;}
+else if(target==='inactive'){var list2=allUsers.filter(function(u){return !isActive(u);}).map(function(u){return u.email;});if(!list2.length){alert('⚠️ هیچ بەکارهێنەرێکی ناچالاک نییە!');return;}data.targetEmails=list2;data.scopeLabel='❌ ناچالاکەکان';count=list2.length;}
+else if(target==='specific'){var em=document.getElementById('msgSpecificUser').value;if(!em){alert('⚠️ بەکارهێنەرێک هەڵبژێرە!');return;}data.targetEmail=em;var uu=allUsers.find(function(x){return x.email===em;});data.scopeLabel='✉️ '+(uu?uu.name:em);count=1;}
+else{data.scopeLabel='📢 هەموو';count=allUsers.length;}
+await db.collection('messages').add(data);document.getElementById('msgIn').value='';alert('✅ نامە نێردرا بۆ '+count+' کەس!\n📱 وەک ئاگاداری دەگاتە مۆبایلەکەیان\n📋 لەناو ئەپەکەشیاندا دەردەکەوێت');}
 
-function renderMsgs(msgs){var list=document.getElementById('mList');var noM=document.getElementById('noM');if(!msgs.length){list.innerHTML='';noM.classList.remove('hidden');return;}noM.classList.add('hidden');list.innerHTML=msgs.map(function(m){return '<div class="msg-item"><div class="mt">📢 '+m.text+'</div><div class="md">'+new Date(m.date).toLocaleString('ku')+' <button class="btn btn-danger btn-small" style="margin-right:10px" onclick="delMsg(\''+m.id+'\')">🗑️</button></div></div>';}).join('');}
+function renderMsgs(msgs){var list=document.getElementById('mList');var noM=document.getElementById('noM');if(!msgs.length){list.innerHTML='';noM.classList.remove('hidden');return;}noM.classList.add('hidden');list.innerHTML=msgs.map(function(m){var scope=m.scopeLabel||(m.targetEmail?('✉️ '+m.targetEmail):(m.targetEmails?('👥 '+m.targetEmails.length+' کەس'):'📢 هەموو'));return '<div class="msg-item"><span class="ms">'+scope+'</span><div class="mt">📢 '+m.text+'</div><div class="md">'+new Date(m.date).toLocaleString('ku')+' <button class="btn btn-danger btn-small" style="margin-right:10px" onclick="delMsg(\''+m.id+'\')">🗑️</button></div></div>';}).join('');}
 
 async function delMsg(id){await db.collection('messages').doc(id).delete();}
 
