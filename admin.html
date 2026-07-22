@@ -24,8 +24,8 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 .form-group{margin-bottom:18px;text-align:right}
 .form-group label{display:block;margin-bottom:8px;color:#ccc;font-size:.9em}
 .form-group input,.form-group textarea,.form-group select{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1em}
-.form-group select option{background:#1a1a2e;color:#fff}
 .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:#f5a623}
+.form-group select option{background:#2d1b1b;color:#fff}
 .login-page{display:flex;justify-content:center;align-items:center;min-height:90vh}
 .login-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:25px;padding:50px 40px;width:100%;max-width:400px;text-align:center}
 .login-box h1{font-size:1.8em;margin-bottom:10px;color:#e94560}
@@ -48,8 +48,11 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 .u-actions{display:flex;gap:8px;flex-wrap:wrap}
 .msg-item{padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
 .msg-item .mt{color:#fff;margin-bottom:5px}
-.msg-item .ms{display:inline-block;background:rgba(245,166,35,.15);color:#f5a623;padding:2px 10px;border-radius:10px;font-size:.72em;margin-bottom:6px}
 .msg-item .md{color:#888;font-size:.8em}
+.msg-tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:.7em;margin-right:6px}
+.tag-all{background:rgba(78,205,196,.2);color:#4ecdc4}
+.tag-private{background:rgba(245,166,35,.2);color:#f5a623}
+.tag-group{background:rgba(155,89,182,.2);color:#bb8fce}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:25px}
 .stat{background:rgba(255,255,255,.05);border-radius:12px;padding:20px;text-align:center}
 .stat .num{font-size:2em;font-weight:bold;color:#f5a623}
@@ -62,6 +65,7 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 .cat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.03)}
 .cat-row .cat-info{font-size:1.15em;display:flex;align-items:center;gap:8px}
 .cat-row .cat-emoji{font-size:1.6em}
+.section-title{color:#f5a623;margin-bottom:15px;font-size:1.1em}
 @media(max-width:600px){.user-row{flex-direction:column;text-align:center}.u-actions{justify-content:center}.stats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -108,20 +112,26 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 
 <div id="secMsgs" class="hidden">
 <div class="card">
-<h2 style="color:#4ecdc4;margin-bottom:20px">📢 ناردنی نامە</h2>
-<p style="color:#aaa;font-size:.85em;margin-bottom:15px">✨ هەڵبژێرە نامەکە بۆ کێ بنێریت 👇</p>
-<div class="form-group"><label>🎯 بۆ کێ؟</label>
-<select id="msgTarget" onchange="onTargetChange()">
-<option value="all">📢 هەموو بەکارهێنەران</option>
+<h2 class="section-title">📢 نامەی گشتی</h2>
+<p style="color:#aaa;font-size:.85em;margin-bottom:15px">نامە بۆ هەموو بەکارهێنەران یان گروپێکی دیاریکراو</p>
+<div class="form-group"><label>بۆ کێ؟</label>
+<select id="msgTarget">
+<option value="all">👥 هەموو بەکارهێنەران</option>
 <option value="active">✅ تەنها چالاکەکان</option>
-<option value="inactive">❌ تەنها ناچالاکەکان (بیرخستنەوەی پارەدان)</option>
-<option value="specific">✉️ یەک کەسی تایبەت</option>
+<option value="inactive">❌ تەنها ناچالاکەکان</option>
 </select></div>
-<div class="form-group hidden" id="specificWrap"><label>👤 هەڵبژاردنی بەکارهێنەر</label>
-<select id="msgSpecificUser"><option value="">-- بەکارهێنەرێک هەڵبژێرە --</option></select></div>
-<div class="form-group"><label>دەقی نامە</label><textarea id="msgIn" rows="4" placeholder="نامەکەت بنووسە..."></textarea></div>
-<button class="btn btn-success btn-full" onclick="sendMsg()">📤 ناردن</button>
+<div class="form-group"><label>دەقی نامە</label><textarea id="msgIn" rows="3" placeholder="نامەکەت بنووسە..."></textarea></div>
+<button class="btn btn-success btn-full" onclick="sendMsg()">📤 ناردنی گشتی</button>
 </div>
+
+<div class="card">
+<h2 class="section-title">✉️ نامەی تایبەت</h2>
+<p style="color:#aaa;font-size:.85em;margin-bottom:15px">نامە بۆ یەک بەکارهێنەری دیاریکراو</p>
+<div class="form-group"><label>بۆ کام بەکارهێنەر؟</label><select id="privateTarget"></select></div>
+<div class="form-group"><label>دەقی نامە</label><textarea id="privateMsgIn" rows="3" placeholder="نامەی تایبەت بنووسە..."></textarea></div>
+<button class="btn btn-primary btn-full" onclick="sendPrivateMsg()">📤 ناردنی تایبەت</button>
+</div>
+
 <div class="card">
 <h2 style="color:#f5a623;margin-bottom:20px">📋 نامە نێردراوەکان</h2>
 <div id="mList"></div>
@@ -163,51 +173,45 @@ var unsubUsers=null,unsubMsgs=null,unsubCats=null;
 var aClockTimer=null;
 
 function fmtDur(diff){var y=Math.floor(diff/365),d=diff%365;var p=[];if(y>0)p.push(y+' ساڵ');p.push(d+' ڕۆژ');return p.join(' و ');}
-function isActive(u){return u.active&&u.subEnd&&new Date(u.subEnd)>new Date();}
 
 function updateAdminClock(){var n=new Date();var h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');var d=['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];document.getElementById('adminClock').innerHTML='🕐 '+h+':'+m+':'+s+'<span class="dp">'+d[n.getDay()]+' - '+n.toLocaleDateString('ku-IQ')+'</span>';}
 function startAdminClock(){updateAdminClock();if(aClockTimer)clearInterval(aClockTimer);aClockTimer=setInterval(updateAdminClock,1000);}
 
-function aLogin(){var u=document.getElementById('aUser').value;var p=document.getElementById('aPass').value;if(u!==USER||p!==PASS){document.getElementById('aErr').textContent='⚠️ ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە!';document.getElementById('aErr').style.display='block';return;}document.getElementById('aLogin').classList.add('hidden');document.getElementById('aPanel').classList.remove('hidden');setupAdmin();}
+function aLogin(){var u=document.getElementById('aUser').value.trim();var p=document.getElementById('aPass').value;if(u!==USER||p!==PASS){document.getElementById('aErr').textContent='⚠️ ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە!';document.getElementById('aErr').style.display='block';return;}document.getElementById('aErr').style.display='none';document.getElementById('aLogin').classList.add('hidden');document.getElementById('aPanel').classList.remove('hidden');setupAdmin();}
 
 function aLogout(){if(unsubUsers)unsubUsers();if(unsubMsgs)unsubMsgs();if(unsubCats)unsubCats();if(aClockTimer)clearInterval(aClockTimer);document.getElementById('aPanel').classList.add('hidden');document.getElementById('aLogin').classList.remove('hidden');document.getElementById('aUser').value='';document.getElementById('aPass').value='';}
 
 function setupAdmin(){
 ensureDefaultCats();
 startAdminClock();
-unsubUsers=db.collection('users').onSnapshot(function(snap){allUsers=snap.docs.map(function(d){return d.data();});allUsers.sort(function(a,b){return(b.joined||'').localeCompare(a.joined||'');});renderUsers();updateStats();populateSpecificUsers();},function(){});
-unsubMsgs=db.collection('messages').orderBy('createdAt','desc').onSnapshot(function(snap){renderMsgs(snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;}));},function(){});
-unsubCats=db.collection('expense_cats').orderBy('order','asc').onSnapshot(function(snap){allCats=snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;});renderCats();},function(){});
+unsubUsers=db.collection('users').onSnapshot(function(snap){allUsers=snap.docs.map(function(d){return d.data();});allUsers.sort(function(a,b){return(b.joined||'').localeCompare(a.joined||'');});renderUsers();updateStats();},function(e){console.log('users err:',e);});
+unsubMsgs=db.collection('messages').orderBy('createdAt','desc').onSnapshot(function(snap){renderMsgs(snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;}));},function(e){console.log('msgs err:',e);});
+unsubCats=db.collection('expense_cats').orderBy('order','asc').onSnapshot(function(snap){allCats=snap.docs.map(function(d){var o=d.data();o.id=d.id;return o;});renderCats();},function(e){console.log('cats err:',e);});
 }
 
 function ensureDefaultCats(){db.collection('expense_cats').get().then(function(snap){if(snap.empty){var batch=db.batch();DEFAULT_CATS.forEach(function(c,i){batch.set(db.collection('expense_cats').doc(c.v),{name:c.name,emoji:c.emoji,order:i});});batch.commit();}}).catch(function(){});}
 
 function aTab(t2){var tabs={users:0,msgs:1,cats:2};document.querySelectorAll('.nav button').forEach(function(b,i){b.classList.toggle('active',i===tabs[t2]);});document.getElementById('secUsers').classList.toggle('hidden',t2!=='users');document.getElementById('secMsgs').classList.toggle('hidden',t2!=='msgs');document.getElementById('secCats').classList.toggle('hidden',t2!=='cats');}
 
-function updateStats(){var active=allUsers.filter(isActive).length;document.getElementById('stTotal').textContent=allUsers.length;document.getElementById('stActive').textContent=active;document.getElementById('stInactive').textContent=allUsers.length-active;}
+function updateStats(){var now=new Date();var active=allUsers.filter(function(u){return u.active&&u.subEnd&&new Date(u.subEnd)>now;}).length;document.getElementById('stTotal').textContent=allUsers.length;document.getElementById('stActive').textContent=active;document.getElementById('stInactive').textContent=allUsers.length-active;}
 
-function renderUsers(){var list=document.getElementById('uList');var noU=document.getElementById('noU');if(!allUsers.length){list.innerHTML='';noU.classList.remove('hidden');return;}noU.classList.add('hidden');var now=new Date();list.innerHTML=allUsers.map(function(u){var isOn=isActive(u);var days=isOn?Math.ceil((new Date(u.subEnd)-now)/(1000*60*60*24)):0;return '<div class="user-row"><div class="info"><h4>👤 '+u.name+'</h4><p>📧 '+u.email+'</p><p>📱 '+(u.phone||'-')+'</p><p>📅 تۆمار: '+(u.joined?new Date(u.joined).toLocaleDateString('ku'):'-')+'</p>'+(isOn?'<p style="color:#4ecdc4">⏰ ماوە: '+fmtDur(days)+'</p>':'')+'</div><span class="badge '+(isOn?'badge-on':'badge-off')+'">'+(isOn?'✅ چالاک':'❌ ناچالاک')+'</span><div class="u-actions"><button class="btn btn-success btn-small" onclick="activate(\''+u.email+'\')">✅ چالاک (١ ساڵ)</button><button class="btn btn-danger btn-small" onclick="deactivate(\''+u.email+'\')">🚫 ناچالاک</button><button class="btn btn-danger btn-small" onclick="delUser(\''+u.email+'\')">🗑️ سڕینەوە</button></div></div>';}).join('');}
+function renderUsers(){var list=document.getElementById('uList');var noU=document.getElementById('noU');if(!allUsers.length){list.innerHTML='';noU.classList.remove('hidden');renderUserSelect();return;}noU.classList.add('hidden');var now=new Date();list.innerHTML=allUsers.map(function(u){var isOn=u.active&&u.subEnd&&new Date(u.subEnd)>now;var days=isOn?Math.ceil((new Date(u.subEnd)-now)/(1000*60*60*24)):0;return '<div class="user-row"><div class="info"><h4>👤 '+u.name+'</h4><p>📧 '+u.email+'</p><p>📱 '+(u.phone&&u.phone!=='-'?u.phone:'ژمارە نییە')+'</p><p>📅 تۆمار: '+(u.joined?new Date(u.joined).toLocaleDateString('ku'):'-')+'</p>'+(isOn?'<p style="color:#4ecdc4">⏰ ماوە: '+fmtDur(days)+'</p>':'')+'</div><span class="badge '+(isOn?'badge-on':'badge-off')+'">'+(isOn?'✅ چالاک':'❌ ناچالاک')+'</span><div class="u-actions"><button class="btn btn-success btn-small" onclick="activate(\''+u.email+'\')">✅ چالاک (١ ساڵ)</button><button class="btn btn-danger btn-small" onclick="deactivate(\''+u.email+'\')">🚫 ناچالاک</button><button class="btn btn-danger btn-small" onclick="delUser(\''+u.email+'\')">🗑️ سڕینەوە</button></div></div>';}).join('');renderUserSelect();}
 
-function populateSpecificUsers(){var sel=document.getElementById('msgSpecificUser');if(!sel)return;var cur=sel.value;sel.innerHTML='<option value="">-- بەکارهێنەرێک هەڵبژێرە --</option>'+allUsers.map(function(u){return '<option value="'+u.email+'">'+u.name+' ('+u.email+')</option>';}).join('');if(cur)sel.value=cur;}
+function renderUserSelect(){var sel=document.getElementById('privateTarget');if(!sel)return;if(!allUsers.length){sel.innerHTML='<option value="">هیچ بەکارهێنەرێک نییە</option>';return;}sel.innerHTML=allUsers.map(function(u){return '<option value="'+u.email+'">👤 '+u.name+' ('+u.email+')</option>';}).join('');}
 
-function onTargetChange(){var v=document.getElementById('msgTarget').value;document.getElementById('specificWrap').classList.toggle('hidden',v!=='specific');}
+async function activate(email){var now=new Date();var end=new Date();end.setDate(end.getDate()+365);try{await db.collection('users').doc(email).update({active:true,subStart:now.toISOString(),subEnd:end.toISOString()});alert('✅ چالاککرا بۆ ١ ساڵ!');}catch(e){alert('هەڵە: '+e.message);}}
 
-async function activate(email){var now=new Date();var end=new Date();end.setDate(end.getDate()+365);await db.collection('users').doc(email).update({active:true,subStart:now.toISOString(),subEnd:end.toISOString()});alert('✅ چالاککرا بۆ ١ ساڵ!');}
+async function deactivate(email){if(!confirm('ناچالاککردن؟'))return;try{await db.collection('users').doc(email).update({active:false});}catch(e){alert('هەڵە: '+e.message);}}
 
-async function deactivate(email){if(!confirm('ناچالاککردن؟'))return;await db.collection('users').doc(email).update({active:false});}
+async function delUser(email){if(!confirm('سڕینەوەی بەکارهێنەر و هەموو داتاکانی؟'))return;try{await db.collection('users').doc(email).delete();var recs=await db.collection('records').where('userEmail','==',email).get();var batch=db.batch();recs.docs.forEach(function(d){batch.delete(d.ref);});var exps=await db.collection('expenses').where('userEmail','==',email).get();exps.docs.forEach(function(d){batch.delete(d.ref);});await batch.commit();alert('✅ سڕایەوە!');}catch(e){alert('هەڵە: '+e.message);}}
 
-async function delUser(email){if(!confirm('سڕینەوەی بەکارهێنەر و هەموو داتاکانی؟'))return;await db.collection('users').doc(email).delete();var recs=await db.collection('records').where('userEmail','==',email).get();var batch=db.batch();recs.docs.forEach(function(d){batch.delete(d.ref);});await batch.commit();}
+async function sendMsg(){var txt=document.getElementById('msgIn').value.trim();if(!txt){alert('⚠️ نامە بنووسە!');return;}var target=document.getElementById('msgTarget').value;var now=new Date();var data={text:txt,date:now.toISOString(),createdAt:Date.now()};try{if(target==='all'){await db.collection('messages').add(data);alert('✅ نامە نێردرا بۆ هەموو بەکارهێنەران!');}else{var isActive=(target==='active');var emails=allUsers.filter(function(u){var on=u.active&&u.subEnd&&new Date(u.subEnd)>now;return isActive?on:!on;}).map(function(u){return u.email;});if(!emails.length){alert('⚠️ هیچ بەکارهێنەرێک نییە لەم گروپەدا!');return;}data.targetEmails=emails;await db.collection('messages').add(data);alert('✅ نامە نێردرا بۆ '+emails.length+' بەکارهێنەر ('+(isActive?'چالاک':'ناچالاک')+')!');}document.getElementById('msgIn').value='';}catch(e){alert('هەڵە: '+e.message);}}
 
-async function sendMsg(){var txt=document.getElementById('msgIn').value.trim();if(!txt){alert('⚠️ نامە بنووسە!');return;}var target=document.getElementById('msgTarget').value;var data={text:txt,date:new Date().toISOString(),createdAt:Date.now()};var count=0;
-if(target==='active'){var list=allUsers.filter(isActive).map(function(u){return u.email;});if(!list.length){alert('⚠️ هیچ بەکارهێنەرێکی چالاک نییە!');return;}data.targetEmails=list;data.scopeLabel='✅ چالاکەکان';count=list.length;}
-else if(target==='inactive'){var list2=allUsers.filter(function(u){return !isActive(u);}).map(function(u){return u.email;});if(!list2.length){alert('⚠️ هیچ بەکارهێنەرێکی ناچالاک نییە!');return;}data.targetEmails=list2;data.scopeLabel='❌ ناچالاکەکان';count=list2.length;}
-else if(target==='specific'){var em=document.getElementById('msgSpecificUser').value;if(!em){alert('⚠️ بەکارهێنەرێک هەڵبژێرە!');return;}data.targetEmail=em;var uu=allUsers.find(function(x){return x.email===em;});data.scopeLabel='✉️ '+(uu?uu.name:em);count=1;}
-else{data.scopeLabel='📢 هەموو';count=allUsers.length;}
-await db.collection('messages').add(data);document.getElementById('msgIn').value='';alert('✅ نامە نێردرا بۆ '+count+' کەس!\n📱 وەک ئاگاداری دەگاتە مۆبایلەکەیان\n📋 لەناو ئەپەکەشیاندا دەردەکەوێت');}
+async function sendPrivateMsg(){var txt=document.getElementById('privateMsgIn').value.trim();var target=document.getElementById('privateTarget').value;if(!txt){alert('⚠️ نامە بنووسە!');return;}if(!target){alert('⚠️ بەکارهێنەرێک هەڵبژێرە!');return;}try{await db.collection('messages').add({text:txt,date:new Date().toISOString(),createdAt:Date.now(),targetEmail:target});document.getElementById('privateMsgIn').value='';alert('✅ نامەی تایبەت نێردرا بۆ:\n'+target);}catch(e){alert('هەڵە: '+e.message);}}
 
-function renderMsgs(msgs){var list=document.getElementById('mList');var noM=document.getElementById('noM');if(!msgs.length){list.innerHTML='';noM.classList.remove('hidden');return;}noM.classList.add('hidden');list.innerHTML=msgs.map(function(m){var scope=m.scopeLabel||(m.targetEmail?('✉️ '+m.targetEmail):(m.targetEmails?('👥 '+m.targetEmails.length+' کەس'):'📢 هەموو'));return '<div class="msg-item"><span class="ms">'+scope+'</span><div class="mt">📢 '+m.text+'</div><div class="md">'+new Date(m.date).toLocaleString('ku')+' <button class="btn btn-danger btn-small" style="margin-right:10px" onclick="delMsg(\''+m.id+'\')">🗑️</button></div></div>';}).join('');}
+function renderMsgs(msgs){var list=document.getElementById('mList');var noM=document.getElementById('noM');if(!msgs.length){list.innerHTML='';noM.classList.remove('hidden');return;}noM.classList.add('hidden');list.innerHTML=msgs.map(function(m){var tag='';if(m.targetEmail){tag='<span class="msg-tag tag-private">✉️ تایبەت</span>';}else if(m.targetEmails){tag='<span class="msg-tag tag-group">👥 گروپ ('+m.targetEmails.length+')</span>';}else{tag='<span class="msg-tag tag-all">📢 گشتی</span>';}return '<div class="msg-item"><div class="mt">'+tag+' '+m.text+'</div><div class="md">'+new Date(m.date).toLocaleString('ku')+(m.targetEmail?' → '+m.targetEmail:'')+' <button class="btn btn-danger btn-small" style="margin-right:10px" onclick="delMsg(\''+m.id+'\')">🗑️</button></div></div>';}).join('');}
 
-async function delMsg(id){await db.collection('messages').doc(id).delete();}
+async function delMsg(id){if(!confirm('سڕینەوەی نامەکە؟'))return;try{await db.collection('messages').doc(id).delete();}catch(e){alert('هەڵە: '+e.message);}}
 
 function pickEmoji(e){document.getElementById('catEmoji').value=e;}
 
