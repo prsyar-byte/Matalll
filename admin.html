@@ -20,7 +20,6 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 .btn-danger{background:rgba(233,69,96,.2);color:#e94560;border:1px solid #e94560}
 .btn-danger:hover{background:#e94560;color:#fff}
 .btn-small{padding:8px 15px;font-size:.85em}
-.btn-tiny{padding:5px 10px;font-size:.75em;border:none;border-radius:8px;cursor:pointer;background:rgba(255,255,255,.1);color:#ccc}
 .btn-full{width:100%}
 .form-group{margin-bottom:18px;text-align:right}
 .form-group label{display:block;margin-bottom:8px;color:#ccc;font-size:.9em}
@@ -46,27 +45,14 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 .badge{padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:bold}
 .badge-on{background:rgba(78,205,196,.2);color:#4ecdc4}
 .badge-off{background:rgba(233,69,96,.2);color:#e94560}
-.badge-wait{background:rgba(245,166,35,.2);color:#f5a623}
 .u-actions{display:flex;gap:8px;flex-wrap:wrap}
-.msg-item{padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:12px;background:rgba(255,255,255,.03)}
+.msg-item{padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
 .msg-item .mt{color:#fff;margin-bottom:8px;line-height:1.5}
 .msg-item .md{color:#888;font-size:.8em;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
 .msg-tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:.7em}
 .tag-all{background:rgba(78,205,196,.2);color:#4ecdc4}
 .tag-private{background:rgba(245,166,35,.2);color:#f5a623}
 .tag-group{background:rgba(155,89,182,.2);color:#bb8fce}
-.msg-stats{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 6px}
-.stat-pill{padding:4px 10px;border-radius:10px;font-size:.78em;font-weight:bold}
-.sp-ap{background:rgba(78,205,196,.15);color:#4ecdc4}
-.sp-rj{background:rgba(233,69,96,.15);color:#e94560}
-.sp-pe{background:rgba(245,166,35,.15);color:#f5a623}
-.sp-tot{background:rgba(255,255,255,.08);color:#ccc}
-.msg-progress{height:8px;border-radius:5px;background:rgba(255,255,255,.08);overflow:hidden;margin:6px 0 8px;display:flex}
-.msg-progress .mp-ap{background:#4ecdc4}
-.msg-progress .mp-rj{background:#e94560}
-.msg-details{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.12)}
-.detail-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:.82em}
-.detail-row .dr-name{color:#ccc}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:25px}
 .stat{background:rgba(255,255,255,.05);border-radius:12px;padding:20px;text-align:center}
 .stat .num{font-size:2em;font-weight:bold;color:#f5a623}
@@ -147,7 +133,7 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 </div>
 
 <div class="card">
-<h2 style="color:#f5a623;margin-bottom:20px">📋 نامە نێردراوەکان + ئاماری وەڵام</h2>
+<h2 style="color:#f5a623;margin-bottom:20px">📋 نامە نێردراوەکان</h2>
 <div id="mList"></div>
 <div class="empty hidden" id="noM"><span>📭</span><p>هیچ نامەیەک نییە</p></div>
 </div>
@@ -160,7 +146,7 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(1
 <div class="form-group"><label>ناوی پۆل</label><input type="text" id="catName" placeholder="بۆ نموونە: ئەڤارە"></div>
 <div class="form-group"><label>ئیمۆجی (بنووسە یان هەڵبژێرە)</label><input type="text" id="catEmoji" placeholder="🛒">
 <div class="emoji-pick">
-<span onclick="pickEmoji('🛒')">🛒</span><span onclick="pickEmoji('🏪')">🏪</span><span onclick="pickEmoji('🍞')">🍞</span><span onclick="pickEmoji('🍔')">🍔</span><span onclick="pickEmoji('☕')">☕</span><span onclick="pickEmoji('🥗')"></span><span onclick="pickEmoji('🚗')"></span><span onclick="pickEmoji('⛽')"></span><span onclick="pickEmoji('💊')">💊</span><span onclick="pickEmoji('🏥')">🏥</span><span onclick="pickEmoji('👕')">👕</span><span onclick="pickEmoji('👟')">👟</span><span onclick="pickEmoji('🏠')">🏠</span><span onclick="pickEmoji('💡')">💡</span><span onclick="pickEmoji('💧')">💧</span><span onclick="pickEmoji('📱')">📱</span><span onclick="pickEmoji('🎁')">🎁</span><span onclick="pickEmoji('📚')">📚</span><span onclick="pickEmoji('✈️')">✈️</span><span onclick="pickEmoji('🐾')">🐾</span><span onclick="pickEmoji('⚽')">⚽</span><span onclick="pickEmoji('🔧')">🔧</span><span onclick="pickEmoji('💰')">💰</span><span onclick="pickEmoji('📦')"></span>
+<span onclick="pickEmoji('🛒')">🛒</span><span onclick="pickEmoji('🏪')">🏪</span><span onclick="pickEmoji('🍞')">🍞</span><span onclick="pickEmoji('🍔')">🍔</span><span onclick="pickEmoji('☕')">☕</span><span onclick="pickEmoji('🥗')">🥗</span><span onclick="pickEmoji('🚗')">🚗</span><span onclick="pickEmoji('⛽')"></span><span onclick="pickEmoji('💊')">💊</span><span onclick="pickEmoji('🏥')">🏥</span><span onclick="pickEmoji('👕')">👕</span><span onclick="pickEmoji('👟')">👟</span><span onclick="pickEmoji('🏠')">🏠</span><span onclick="pickEmoji('💡')">💡</span><span onclick="pickEmoji('💧')">💧</span><span onclick="pickEmoji('📱')">📱</span><span onclick="pickEmoji('🎁')">🎁</span><span onclick="pickEmoji('📚')">📚</span><span onclick="pickEmoji('✈️')">✈️</span><span onclick="pickEmoji('🐾')">🐾</span><span onclick="pickEmoji('⚽')">⚽</span><span onclick="pickEmoji('🔧')">🔧</span><span onclick="pickEmoji('💰')">💰</span><span onclick="pickEmoji('📦')"></span>
 </div></div>
 <button class="btn btn-primary btn-full" id="catSaveBtn" onclick="saveCat()">➕ زیادکردن</button>
 <button class="btn btn-danger btn-full hidden" id="catCancelBtn" onclick="cancelEdit()" style="margin-top:10px">❌ پاشگەزبوونەوە</button>
@@ -187,7 +173,6 @@ var unsubUsers=null,unsubMsgs=null,unsubCats=null;
 var aClockTimer=null;
 
 function fmtDur(diff){var y=Math.floor(diff/365),d=diff%365;var p=[];if(y>0)p.push(y+' ساڵ');p.push(d+' ڕۆژ');return p.join(' و ');}
-function nameOf(email){var u=allUsers.find(function(x){return x.email===email;});return u?u.name:email;}
 
 function updateAdminClock(){var n=new Date();var h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');var d=['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];document.getElementById('adminClock').innerHTML='🕐 '+h+':'+m+':'+s+'<span class="dp">'+d[n.getDay()]+' - '+n.toLocaleDateString('ku-IQ')+'</span>';}
 function startAdminClock(){updateAdminClock();if(aClockTimer)clearInterval(aClockTimer);aClockTimer=setInterval(updateAdminClock,1000);}
@@ -224,15 +209,7 @@ async function sendMsg(){var txt=document.getElementById('msgIn').value.trim();i
 
 async function sendPrivateMsg(){var txt=document.getElementById('privateMsgIn').value.trim();var target=document.getElementById('privateTarget').value;if(!txt){alert('⚠️ نامە بنووسە!');return;}if(!target){alert('⚠️ بەکارهێنەرێک هەڵبژێرە!');return;}try{await db.collection('messages').add({text:txt,date:new Date().toISOString(),createdAt:Date.now(),targetEmail:target});document.getElementById('privateMsgIn').value='';alert('✅ نامەی تایبەت نێردرا بۆ:\n'+target);}catch(e){alert('هەڵە: '+e.message);}}
 
-// کێ ئەم نامەیەی پێ گەیشتووە؟
-function getRecipients(m){if(m.targetEmail)return [m.targetEmail];if(m.targetEmails&&m.targetEmails.length)return m.targetEmails;return allUsers.map(function(u){return u.email;});}
-
-// ئاماری وەڵامەکان
-function msgStats(m){var recs=getRecipients(m);var ap=0,rj=0,pe=0,details=[];recs.forEach(function(em){var r=m.responses&&m.responses[em];var st;if(r==='approved'){ap++;st='ap';}else if(r==='rejected'){rj++;st='rj';}else{pe++;st='pe';}details.push({email:em,status:st});});return {total:recs.length,ap:ap,rj:rj,pe:pe,details:details};}
-
-function toggleDetails(btn){var d=btn.parentNode.querySelector('.msg-details');if(!d)return;if(d.classList.contains('hidden')){d.classList.remove('hidden');btn.textContent='🔼 شاردنەوە';}else{d.classList.add('hidden');btn.textContent='🔍 وردبینی';}}
-
-function renderMsgs(msgs){var list=document.getElementById('mList');var noM=document.getElementById('noM');if(!msgs.length){list.innerHTML='';noM.classList.remove('hidden');return;}noM.classList.add('hidden');list.innerHTML=msgs.map(function(m){var tag='';if(m.targetEmail){tag='<span class="msg-tag tag-private">✉️ تایبەت</span>';}else if(m.targetEmails){tag='<span class="msg-tag tag-group">👥 گروپ ('+m.targetEmails.length+')</span>';}else{tag='<span class="msg-tag tag-all">📢 گشتی</span>';}var s=msgStats(m);var apPct=s.total?Math.round(s.ap/s.total*100):0;var rjPct=s.total?Math.round(s.rj/s.total*100):0;var pePct=s.total?Math.round(s.pe/s.total*100):0;var detailsHtml=s.details.map(function(d){var b=d.status==='ap'?'<span class="badge badge-on">✅ پەسەند</span>':d.status==='rj'?'<span class="badge badge-off">❌ ڕەت</span>':'<span class="badge badge-wait">⏳ چاوەڕوان</span>';return '<div class="detail-row"><span class="dr-name">👤 '+nameOf(d.email)+'</span>'+b+'</div>';}).join('');return '<div class="msg-item"><div class="mt">'+tag+' '+m.text+'</div><div class="msg-stats"><span class="stat-pill sp-tot">👥 کۆ: '+s.total+'</span><span class="stat-pill sp-ap">✅ '+s.ap+'</span><span class="stat-pill sp-rj">❌ '+s.rj+'</span><span class="stat-pill sp-pe">⏳ '+s.pe+'</span></div><div class="msg-progress"><div class="mp-ap" style="width:'+apPct+'%"></div><div class="mp-rj" style="width:'+rjPct+'%"></div></div><div class="md">'+new Date(m.date).toLocaleString('ku')+(m.targetEmail?' → '+m.targetEmail:'')+' <button class="btn-tiny" onclick="toggleDetails(this)">🔍 وردبینی</button> <button class="btn btn-danger btn-small" onclick="delMsg(\''+m.id+'\')">🗑️ سڕینەوە</button></div><div class="msg-details hidden">'+detailsHtml+'</div></div>';}).join('');}
+function renderMsgs(msgs){var list=document.getElementById('mList');var noM=document.getElementById('noM');if(!msgs.length){list.innerHTML='';noM.classList.remove('hidden');return;}noM.classList.add('hidden');list.innerHTML=msgs.map(function(m){var tag='';if(m.targetEmail){tag='<span class="msg-tag tag-private">✉️ تایبەت</span>';}else if(m.targetEmails){tag='<span class="msg-tag tag-group">👥 گروپ ('+m.targetEmails.length+')</span>';}else{tag='<span class="msg-tag tag-all">📢 گشتی</span>';}return '<div class="msg-item"><div class="mt">'+tag+' '+m.text+'</div><div class="md">'+new Date(m.date).toLocaleString('ku')+(m.targetEmail?' → '+m.targetEmail:'')+' <button class="btn btn-danger btn-small" style="margin-right:10px" onclick="delMsg(\''+m.id+'\')">🗑️ سڕینەوە</button></div></div>';}).join('');}
 
 async function delMsg(id){if(!confirm('سڕینەوەی نامەکە؟'))return;try{await db.collection('messages').doc(id).delete();}catch(e){alert('هەڵە: '+e.message);}}
 
