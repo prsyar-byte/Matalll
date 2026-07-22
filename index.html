@@ -43,13 +43,16 @@ body.dark{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);background-
 .login-box h1{font-size:2em;margin-bottom:10px;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .login-box p{color:var(--t2);margin-bottom:25px}
 .error-msg{color:#e94560;font-size:.85em;margin-top:10px;display:none;word-break:break-word}
-.pin-dots{display:flex;gap:12px;justify-content:center;margin:20px 0}
-.pin-dots span{width:18px;height:18px;border-radius:50%;border:2px solid var(--i2);background:transparent;transition:all .2s}
-.pin-dots span.on{background:linear-gradient(45deg,#e94560,#f5a623);border-color:transparent}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto}
-.pin-pad button{padding:18px;border:none;border-radius:14px;background:var(--g);color:var(--t);font-size:1.4em;font-weight:bold;cursor:pointer}
-.pin-pad button:active{transform:scale(.95)}
+.pin-dots{display:flex;gap:14px;justify-content:center;margin:22px 0}
+.pin-dots span{width:18px;height:18px;border-radius:50%;border:2px solid var(--i2);background:transparent;transition:all .25s}
+.pin-dots span.on{background:linear-gradient(45deg,#e94560,#f5a623);border-color:transparent;transform:scale(1.2)}
+.pin-dots.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:270px;margin:0 auto}
+.pin-pad button{padding:16px;border:none;border-radius:14px;background:var(--g);color:var(--t);font-size:1.4em;font-weight:bold;cursor:pointer}
+.pin-pad button:active{transform:scale(.92)}
 .pin-pad .del{background:rgba(233,69,96,.15);color:#e94560}
+.pin-pad .clr{background:rgba(78,205,196,.15);color:#2a9d8f}
 .app-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;padding:10px 0}
 .app-header .hdr-left{display:flex;align-items:center;gap:10px}
 .app-header h1{font-size:1.5em;background:linear-gradient(45deg,#e94560,#f5a623);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -167,13 +170,14 @@ body.dark .badge-on{color:#4ecdc4}
 
 <div class="login-page hidden" id="pagePin">
 <div class="login-box">
-<h1 data-i="pt">🔐 PIN بنووسە</h1>
+<h1 id="pinTitle">🔐 PIN بنووسە</h1>
+<p id="pinSub" style="color:var(--t2);margin-bottom:18px"></p>
 <div class="pin-dots" id="pinDots"><span></span><span></span><span></span><span></span></div>
 <div class="pin-pad">
 <button onclick="pinKey('1')">1</button><button onclick="pinKey('2')">2</button><button onclick="pinKey('3')">3</button>
 <button onclick="pinKey('4')">4</button><button onclick="pinKey('5')">5</button><button onclick="pinKey('6')">6</button>
 <button onclick="pinKey('7')">7</button><button onclick="pinKey('8')">8</button><button onclick="pinKey('9')">9</button>
-<button onclick="pinClear()">C</button><button onclick="pinKey('0')">0</button><button class="del" onclick="pinBack()">⌫</button>
+<button class="clr" onclick="pinClear()">C</button><button onclick="pinKey('0')">0</button><button class="del" onclick="pinBack()">⌫</button>
 </div>
 <p class="error-msg" id="pinErr"></p>
 </div>
@@ -209,7 +213,7 @@ body.dark .badge-on{color:#4ecdc4}
 <div class="form-grid">
 <div class="form-group"><label data-i="pn">ناوی کەس</label><input type="text" id="rName"></div>
 <div class="form-group"><label data-i="am">بڕی پارە</label><input type="number" id="rAmount" placeholder="0" min="0"></div>
-<div class="form-group"><label data-i="cu">یەکەی پارە</label><select id="rCurrency"><option value="IQD">🇮 دینار</option><option value="USD">🇺🇸 دۆلار</option><option value="EUR">🇪🇺 یۆرۆ</option></select></div>
+<div class="form-group"><label data-i="cu">یەکەی پارە</label><select id="rCurrency"><option value="IQD">🇮🇶 دینار</option><option value="USD">🇺🇸 دۆلار</option><option value="EUR">🇪🇺 یۆرۆ</option></select></div>
 <div class="form-group"><label data-i="ty">جۆر</label><select id="rType"><option value="debt" data-i="d1">🔴 من قەرزارم</option><option value="credit" data-i="c1">🟢 خەڵکی قەرزارمن</option></select></div>
 <div class="form-group"><label data-i="dt">بەروار</label><input type="date" id="rDate"></div>
 <div class="form-group"><label data-i="du">📅 بەرواری بەسەرچوون</label><input type="date" id="rDue"></div>
@@ -235,7 +239,6 @@ body.dark .badge-on{color:#4ecdc4}
 <div class="lock-view hidden"></div>
 <div class="active-view">
 <div class="exp-total"><div class="lbl" data-i="et">💸 کۆی خەرجی ئەم مانگە</div><div class="val" id="expMonthTotal">0</div><div class="mon" id="expMonthName">-</div></div>
-
 <div class="card">
 <h2 class="sec-title" data-i="bg">🎯 ئامانجی مانگانە</h2>
 <div class="form-grid">
@@ -248,13 +251,12 @@ body.dark .badge-on{color:#4ecdc4}
 <div class="budget-info"><span id="budgetSpent">0</span><span id="budgetStatus"></span></div>
 </div>
 </div>
-
 <div class="card">
 <h2 class="sec-title" data-i="ne">🛒 تۆماری خەرجی ڕۆژانە</h2>
 <div class="form-grid">
 <div class="form-group"><label data-i="pn">ناو</label><input type="text" id="eName" data-p="ep"></div>
 <div class="form-group"><label data-i="am">بڕی پارە</label><input type="number" id="eAmount" placeholder="0" min="0"></div>
-<div class="form-group"><label data-i="cu">یەکەی پارە</label><select id="eCurrency"><option value="IQD">🇮 دینار</option><option value="USD">🇺🇸 دۆلار</option><option value="EUR">🇪🇺 یۆرۆ</option></select></div>
+<div class="form-group"><label data-i="cu">یەکەی پارە</label><select id="eCurrency"><option value="IQD">🇮🇶 دینار</option><option value="USD">🇺🇸 دۆلار</option><option value="EUR">🇪🇺 یۆرۆ</option></select></div>
 <div class="form-group"><label data-i="ca">پۆل</label><select id="eCat"></select></div>
 <div class="form-group"><label data-i="dt">بەروار</label><input type="date" id="eDate"></div>
 </div>
@@ -291,7 +293,6 @@ body.dark .badge-on{color:#4ecdc4}
 <p style="color:var(--t4);font-size:.75em;margin-top:15px" data-i="pnt">✨ وێنەکەت لەسەر هەموو ئامێرەکان دەردەکەوێت</p>
 </div>
 </div>
-
 </div>
 
 <div class="bottom-nav hidden" id="bottomNav">
@@ -305,9 +306,9 @@ body.dark .badge-on{color:#4ecdc4}
 
 <script>
 var I18N={
-ku:{lt:'📒 دەفتەری قەرز',ld:'ناو و ئیمەیل بنووسە',nm:'👤 ناو',em:'📧 ئیمەیل',lb:'🔓 چوونەژوورەوە / تۆمارکردن',eN:'⚠️ ناو بنووسە!',eE:'⚠️ ئیمەیل دروست بنووسە!',ld2:'⏳ چاوەڕێ...',lo:'🚪 دەرچوون',h:'سەرەتا',db:'قەرزەکان',ex:'خەرجی',pr:'پرۆفایل',sd:'🔴 کۆی قەرزەکانم',sc:'🟢 کۆی وەرگرتن',se:'💸 خەرجی ئەم مانگە',hi:'💡 بۆ تۆمارکردن، تابەکە هەڵبژێرە',nd:'➕ تۆماری قەرزی نوێ',pn:'ناوی کەس',am:'بڕی پارە',cu:'یەکەی پارە',ty:'جۆر',d1:'🔴 من قەرزارم',c1:'🟢 خەڵکی قەرزارمن',dt:'بەروار',tm:'کاتژمێر',nt:'تێبینی',ad:'➕ زیادکردن',dl:'📋 لیستی قەرزەکان',sr:'🔍 گەڕان...',al:'هەموو',as:'هەموو دۆخ',up:'نەدراو',pd:'دراو',ne:'🛒 تۆماری خەرجی ڕۆژانە',ep:'بۆ نموونە: نانی ئێوارە',ca:'پۆل',ae:'➕ زیادکردنی خەرجی',et:'💸 کۆی خەرجی ئەم مانگە',el:'📋 لیستی خەرجییەکان',ed:'هیچ تۆمارێک نییە',ee:'هیچ خەرجییەک تۆمار نەکراوە',cp:'📷 گۆڕینی وێنە',jo:'📅 بەرواری تۆمار',su:'💳 دۆخی بەشداری',co:'📞 پەیوەندی',ps:'✅ وێنەکە پاشەکەوت کرا!',pb:'⚠️ وێنەکە زۆر گەورەیە!',pnt:'✨ وێنەکەت لەسەر هەموو ئامێرەکان دەردەکەوێت',ac:'✅ چالاک',ia:'❌ ناچالاک',la:'🌐 زمان',pt:'🔐 PIN بنووسە',pset:'➕ دانانی PIN',prm:'🗑️ سڕینەوەی PIN',pst:'🔐 PINی نوێ دابنێ',pcf:'دووبارە PIN بنووسە',pw:'⚠️ PIN هەڵەیە!',pm:'⚠️ دوو PINەکە یەکسان نین!',psv:'✅ PIN پاشەکەوت کرا!',prd:'✅ PIN سڕایەوە!',psh:'⚠️ PIN دەبێت ٤ ژمارە بێت!',bg:'🎯 ئامانجی مانگانە',bgs:'💾 پاشەکەوتکردنی ئامانج',bgo:'لە',bgl:'ماوە',bgv:'تێپەڕی!',bgn:'هیچ ئامانجێک دانەنراوە',of:'📴 ئۆفلاین - تۆمارەکان دواتر دەنێردرێن',ofs:'✅ پاشەکەوت کرا (ئۆفلاین)',ofy:'✅ تۆمارە چاوەڕوانەکان نێردران',ofb:'⏳ چاوەڕوان',du:'📅 بەرواری بەسەرچوون',dus:'⏰ قەرزێک نزیکە لە بەسەرچوون!',duo:'⚠️ قەرزێک بەسەرچووە!',sa:'✅ بەشداری چالاکە',si:'❌ بەشداری چالاک نییە',sx:'❌ بەشداری بەسەرچووە!',dyl:'ڕۆژی ماوە',md:'ماوە: ',cm:'پارەدان ئەنجام بدە → 07705353322',rm:'نوێکردنەوە → 07705353322',lkt:'ئەم بەشە قوفڵە!',lkm:'بەشداریکردنت چالاک نییە.',py:'💰 پارەدان بۆ چالاککردن (١٢ مانگ و ٥ ڕۆژ)',cl:'📞 پەیوەندی بکە بە:',ap:'دوای پارەدان، ئەدمین چالاکت دەکات ✅',rc:'تۆمار',mo:'مانگی ',yr:'ساڵی ',cn:'#',cna:'ناو',cam:'بڕ',cty:'جۆر',cdt:'بەروار',cst:'دۆخ',cac:'کردار',cca:'پۆل'},
-ar:{lt:'📒 دفتر الديون',ld:'اكتب الاسم والإيميل',nm:'👤 الاسم',em:'📧 الإيميل',lb:'🔓 دخول / تسجيل',eN:'⚠️ اكتب الاسم!',eE:'⚠️ اكتب إيميل صحيح!',ld2:'⏳ انتظر...',lo:'🚪 خروج',h:'الرئيسية',db:'الديون',ex:'المصروف',pr:'الملف',sd:'🔴 إجمالي ديوني',sc:'🟢 إجمالي المستحق لي',se:'💸 مصروف الشهر',hi:'💡 للتسجيل اختر التبويب',nd:'➕ دين جديد',pn:'اسم الشخص',am:'المبلغ',cu:'العملة',ty:'النوع',d1:'🔴 أنا مدين',c1:'🟢 مدينون لي',dt:'التاريخ',tm:'الوقت',nt:'ملاحظة',ad:'➕ إضافة',dl:'📋 قائمة الديون',sr:'🔍 بحث...',al:'الكل',as:'كل الحالات',up:'غير مدفوع',pd:'مدفوع',ne:'🛒 مصروف يومي',ep:'مثال: خبز العشاء',ca:'الفئة',ae:'➕ إضافة مصروف',et:'💸 مصروف الشهر',el:'📋 قائمة المصروف',ed:'لا توجد سجلات',ee:'لا مصروف مسجل',cp:'📷 تغيير الصورة',jo:'📅 تاريخ التسجيل',su:'💳 حالة الاشتراك',co:'📞 التواصل',ps:'✅ حُفظت الصورة!',pb:'⚠️ الصورة كبيرة جداً!',pnt:'✨ صورتك تظهر على كل الأجهزة',ac:'✅ نشط',ia:'❌ غير نشط',la:'🌐 اللغة',pt:'🔐 أدخل PIN',pset:'➕ تعيين PIN',prm:'🗑️ حذف PIN',pst:'🔐 PIN جديد',pcf:'أعد PIN',pw:'⚠️ PIN خطأ!',pm:'⚠️ PIN غير متطابق!',psv:'✅ حُفظ PIN!',prd:'✅ حُذف PIN!',psh:'⚠️ PIN يجب 4 أرقام!',bg:'🎯 ميزانية الشهر',bgs:'💾 حفظ الميزانية',bgo:'من',bgl:'متبقي',bgv:'تجاوز!',bgn:'لا ميزانية محددة',of:'📴 بلا إنترنت - تُرسل لاحقاً',ofs:'✅ حُفظ (بلا إنترنت)',ofy:'✅ أُرسلت السجلات المعلقة',ofb:'⏳ معلق',du:'📅 تاريخ الاستحقاق',dus:'⏰ دين يقترب استحقاقه!',duo:'⚠️ دين متأخر!',sa:'✅ الاشتراك نشط',si:'❌ الاشتراك غير نشط',sx:'❌ انتهى الاشتراك!',dyl:'يوم متبقي',md:'المدة: ',cm:'ادفع للتفعيل → 07705353322',rm:'تجديد → 07705353322',lkt:'هذا القسم مقفل!',lkm:'اشتراكك غير نشط.',py:'💰 ادفع للتفعيل (12 شهر و5 أيام)',cl:'📞 تواصل مع:',ap:'بعد الدفع يفعّلك الأدمن ✅',rc:'سجل',mo:'شهر ',yr:'سنة ',cn:'#',cna:'الاسم',cam:'المبلغ',cty:'النوع',cdt:'التاريخ',cst:'الحالة',cac:'إجراء',cca:'الفئة'},
-en:{lt:'📒 Debt Book',ld:'Enter name & email',nm:'👤 Name',em:'📧 Email',lb:'🔓 Login / Register',eN:'⚠️ Enter name!',eE:'⚠️ Enter valid email!',ld2:'⏳ Wait...',lo:'🚪 Logout',h:'Home',db:'Debts',ex:'Expenses',pr:'Profile',sd:'🔴 My Debts',sc:'🟢 My Credits',se:'💸 This Month',hi:'💡 Pick a tab to record',nd:'➕ New Debt',pn:'Person',am:'Amount',cu:'Currency',ty:'Type',d1:'🔴 I owe',c1:'🟢 Owed to me',dt:'Date',tm:'Time',nt:'Note',ad:'➕ Add',dl:'📋 Debt List',sr:'🔍 Search...',al:'All',as:'All status',up:'Unpaid',pd:'Paid',ne:'🛒 Daily Expense',ep:'e.g. Dinner bread',ca:'Category',ae:'➕ Add Expense',et:'💸 Month Expenses',el:'📋 Expense List',ed:'No records',ee:'No expenses',cp:'📷 Change Photo',jo:'📅 Joined',su:'💳 Subscription',co:'📞 Contact',ps:'✅ Photo saved!',pb:'⚠️ Image too large!',pnt:'✨ Your photo shows on all devices',ac:'✅ Active',ia:'❌ Inactive',la:'🌐 Language',pt:'🔐 Enter PIN',pset:'➕ Set PIN',prm:'🗑️ Remove PIN',pst:'🔐 New PIN',pcf:'Confirm PIN',pw:'⚠️ Wrong PIN!',pm:'⚠️ PINs do not match!',psv:'✅ PIN saved!',prd:'✅ PIN removed!',psh:'⚠️ PIN must be 4 digits!',bg:'🎯 Monthly Budget',bgs:'💾 Save Budget',bgo:'of',bgl:'left',bgv:'Over!',bgn:'No budget set',of:'📴 Offline - will sync later',ofs:'✅ Saved (offline)',ofy:'✅ Pending records synced',ofb:'⏳ Pending',du:'📅 Due Date',dus:'⏰ A debt is due soon!',duo:'⚠️ A debt is overdue!',sa:'✅ Subscription active',si:'❌ Subscription inactive',sx:'❌ Subscription expired!',dyl:'Days left',md:'Left: ',cm:'Pay to activate → 07705353322',rm:'Renew → 07705353322',lkt:'This section is locked!',lkm:'Your subscription is inactive.',py:'💰 Pay to activate (12 months & 5 days)',cl:'📞 Contact:',ap:'After payment admin activates you ✅',rc:'records',mo:'Month ',yr:'Year ',cn:'#',cna:'Name',cam:'Amount',cty:'Type',cdt:'Date',cst:'Status',cac:'Action',cca:'Category'}
+ku:{lt:'📒 دەفتەری قەرز',ld:'ناو و ئیمەیل بنووسە',nm:'👤 ناو',em:'📧 ئیمەیل',lb:'🔓 چوونەژوورەوە / تۆمارکردن',eN:'⚠️ ناو بنووسە!',eE:'⚠️ ئیمەیل دروست بنووسە!',ld2:'⏳ چاوەڕێ...',lo:'🚪 دەرچوون',h:'سەرەتا',db:'قەرزەکان',ex:'خەرجی',pr:'پرۆفایل',sd:'🔴 کۆی قەرزەکانم',sc:'🟢 کۆی وەرگرتن',se:'💸 خەرجی ئەم مانگە',hi:'💡 بۆ تۆمارکردن، تابەکە هەڵبژێرە',nd:'➕ تۆماری قەرزی نوێ',pn:'ناوی کەس',am:'بڕی پارە',cu:'یەکەی پارە',ty:'جۆر',d1:'🔴 من قەرزارم',c1:'🟢 خەڵکی قەرزارمن',dt:'بەروار',tm:'کاتژمێر',nt:'تێبینی',ad:'➕ زیادکردن',dl:'📋 لیستی قەرزەکان',sr:'🔍 گەڕان...',al:'هەموو',as:'هەموو دۆخ',up:'نەدراو',pd:'دراو',ne:'🛒 تۆماری خەرجی ڕۆژانە',ep:'بۆ نموونە: نانی ئێوارە',ca:'پۆل',ae:'➕ زیادکردنی خەرجی',et:'💸 کۆی خەرجی ئەم مانگە',el:'📋 لیستی خەرجییەکان',ed:'هیچ تۆمارێک نییە',ee:'هیچ خەرجییەک تۆمار نەکراوە',cp:'📷 گۆڕینی وێنە',jo:'📅 بەرواری تۆمار',su:'💳 دۆخی بەشداری',co:'📞 پەیوەندی',ps:'✅ وێنەکە پاشەکەوت کرا!',pb:'⚠️ وێنەکە زۆر گەورەیە!',pnt:'✨ وێنەکەت لەسەر هەموو ئامێرەکان دەردەکەوێت',ac:'✅ چالاک',ia:'❌ ناچالاک',la:'🌐 زمان',pt:'🔐 PIN بنووسە',pset:'➕ دانانی PIN',prm:'🗑️ سڕینەوەی PIN',pst:'🔐 PINی نوێ دابنێ',pcf:'دووبارە PIN بنووسە',pw:'⚠️ PIN هەڵەیە!',pm:'⚠️ دوو PINەکە یەکسان نین!',psv:'✅ PIN پاشەکەوت کرا!',prd:'✅ PIN سڕایەوە!',psh:'⚠️ PIN دەبێت ٤ ژمارە بێت!',psu_login:'بۆ کردنەوەی ئەپەکە',psu_set:'پاراستنی ئەپ بە ٤ ژمارە',psu_confirm:'بۆ دڵنیابوون دووبارە بنووسە',bg:'🎯 ئامانجی مانگانە',bgs:'💾 پاشەکەوتکردنی ئامانج',bgo:'لە',bgl:'ماوە',bgv:'تێپەڕی!',bgn:'هیچ ئامانجێک دانەنراوە',of:'📴 ئۆفلاین - تۆمارەکان دواتر دەنێردرێن',ofs:'✅ پاشەکەوت کرا (ئۆفلاین)',ofy:'✅ تۆمارە چاوەڕوانەکان نێردران',ofb:'⏳ چاوەڕوان',du:'📅 بەرواری بەسەرچوون',dus:'⏰ قەرزێک نزیکە لە بەسەرچوون!',duo:'⚠️ قەرزێک بەسەرچووە!',sa:'✅ بەشداری چالاکە',si:'❌ بەشداری چالاک نییە',sx:'❌ بەشداری بەسەرچووە!',dyl:'ڕۆژی ماوە',md:'ماوە: ',cm:'پارەدان ئەنجام بدە → 07705353322',rm:'نوێکردنەوە → 07705353322',lkt:'ئەم بەشە قوفڵە!',lkm:'بەشداریکردنت چالاک نییە.',py:'💰 پارەدان بۆ چالاککردن (١٢ مانگ و ٥ ڕۆژ)',cl:'📞 پەیوەندی بکە بە:',ap:'دوای پارەدان، ئەدمین چالاکت دەکات ✅',rc:'تۆمار',mo:'مانگی ',yr:'ساڵی ',cn:'#',cna:'ناو',cam:'بڕ',cty:'جۆر',cdt:'بەروار',cst:'دۆخ',cac:'کردار',cca:'پۆل'},
+ar:{lt:'📒 دفتر الديون',ld:'اكتب الاسم والإيميل',nm:'👤 الاسم',em:'📧 الإيميل',lb:'🔓 دخول / تسجيل',eN:'⚠️ اكتب الاسم!',eE:'⚠️ اكتب إيميل صحيح!',ld2:'⏳ انتظر...',lo:'🚪 خروج',h:'الرئيسية',db:'الديون',ex:'المصروف',pr:'الملف',sd:'🔴 إجمالي ديوني',sc:'🟢 إجمالي المستحق لي',se:'💸 مصروف الشهر',hi:'💡 للتسجيل اختر التبويب',nd:'➕ دين جديد',pn:'اسم الشخص',am:'المبلغ',cu:'العملة',ty:'النوع',d1:'🔴 أنا مدين',c1:'🟢 مدينون لي',dt:'التاريخ',tm:'الوقت',nt:'ملاحظة',ad:'➕ إضافة',dl:'📋 قائمة الديون',sr:'🔍 بحث...',al:'الكل',as:'كل الحالات',up:'غير مدفوع',pd:'مدفوع',ne:'🛒 مصروف يومي',ep:'مثال: خبز العشاء',ca:'الفئة',ae:'➕ إضافة مصروف',et:'💸 مصروف الشهر',el:'📋 قائمة المصروف',ed:'لا توجد سجلات',ee:'لا مصروف مسجل',cp:'📷 تغيير الصورة',jo:'📅 تاريخ التسجيل',su:'💳 حالة الاشتراك',co:'📞 التواصل',ps:'✅ حُفظت الصورة!',pb:'⚠️ الصورة كبيرة جداً!',pnt:'✨ صورتك تظهر على كل الأجهزة',ac:'✅ نشط',ia:'❌ غير نشط',la:'🌐 اللغة',pt:'🔐 أدخل PIN',pset:'➕ تعيين PIN',prm:'🗑️ حذف PIN',pst:'🔐 PIN جديد',pcf:'أعد PIN',pw:'⚠️ PIN خطأ!',pm:'⚠️ PIN غير متطابق!',psv:'✅ حُفظ PIN!',prd:'✅ حُذف PIN!',psh:'⚠️ PIN يجب 4 أرقام!',psu_login:'لفتح التطبيق',psu_set:'حماية التطبيق بـ 4 أرقام',psu_confirm:'أعد الإدخال للتأكيد',bg:'🎯 ميزانية الشهر',bgs:'💾 حفظ الميزانية',bgo:'من',bgl:'متبقي',bgv:'تجاوز!',bgn:'لا ميزانية محددة',of:'📴 بلا إنترنت - تُرسل لاحقاً',ofs:'✅ حُفظ (بلا إنترنت)',ofy:'✅ أُرسلت السجلات المعلقة',ofb:'⏳ معلق',du:'📅 تاريخ الاستحقاق',dus:'⏰ دين يقترب استحقاقه!',duo:'⚠️ دين متأخر!',sa:'✅ الاشتراك نشط',si:'❌ الاشتراك غير نشط',sx:'❌ انتهى الاشتراك!',dyl:'يوم متبقي',md:'المدة: ',cm:'ادفع للتفعيل → 07705353322',rm:'تجديد → 07705353322',lkt:'هذا القسم مقفل!',lkm:'اشتراكك غير نشط.',py:'💰 ادفع للتفعيل (12 شهر و5 أيام)',cl:'📞 تواصل مع:',ap:'بعد الدفع يفعّلك الأدمن ✅',rc:'سجل',mo:'شهر ',yr:'سنة ',cn:'#',cna:'الاسم',cam:'المبلغ',cty:'النوع',cdt:'التاريخ',cst:'الحالة',cac:'إجراء',cca:'الفئة'},
+en:{lt:'📒 Debt Book',ld:'Enter name & email',nm:'👤 Name',em:'📧 Email',lb:'🔓 Login / Register',eN:'⚠️ Enter name!',eE:'⚠️ Enter valid email!',ld2:'⏳ Wait...',lo:'🚪 Logout',h:'Home',db:'Debts',ex:'Expenses',pr:'Profile',sd:'🔴 My Debts',sc:'🟢 My Credits',se:'💸 This Month',hi:'💡 Pick a tab to record',nd:'➕ New Debt',pn:'Person',am:'Amount',cu:'Currency',ty:'Type',d1:'🔴 I owe',c1:'🟢 Owed to me',dt:'Date',tm:'Time',nt:'Note',ad:'➕ Add',dl:'📋 Debt List',sr:'🔍 Search...',al:'All',as:'All status',up:'Unpaid',pd:'Paid',ne:'🛒 Daily Expense',ep:'e.g. Dinner bread',ca:'Category',ae:'➕ Add Expense',et:'💸 Month Expenses',el:'📋 Expense List',ed:'No records',ee:'No expenses',cp:'📷 Change Photo',jo:'📅 Joined',su:'💳 Subscription',co:'📞 Contact',ps:'✅ Photo saved!',pb:'⚠️ Image too large!',pnt:'✨ Your photo shows on all devices',ac:'✅ Active',ia:'❌ Inactive',la:'🌐 Language',pt:'🔐 Enter PIN',pset:'➕ Set PIN',prm:'🗑️ Remove PIN',pst:'🔐 New PIN',pcf:'Confirm PIN',pw:'⚠️ Wrong PIN!',pm:'⚠️ PINs do not match!',psv:'✅ PIN saved!',prd:'✅ PIN removed!',psh:'⚠️ PIN must be 4 digits!',psu_login:'To unlock the app',psu_set:'Protect app with 4 digits',psu_confirm:'Re-enter to confirm',bg:'🎯 Monthly Budget',bgs:'💾 Save Budget',bgo:'of',bgl:'left',bgv:'Over!',bgn:'No budget set',of:'📴 Offline - will sync later',ofs:'✅ Saved (offline)',ofy:'✅ Pending records synced',ofb:'⏳ Pending',du:'📅 Due Date',dus:'⏰ A debt is due soon!',duo:'⚠️ A debt is overdue!',sa:'✅ Subscription active',si:'❌ Subscription inactive',sx:'❌ Subscription expired!',dyl:'Days left',md:'Left: ',cm:'Pay to activate → 07705353322',rm:'Renew → 07705353322',lkt:'This section is locked!',lkm:'Your subscription is inactive.',py:'💰 Pay to activate (12 months & 5 days)',cl:'📞 Contact:',ap:'After payment admin activates you ✅',rc:'records',mo:'Month ',yr:'Year ',cn:'#',cna:'Name',cam:'Amount',cty:'Type',cdt:'Date',cst:'Status',cac:'Action',cca:'Category'}
 };
 var lang=localStorage.getItem('dq_lang')||'ku';
 function t(k){return (I18N[lang]&&I18N[lang][k])||k;}
@@ -316,7 +317,7 @@ function applyLang(){document.documentElement.lang=lang;document.documentElement
 function setLang(v){lang=v;localStorage.setItem('dq_lang',v);applyLang();}
 function refreshDynamic(){if(me){renderRecs();renderExpenses();renderProfile();checkSub();updateSum();updateExpMonth();renderBudget();}document.querySelectorAll('.lock-view').forEach(function(el){el.innerHTML=lockedHTML();});}
 
-function applyTheme(t2){document.body.classList.toggle('dark',t2==='dark');var b=document.getElementById('themeBtn');if(b)b.textContent=t2==='dark'?'☀️':'';localStorage.setItem('dq_theme',t2);}
+function applyTheme(t2){document.body.classList.toggle('dark',t2==='dark');var b=document.getElementById('themeBtn');if(b)b.textContent=t2==='dark'?'☀️':'🌙';localStorage.setItem('dq_theme',t2);}
 function toggleTheme(){var c=localStorage.getItem('dq_theme')==='dark'?'dark':'light';applyTheme(c==='dark'?'light':'dark');}
 applyTheme(localStorage.getItem('dq_theme')==='dark'?'dark':'light');
 
@@ -346,13 +347,15 @@ function setPinStore(email,p){localStorage.setItem('dq_pin_'+email,hashPin(p));}
 function removePinStore(email){localStorage.removeItem('dq_pin_'+email);}
 var pinBuffer='',pinMode='login',pinSetFirst='';
 function pinRender(){var dots=document.querySelectorAll('#pinDots span');dots.forEach(function(d,i){d.classList.toggle('on',i<pinBuffer.length);});}
-function pinKey(k){if(pinBuffer.length<4){pinBuffer+=k;pinRender();if(pinBuffer.length===4)setTimeout(pinSubmit,150);}}
+function pinShake(){var d=document.getElementById('pinDots');d.classList.add('shake');setTimeout(function(){d.classList.remove('shake');},400);}
+function pinKey(k){if(pinBuffer.length<4){pinBuffer+=k;pinRender();if(pinBuffer.length===4)setTimeout(pinSubmit,180);}}
 function pinBack(){pinBuffer=pinBuffer.slice(0,-1);pinRender();}
 function pinClear(){pinBuffer='';pinRender();document.getElementById('pinErr').style.display='none';}
-function pinSubmit(){var err=document.getElementById('pinErr');err.style.display='none';if(pinMode==='login'){var email=localStorage.getItem('dq_email');if(hashPin(pinBuffer)===getPin(email)){pinBuffer='';pinRender();afterPinOk();}else{err.textContent=t('pw');err.style.display='block';pinBuffer='';pinRender();}}else if(pinMode==='set1'){if(pinBuffer.length<4){err.textContent=t('psh');err.style.display='block';pinBuffer='';pinRender();return;}pinSetFirst=pinBuffer;pinBuffer='';pinRender();pinMode='set2';document.querySelector('#pagePin h1').textContent=t('pcf');}else if(pinMode==='set2'){if(pinBuffer===pinSetFirst){var em=localStorage.getItem('dq_email');setPinStore(em,pinBuffer);pinBuffer='';pinSetFirst='';alert(t('psv'));backToAppFromPin();}else{err.textContent=t('pm');err.style.display='block';pinBuffer='';pinRender();pinMode='set1';document.querySelector('#pagePin h1').textContent=t('pst');}}}
+function updatePinUI(){var title=document.getElementById('pinTitle');var sub=document.getElementById('pinSub');if(pinMode==='login'){title.textContent=t('pt');sub.textContent=t('psu_login');}else if(pinMode==='set1'){title.textContent=t('pst');sub.textContent=t('psu_set');}else if(pinMode==='set2'){title.textContent=t('pcf');sub.textContent=t('psu_confirm');}}
+function pinSubmit(){var err=document.getElementById('pinErr');err.style.display='none';if(pinMode==='login'){var email=localStorage.getItem('dq_email');if(hashPin(pinBuffer)===getPin(email)){pinBuffer='';pinRender();afterPinOk();}else{err.textContent=t('pw');err.style.display='block';pinShake();pinBuffer='';pinRender();}}else if(pinMode==='set1'){if(pinBuffer.length<4){err.textContent=t('psh');err.style.display='block';pinShake();pinBuffer='';pinRender();return;}pinSetFirst=pinBuffer;pinBuffer='';pinRender();pinMode='set2';updatePinUI();}else if(pinMode==='set2'){if(pinBuffer===pinSetFirst){var em=localStorage.getItem('dq_email');setPinStore(em,pinBuffer);pinBuffer='';pinSetFirst='';alert(t('psv'));backToAppFromPin();}else{err.textContent=t('pm');err.style.display='block';pinShake();pinBuffer='';pinRender();pinMode='set1';updatePinUI();}}}
 function afterPinOk(){document.getElementById('pagePin').classList.add('hidden');autoLoginReal();}
 function backToAppFromPin(){document.getElementById('pagePin').classList.add('hidden');document.getElementById('pageApp').classList.remove('hidden');document.getElementById('bottomNav').classList.remove('hidden');}
-function showPinPage(mode){pinMode=mode;pinBuffer='';pinSetFirst='';pinRender();document.getElementById('pinErr').style.display='none';document.querySelector('#pagePin h1').textContent=(mode==='login')?t('pt'):t('pst');document.getElementById('pageLogin').classList.add('hidden');document.getElementById('pageApp').classList.add('hidden');document.getElementById('bottomNav').classList.add('hidden');document.getElementById('pagePin').classList.remove('hidden');}
+function showPinPage(mode){pinMode=mode;pinBuffer='';pinSetFirst='';pinRender();document.getElementById('pinErr').style.display='none';document.getElementById('pageLogin').classList.add('hidden');document.getElementById('pageApp').classList.add('hidden');document.getElementById('bottomNav').classList.add('hidden');document.getElementById('pagePin').classList.remove('hidden');updatePinUI();}
 function promptSetPin(){showPinPage('set1');}
 function removePin(){var em=localStorage.getItem('dq_email');if(getPin(em)){removePinStore(em);alert(t('prd'));}else{alert(t('pw'));}}
 
